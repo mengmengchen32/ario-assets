@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ario Assets</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #2B5CFF;
+      --blue-deep: #1A4AE6;
+      --blue-pale: #EEF2FF;
+      --ink: #111111;
+      --ink-soft: #2A2A2A;
+      --ink-muted: #666666;
+      --paper: #FAFAFA;
+      --rule: #E0E0E0;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #fff;
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 640px;
+      width: 100%;
+      padding: 80px 24px 60px;
+    }
+
+    .logo {
+      height: 28px;
+      margin-bottom: 48px;
+    }
+
+    .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--blue);
+      margin-bottom: 24px;
+    }
+
+    .card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      padding: 24px 28px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--blue);
+      box-shadow: 0 2px 12px rgba(43, 92, 255, 0.1);
+    }
+
+    .card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      color: var(--ink-muted);
+      line-height: 1.5;
+    }
+
+    .card-arrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--blue);
+      margin-top: 12px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="ario-logo-black.png" alt="Ario" class="logo">
+    <div class="label">Assets</div>
+
+    <a href="/one-pager" class="card">
+      <div class="card-title">Ario 1-Pager</div>
+      <div class="card-desc">Print-ready overview of Ario's platform, use cases, and competitive advantage.</div>
+      <span class="card-arrow">View &rarr;</span>
+    </a>
+
+    <a href="/brand" class="card">
+      <div class="card-title">Brand Guide</div>
+      <div class="card-desc">Logo usage, color palette, typography, and voice guidelines.</div>
+      <span class="card-arrow">View &rarr;</span>
+    </a>
+  </div>
+</body>
+</html>
