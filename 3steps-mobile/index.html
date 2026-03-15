@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ario — How It Works Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #2B5CFF;
+      --blue-deep: #1A4AE6;
+      --blue-pale: #EEF2FF;
+      --ink: #111111;
+      --ink-soft: #2A2A2A;
+      --ink-muted: #666666;
+      --ink-faint: #999999;
+      --paper: #FAFAFA;
+      --green: #22C55E;
+      --green-bg: #F0FDF4;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: 'DM Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+    }
+
+    /* ── PHONE FRAME ── */
+    .phone-wrapper {
+      position: relative;
+    }
+
+    .phone {
+      width: 375px;
+      height: 812px;
+      background: #fff;
+      border-radius: 44px;
+      box-shadow:
+        0 0 0 2px #1a1a1a,
+        0 0 0 6px #333,
+        0 0 0 8px #1a1a1a,
+        0 50px 100px rgba(0,0,0,0.15),
+        0 20px 60px rgba(0,0,0,0.1);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Status bar */
+    .status-bar {
+      height: 54px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 0 28px 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ink);
+      position: relative;
+      z-index: 10;
+    }
+    .status-bar .time { letter-spacing: 0.02em; }
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .status-icons svg { width: 16px; height: 16px; }
+
+    /* Dynamic island */
+    .dynamic-island {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 34px;
+      background: #000;
+      border-radius: 20px;
+      z-index: 20;
+    }
+
+    /* ── SCREENS CONTAINER ── */
+    .screens {
+      position: absolute;
+      top: 54px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+    }
+
+    .screen {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .screen.active {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .screen.exit {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+
+    /* ══════════════════════════════════
+       SCREEN 1: EMAIL OFFER
+    ══════════════════════════════════ */
+    .s1-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 20px 12px;
+    }
+    .s1-toolbar svg { width: 22px; height: 22px; color: var(--ink-muted); }
+    .s1-toolbar-icons { display: flex; gap: 20px; }
+
+    .s1-subject {
+      padding: 0 20px 14px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+
+    .s1-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      border-top: 1px solid #f0f0f0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .s1-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .s1-sender-info { flex: 1; }
+    .s1-sender-name {
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--ink);
+    }
+    .s1-sender-sub {
+      font-size: 12px;
+      color: var(--ink-faint);
+      margin-top: 1px;
+    }
+    .s1-time {
+      font-size: 12px;
+      color: var(--ink-faint);
+    }
+
+    .s1-body {
+      flex: 1;
+      padding: 28px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .s1-email-card {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 16px;
+      padding: 36px 24px;
+      text-align: center;
+      width: 100%;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    .s1-email-card .kroger-logo {
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--blue);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .s1-email-card h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .s1-email-card p {
+      font-size: 15px;
+      color: var(--ink-muted);
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+    .s1-email-card .reward-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--blue-pale);
+      color: var(--blue);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+    }
+
+    .claim-btn {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s, background 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .claim-btn.pressed {
+      transform: scale(0.97);
+      background: var(--blue-deep);
+    }
+    .claim-btn .btn-ripple {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 50%;
+      transform: scale(0);
+      opacity: 1;
+      pointer-events: none;
+    }
+    .claim-btn .btn-ripple.animate {
+      animation: ripple 0.6s ease-out;
+    }
+    @keyframes ripple {
+      to { transform: scale(3); opacity: 0; }
+    }
+
+    /* ══════════════════════════════════
+       SCREEN 2: LINK ACCOUNT
+    ══════════════════════════════════ */
+    .s2-hero {
+      height: 180px;
+      background: linear-gradient(135deg, #1e3a8a 0%, var(--blue) 50%, #6366f1 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .s2-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .s2-hero h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.3;
+      position: relative;
+      z-index: 1;
+    }
+    .s2-hero h2 em {
+      font-style: normal;
+      opacity: 0.85;
+    }
+
+    .s2-form {
+      padding: 32px 24px;
+      flex: 1;
+    }
+    .s2-form h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 24px;
+    }
+    .s2-field {
+      margin-bottom: 20px;
+    }
+    .s2-field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-muted);
+      margin-bottom: 6px;
+    }
+    .s2-field .input-box {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--ink);
+      background: #fff;
+      transition: border-color 0.2s;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .s2-field .input-box.focused {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(43, 92, 255, 0.1);
+    }
+    .s2-field .input-box .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 18px;
+      background: var(--blue);
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+      margin-left: 1px;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+    .s2-field .input-box .typed-text {
+      display: inline;
+    }
+    .s2-field .input-box.password .typed-text {
+      letter-spacing: 3px;
+    }
+
+    .link-btn {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      background: #e0e0e0;
+      color: #999;
+      border: none;
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      margin-top: 28px;
+      transition: background 0.3s, color 0.3s, transform 0.15s;
+    }
+    .link-btn.ready {
+      background: var(--blue);
+      color: #fff;
+    }
+    .link-btn.pressed {
+      transform: scale(0.97);
+      background: var(--blue-deep);
+    }
+
+    .s2-secured {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 12px;
+      color: var(--ink-faint);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .s2-secured svg { width: 14px; height: 14px; }
+
+    /* ══════════════════════════════════
+       SCREEN 3: SUCCESS
+    ══════════════════════════════════ */
+    .s3-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 48px 24px 24px;
+    }
+
+    .s3-check-circle {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      background: var(--green-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      position: relative;
+    }
+    .s3-check-circle svg {
+      width: 40px;
+      height: 40px;
+      color: var(--green);
+      opacity: 0;
+      transform: scale(0.5);
+      transition: opacity 0.4s, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .s3-check-circle.animate svg {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .s3-check-ring {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 3px solid var(--green);
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 0.3s 0.2s, transform 0.4s 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .s3-check-circle.animate .s3-check-ring {
+      opacity: 0.3;
+      transform: scale(1);
+    }
+
+    .s3-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 8px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s 0.3s, transform 0.4s 0.3s;
+    }
+    .s3-content.animate .s3-title {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .s3-subtitle {
+      font-size: 15px;
+      color: var(--ink-muted);
+      margin-bottom: 36px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s 0.5s, transform 0.4s 0.5s;
+    }
+    .s3-content.animate .s3-subtitle {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Data card */
+    .s3-data-card {
+      width: 100%;
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s 0.8s, transform 0.5s 0.8s;
+    }
+    .s3-content.animate .s3-data-card {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .s3-data-header {
+      padding: 16px 18px;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .s3-data-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .s3-data-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), #6366f1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .s3-data-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--ink);
+    }
+    .s3-data-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--green);
+      background: var(--green-bg);
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-weight: 500;
+    }
+
+    .s3-data-items {
+      padding: 4px 0;
+    }
+    .s3-data-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 18px;
+      border-bottom: 1px solid #f8f8f8;
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    .s3-data-item:last-child { border-bottom: none; }
+    .s3-data-item.show {
+      opacity: 1;
+      transform: translateX(0);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+    .s3-item-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .s3-item-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: var(--blue-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .s3-item-icon svg { width: 14px; height: 14px; color: var(--blue); }
+    .s3-item-name {
+      font-size: 13px;
+      color: var(--ink);
+      font-weight: 500;
+    }
+    .s3-item-retailer {
+      font-size: 11px;
+      color: var(--ink-faint);
+      margin-top: 1px;
+    }
+    .s3-item-price {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    /* ── PROGRESS DOTS ── */
+    .progress-dots {
+      display: flex;
+      gap: 8px;
+      margin-top: 32px;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ddd;
+      transition: background 0.3s, width 0.3s;
+    }
+    .dot.active {
+      background: var(--blue);
+      width: 24px;
+      border-radius: 4px;
+    }
+
+    /* ── REPLAY BUTTON ── */
+    .replay-btn {
+      margin-top: 28px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink-faint);
+      background: none;
+      border: 1px solid #e0e0e0;
+      padding: 10px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .replay-btn:hover {
+      color: var(--ink);
+      border-color: var(--ink-muted);
+    }
+    .replay-btn svg { width: 16px; height: 16px; }
+
+    /* ── STEP LABELS ── */
+    .step-label {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--ink-faint);
+      opacity: 0;
+      transition: opacity 0.4s;
+      white-space: nowrap;
+    }
+    .step-label.left {
+      right: calc(100% + 40px);
+    }
+    .step-label.right {
+      left: calc(100% + 40px);
+    }
+    .step-label.visible { opacity: 1; }
+    .step-label .step-num {
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="phone-wrapper">
+  <!-- Step labels floating beside the phone -->
+  <div class="step-label left" id="stepLabel1"><span class="step-num">01</span> &mdash; Make an offer</div>
+  <div class="step-label left" id="stepLabel2"><span class="step-num">02</span> &mdash; Customer links</div>
+  <div class="step-label left" id="stepLabel3"><span class="step-num">03</span> &mdash; Data flows in</div>
+
+  <div class="phone">
+    <div class="dynamic-island"></div>
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <div class="status-icons">
+        <svg viewBox="0 0 18 12"><path d="M1 8.5a1 1 0 011-1h1.5a1 1 0 011 1V11a1 1 0 01-1 1H2a1 1 0 01-1-1V8.5zM5.5 6a1 1 0 011-1H8a1 1 0 011 1v5a1 1 0 01-1 1H6.5a1 1 0 01-1-1V6zM10 3.5a1 1 0 011-1h1.5a1 1 0 011 1V11a1 1 0 01-1 1H11a1 1 0 01-1-1V3.5zM14.5 1a1 1 0 011-1H17a1 1 0 011 1v10a1 1 0 01-1 1h-1.5a1 1 0 01-1-1V1z" fill="currentColor"/></svg>
+        <svg viewBox="0 0 16 12"><path d="M8 2.4C10.3 2.4 12.4 3.3 14 4.8l1.4-1.4C13.3 1.3 10.8 0 8 0S2.7 1.3.6 3.4L2 4.8C3.6 3.3 5.7 2.4 8 2.4zm0 4c1.4 0 2.6.5 3.6 1.4l1.4-1.4c-1.3-1.2-3.1-2-5-2s-3.7.8-5 2l1.4 1.4c1-.9 2.2-1.4 3.6-1.4zM8 10l2-2.5c-.5-.4-1.2-.7-2-.7s-1.5.3-2 .7L8 10z" fill="currentColor"/></svg>
+        <svg viewBox="0 0 25 12"><rect x="0" y="1" width="21" height="10" rx="2.5" stroke="currentColor" fill="none" stroke-width="1"/><rect x="22" y="4" width="2" height="4" rx="0.5" fill="currentColor" opacity="0.4"/><rect x="1.5" y="2.5" width="16" height="7" rx="1.5" fill="currentColor"/></svg>
+      </div>
+    </div>
+
+    <div class="screens">
+      <!-- SCREEN 1: Email Offer -->
+      <div class="screen active" id="screen1">
+        <div class="s1-toolbar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <div class="s1-toolbar-icons">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
+          </div>
+        </div>
+
+        <div class="s1-subject">Exclusive offer!</div>
+
+        <div class="s1-meta">
+          <div class="s1-avatar">K</div>
+          <div class="s1-sender-info">
+            <div class="s1-sender-name">Kroger Rewards</div>
+            <div class="s1-sender-sub">to me</div>
+          </div>
+          <div class="s1-time">Just now</div>
+        </div>
+
+        <div class="s1-body">
+          <div class="s1-email-card">
+            <div class="kroger-logo">Kroger Rewards</div>
+            <h3>Start earning<br>2x rewards</h3>
+            <p>Link your Amazon account and we'll give you double points on your next 3 purchases.</p>
+            <div class="reward-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z"/></svg>
+              2X POINTS BONUS
+            </div>
+            <button class="claim-btn" id="claimBtn">
+              Claim offer
+              <span class="btn-ripple" id="claimRipple"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCREEN 2: Link Account -->
+      <div class="screen" id="screen2">
+        <div class="s2-hero">
+          <h2>Link and unlock<br><em>exclusive benefits</em></h2>
+        </div>
+
+        <div class="s2-form">
+          <h3>Sign in to Amazon</h3>
+
+          <div class="s2-field">
+            <label>Email address</label>
+            <div class="input-box" id="emailBox">
+              <span class="typed-text" id="emailText"></span><span class="cursor" id="emailCursor"></span>
+            </div>
+          </div>
+
+          <div class="s2-field">
+            <label>Password</label>
+            <div class="input-box password" id="passwordBox">
+              <span class="typed-text" id="passwordText"></span><span class="cursor" id="passwordCursor" style="display:none;"></span>
+            </div>
+          </div>
+
+          <button class="link-btn" id="linkBtn">Link account</button>
+
+          <div class="s2-secured">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            Secured by Ario
+          </div>
+        </div>
+      </div>
+
+      <!-- SCREEN 3: Success -->
+      <div class="screen" id="screen3">
+        <div class="s3-content" id="s3Content">
+          <div class="s3-check-circle" id="checkCircle">
+            <div class="s3-check-ring"></div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+
+          <div class="s3-title">Linking successful!</div>
+          <div class="s3-subtitle">Access granted to Amazon</div>
+
+          <div class="s3-data-card">
+            <div class="s3-data-header">
+              <div class="s3-data-header-left">
+                <div class="s3-data-avatar">SK</div>
+                <div class="s3-data-name">Sarah Kim</div>
+              </div>
+              <div class="s3-data-count">+127 transactions</div>
+            </div>
+            <div class="s3-data-items">
+              <div class="s3-data-item" data-delay="0">
+                <div class="s3-item-left">
+                  <div class="s3-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+                  <div>
+                    <div class="s3-item-name">Cheerios Family Size</div>
+                    <div class="s3-item-retailer">Amazon &middot; Mar 2</div>
+                  </div>
+                </div>
+                <div class="s3-item-price">$6.49</div>
+              </div>
+              <div class="s3-data-item" data-delay="1">
+                <div class="s3-item-left">
+                  <div class="s3-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+                  <div>
+                    <div class="s3-item-name">Olaplex No.3 Treatment</div>
+                    <div class="s3-item-retailer">Amazon &middot; Feb 28</div>
+                  </div>
+                </div>
+                <div class="s3-item-price">$30.00</div>
+              </div>
+              <div class="s3-data-item" data-delay="2">
+                <div class="s3-item-left">
+                  <div class="s3-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+                  <div>
+                    <div class="s3-item-name">Purina ONE Cat Food</div>
+                    <div class="s3-item-retailer">Amazon &middot; Feb 25</div>
+                  </div>
+                </div>
+                <div class="s3-item-price">$24.98</div>
+              </div>
+              <div class="s3-data-item" data-delay="3">
+                <div class="s3-item-left">
+                  <div class="s3-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+                  <div>
+                    <div class="s3-item-name">Stanley Tumbler 40oz</div>
+                    <div class="s3-item-retailer">Amazon &middot; Feb 20</div>
+                  </div>
+                </div>
+                <div class="s3-item-price">$35.00</div>
+              </div>
+              <div class="s3-data-item" data-delay="4">
+                <div class="s3-item-left">
+                  <div class="s3-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+                  <div>
+                    <div class="s3-item-name">Tide Pods 42ct</div>
+                    <div class="s3-item-retailer">Amazon &middot; Feb 14</div>
+                  </div>
+                </div>
+                <div class="s3-item-price">$13.97</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="progress-dots">
+  <div class="dot active" id="dot1"></div>
+  <div class="dot" id="dot2"></div>
+  <div class="dot" id="dot3"></div>
+</div>
+
+<button class="replay-btn" id="replayBtn" onclick="startDemo()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 105.64-8.36L1 10"/></svg>
+  Replay
+</button>
+
+<script>
+  const email = 'sarah@gmail.com';
+  const password = '••••••••••••';
+  let demoTimeout = [];
+
+  function clearTimers() {
+    demoTimeout.forEach(t => clearTimeout(t));
+    demoTimeout = [];
+  }
+
+  function wait(ms) {
+    return new Promise(resolve => {
+      const t = setTimeout(resolve, ms);
+      demoTimeout.push(t);
+    });
+  }
+
+  function setScreen(num) {
+    document.querySelectorAll('.screen').forEach(s => {
+      s.classList.remove('active', 'exit');
+    });
+    // Exit current
+    const screens = [1, 2, 3];
+    screens.forEach(n => {
+      const el = document.getElementById('screen' + n);
+      if (n < num) el.classList.add('exit');
+      if (n === num) el.classList.add('active');
+    });
+    // Dots
+    document.querySelectorAll('.dot').forEach((d, i) => {
+      d.classList.toggle('active', i === num - 1);
+    });
+    // Step labels
+    document.querySelectorAll('.step-label').forEach(l => l.classList.remove('visible'));
+    const label = document.getElementById('stepLabel' + num);
+    if (label) label.classList.add('visible');
+  }
+
+  async function typeText(elementId, text, speed) {
+    const el = document.getElementById(elementId);
+    el.textContent = '';
+    for (let i = 0; i < text.length; i++) {
+      el.textContent += text[i];
+      await wait(speed);
+    }
+  }
+
+  async function startDemo() {
+    clearTimers();
+
+    // Reset all states
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active', 'exit'));
+    document.getElementById('emailText').textContent = '';
+    document.getElementById('passwordText').textContent = '';
+    document.getElementById('emailCursor').style.display = 'none';
+    document.getElementById('passwordCursor').style.display = 'none';
+    document.getElementById('emailBox').classList.remove('focused');
+    document.getElementById('passwordBox').classList.remove('focused');
+    document.getElementById('linkBtn').classList.remove('ready', 'pressed');
+    document.getElementById('claimBtn').classList.remove('pressed');
+    document.getElementById('checkCircle').classList.remove('animate');
+    document.getElementById('s3Content').classList.remove('animate');
+    document.querySelectorAll('.s3-data-item').forEach(item => item.classList.remove('show'));
+    document.querySelectorAll('.step-label').forEach(l => l.classList.remove('visible'));
+
+    // ── SCREEN 1: Email ──
+    setScreen(1);
+    await wait(2500);
+
+    // Simulate button press
+    document.getElementById('claimBtn').classList.add('pressed');
+    const ripple = document.getElementById('claimRipple');
+    ripple.style.left = '50%';
+    ripple.style.top = '50%';
+    ripple.style.marginLeft = '-100px';
+    ripple.style.marginTop = '-100px';
+    ripple.classList.add('animate');
+    await wait(400);
+    ripple.classList.remove('animate');
+
+    // ── SCREEN 2: Link ──
+    setScreen(2);
+    await wait(600);
+
+    // Type email
+    document.getElementById('emailBox').classList.add('focused');
+    document.getElementById('emailCursor').style.display = 'inline-block';
+    await wait(300);
+    await typeText('emailText', email, 65);
+    await wait(300);
+    document.getElementById('emailCursor').style.display = 'none';
+    document.getElementById('emailBox').classList.remove('focused');
+
+    // Type password
+    await wait(200);
+    document.getElementById('passwordBox').classList.add('focused');
+    document.getElementById('passwordCursor').style.display = 'inline-block';
+    await wait(300);
+    await typeText('passwordText', password, 80);
+    await wait(300);
+    document.getElementById('passwordCursor').style.display = 'none';
+    document.getElementById('passwordBox').classList.remove('focused');
+
+    // Enable button
+    await wait(200);
+    document.getElementById('linkBtn').classList.add('ready');
+    await wait(600);
+
+    // Press button
+    document.getElementById('linkBtn').classList.add('pressed');
+    await wait(400);
+
+    // ── SCREEN 3: Success ──
+    setScreen(3);
+    await wait(300);
+
+    // Animate check
+    document.getElementById('checkCircle').classList.add('animate');
+    document.getElementById('s3Content').classList.add('animate');
+
+    // Stagger data items
+    await wait(1200);
+    const items = document.querySelectorAll('.s3-data-item');
+    for (let i = 0; i < items.length; i++) {
+      items[i].classList.add('show');
+      await wait(180);
+    }
+
+    // Hold on success
+    await wait(4000);
+  }
+
+  // Auto-start
+  window.addEventListener('load', () => {
+    setTimeout(startDemo, 600);
+  });
+</script>
+
+</body>
+</html>
