@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ario — How It Works</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #2B5CFF;
+      --blue-deep: #1A4AE6;
+      --blue-pale: #EEF2FF;
+      --ink: #111111;
+      --ink-soft: #2A2A2A;
+      --ink-muted: #666666;
+      --ink-faint: #999999;
+      --paper: #FAFAFA;
+      --green: #22C55E;
+      --green-bg: #F0FDF4;
+      --border: #E5E7EB;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #fff;
+      font-family: 'DM Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* ══════════════════════════════════════════
+       MAIN CONTAINER
+    ══════════════════════════════════════════ */
+    .demo-frame {
+      width: 960px;
+      height: 680px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+      position: relative;
+    }
+
+    /* ── FAKE CURSOR ── */
+    .fake-cursor {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      z-index: 50;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+    }
+    .fake-cursor.visible { opacity: 1; }
+    .fake-cursor.clicking { transform: scale(0.85); }
+
+    /* Click ripple */
+    .click-ripple {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(43, 92, 255, 0.2);
+      z-index: 49;
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0;
+    }
+    .click-ripple.animate {
+      animation: ripple 0.5s ease-out forwards;
+    }
+    @keyframes ripple {
+      0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+    }
+
+    /* ── STEP BAR ── */
+    .step-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 48px;
+      height: 64px;
+      border-bottom: 1px solid var(--border);
+      gap: 0;
+      flex-shrink: 0;
+      background: #fff;
+    }
+    .step-indicator {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+    }
+    .step-indicator::after {
+      content: '';
+      width: 80px;
+      height: 2px;
+      background: var(--border);
+      margin: 0 20px;
+      transition: background 0.5s;
+    }
+    .step-indicator:last-child::after { display: none; }
+    .step-indicator.done::after { background: var(--blue); }
+    .step-num-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-faint);
+      flex-shrink: 0;
+      transition: all 0.4s;
+    }
+    .step-indicator.active .step-num-circle,
+    .step-indicator.done .step-num-circle {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: #fff;
+    }
+    .step-label-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink-faint);
+      white-space: nowrap;
+      transition: color 0.4s;
+    }
+    .step-indicator.active .step-label-text,
+    .step-indicator.done .step-label-text { color: var(--ink); }
+
+    /* ── FLOW STAGE ── */
+    .flow-stage {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      background: var(--paper);
+    }
+    .flow-screen {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      padding: 32px 40px;
+    }
+    .flow-screen.active { opacity: 1; transform: translateY(0); }
+    .flow-screen.exit { opacity: 0; transform: translateY(-24px); }
+
+    /* ── SCREEN 1: EMAIL MOCK ── */
+    .email-mock {
+      width: 100%;
+      max-width: 580px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .email-mock.entered { opacity: 1; transform: translateY(0); }
+
+    .email-mock-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 22px;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+    }
+    .email-mock-toolbar-left { display: flex; align-items: center; gap: 16px; }
+    .email-mock-toolbar svg { width: 18px; height: 18px; color: var(--ink-faint); }
+    .email-mock-toolbar-icons { display: flex; gap: 12px; }
+
+    .email-mock-subject {
+      padding: 22px 28px 16px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--ink);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.4s 0.15s, transform 0.4s 0.15s;
+    }
+    .email-mock.entered .email-mock-subject { opacity: 1; transform: translateY(0); }
+
+    .email-mock-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 28px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      opacity: 0;
+      transition: opacity 0.4s 0.25s;
+    }
+    .email-mock.entered .email-mock-meta { opacity: 1; }
+
+    .email-mock-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+    .email-mock-sender { flex: 1; }
+    .email-mock-sender-name { font-weight: 600; font-size: 15px; color: var(--ink); }
+    .email-mock-sender-sub { font-size: 12px; color: var(--ink-faint); }
+    .email-mock-time { font-size: 12px; color: var(--ink-faint); }
+
+    .email-mock-body {
+      padding: 28px 28px 32px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.5s 0.35s, transform 0.5s 0.35s;
+    }
+    .email-mock.entered .email-mock-body { opacity: 1; transform: translateY(0); }
+
+    .email-mock-brand {
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--blue);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .email-mock-body h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 8px;
+      line-height: 1.25;
+    }
+    .email-mock-body p {
+      font-size: 15px;
+      color: var(--ink-muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .email-reward-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--blue-pale);
+      color: var(--blue);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    .email-claim-btn {
+      display: block;
+      width: 100%;
+      max-width: 340px;
+      margin: 0 auto;
+      padding: 14px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: default;
+      transition: transform 0.15s, background 0.15s;
+    }
+    .email-claim-btn.pressed { transform: scale(0.97); background: var(--blue-deep); }
+
+    /* ── SCREEN 2: LOGIN MOCK ── */
+    .login-mock {
+      width: 100%;
+      max-width: 440px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    }
+    .login-mock-hero {
+      padding: 32px 36px;
+      background: linear-gradient(135deg, #1e3a8a 0%, var(--blue) 50%, #6366f1 100%);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .login-mock-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .login-mock-hero h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.3;
+      position: relative;
+      z-index: 1;
+    }
+    .login-mock-hero h2 em { font-style: normal; opacity: 0.85; }
+
+    .login-mock-form { padding: 28px 36px 32px; }
+    .login-mock-form h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 22px;
+    }
+    .login-field { margin-bottom: 16px; }
+    .login-field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-muted);
+      margin-bottom: 6px;
+    }
+    .login-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--ink);
+      background: #fff;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .login-input.focused {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(43, 92, 255, 0.1);
+    }
+    .login-input .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 16px;
+      background: var(--blue);
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+      margin-left: 1px;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+    .login-input .typed-text { display: inline; }
+    .login-input.password .typed-text { letter-spacing: 3px; }
+
+    .login-submit-btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: #e0e0e0;
+      color: #999;
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      margin-top: 22px;
+      cursor: default;
+      transition: background 0.3s, color 0.3s, transform 0.15s;
+    }
+    .login-submit-btn.ready { background: var(--blue); color: #fff; }
+    .login-submit-btn.pressed { transform: scale(0.97); background: var(--blue-deep); }
+    .login-secured {
+      text-align: center;
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--ink-faint);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .login-secured svg { width: 14px; height: 14px; }
+
+    /* ── SCREEN 3: SUCCESS ── */
+    .success-card {
+      width: 100%;
+      max-width: 460px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+      text-align: center;
+    }
+    .success-card-top {
+      padding: 44px 40px 28px;
+    }
+    .success-check-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--green-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 22px;
+      position: relative;
+    }
+    .success-check-circle svg {
+      width: 36px;
+      height: 36px;
+      color: var(--green);
+      opacity: 0;
+      transform: scale(0.5);
+      transition: opacity 0.4s, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .success-check-circle.animate svg { opacity: 1; transform: scale(1); }
+    .success-check-ring {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 3px solid var(--green);
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 0.3s 0.2s, transform 0.4s 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .success-check-circle.animate .success-check-ring { opacity: 0.3; transform: scale(1); }
+    .success-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 8px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s 0.3s, transform 0.4s 0.3s;
+    }
+    .success-card.animate .success-title { opacity: 1; transform: translateY(0); }
+    .success-subtitle {
+      font-size: 15px;
+      color: var(--ink-muted);
+      line-height: 1.6;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s 0.5s, transform 0.4s 0.5s;
+    }
+    .success-card.animate .success-subtitle { opacity: 1; transform: translateY(0); }
+
+    /* Reward confirmation */
+    .success-reward {
+      margin: 0 40px;
+      padding: 20px 0;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-align: left;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.4s 0.7s, transform 0.4s 0.7s;
+    }
+    .success-card.animate .success-reward { opacity: 1; transform: translateY(0); }
+    .success-reward-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--blue-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .success-reward-icon svg { width: 22px; height: 22px; color: var(--blue); }
+    .success-reward-info { flex: 1; }
+    .success-reward-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .success-reward-detail {
+      font-size: 12px;
+      color: var(--ink-faint);
+      margin-top: 2px;
+    }
+    .success-reward-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--green);
+      background: var(--green-bg);
+      padding: 5px 10px;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    /* Done button */
+    .success-card-bottom {
+      padding: 16px 40px 36px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.4s 0.9s, transform 0.4s 0.9s;
+    }
+    .success-card.animate .success-card-bottom { opacity: 1; transform: translateY(0); }
+    .success-done-btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: default;
+    }
+    .success-secured {
+      text-align: center;
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--ink-faint);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .success-secured svg { width: 14px; height: 14px; }
+
+    /* ── REPLAY ── */
+    .replay-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink-muted);
+      background: #fff;
+      border: 1px solid var(--border);
+      padding: 10px 24px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s, box-shadow 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .replay-btn:hover {
+      color: var(--ink);
+      border-color: var(--ink-muted);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    }
+    .replay-btn svg { width: 14px; height: 14px; }
+  </style>
+</head>
+<body>
+
+<div class="demo-frame" id="demoFrame">
+  <!-- Fake cursor -->
+  <svg class="fake-cursor" id="fakeCursor" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.87c.48 0 .68-.61.3-.92L6.41 2.94a.5.5 0 0 0-.91.27Z" fill="#fff" stroke="#111" stroke-width="1.5"/>
+  </svg>
+  <div class="click-ripple" id="clickRipple"></div>
+
+  <!-- Step indicators -->
+  <div class="step-bar">
+    <div class="step-indicator" id="step1">
+      <div class="step-num-circle">1</div>
+      <div class="step-label-text">Make an Offer</div>
+    </div>
+    <div class="step-indicator" id="step2">
+      <div class="step-num-circle">2</div>
+      <div class="step-label-text">Customer Links</div>
+    </div>
+    <div class="step-indicator" id="step3">
+      <div class="step-num-circle">3</div>
+      <div class="step-label-text">Data Flows In</div>
+    </div>
+  </div>
+
+  <!-- Flow screens -->
+  <div class="flow-stage">
+    <!-- SCREEN 1: Email -->
+    <div class="flow-screen active" id="flowScreen1">
+      <div class="email-mock" id="emailMock">
+        <div class="email-mock-toolbar">
+          <div class="email-mock-toolbar-left">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </div>
+          <div class="email-mock-toolbar-icons">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
+          </div>
+        </div>
+        <div class="email-mock-subject">Exclusive offer from Greenleaf Market</div>
+        <div class="email-mock-meta">
+          <div class="email-mock-avatar">G</div>
+          <div class="email-mock-sender">
+            <div class="email-mock-sender-name">Greenleaf Market</div>
+            <div class="email-mock-sender-sub">rewards@greenleafmarket.com &middot; to sarah@gmail.com</div>
+          </div>
+          <div class="email-mock-time">Just now</div>
+        </div>
+        <div class="email-mock-body">
+          <div class="email-mock-brand">Greenleaf Market</div>
+          <h3>Start earning 2x rewards</h3>
+          <p>Link your Amazon account and we'll give you double points on your next 3 purchases.</p>
+          <div class="email-reward-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z"/></svg>
+            2X POINTS BONUS
+          </div>
+          <button class="email-claim-btn" id="claimBtn">Claim offer</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 2: Login -->
+    <div class="flow-screen" id="flowScreen2">
+      <div class="login-mock">
+        <div class="login-mock-hero">
+          <h2>Link and unlock<br><em>exclusive benefits</em></h2>
+        </div>
+        <div class="login-mock-form">
+          <h3>Sign in to Amazon</h3>
+          <div class="login-field">
+            <label>Email address</label>
+            <div class="login-input" id="emailBox">
+              <span class="typed-text" id="emailText"></span><span class="cursor" id="emailCursor" style="display:none;"></span>
+            </div>
+          </div>
+          <div class="login-field">
+            <label>Password</label>
+            <div class="login-input password" id="passwordBox">
+              <span class="typed-text" id="passwordText"></span><span class="cursor" id="passwordCursor" style="display:none;"></span>
+            </div>
+          </div>
+          <button class="login-submit-btn" id="linkBtn">Link account</button>
+          <div class="login-secured">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            Secured by Ario
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 3: Customer Success -->
+    <div class="flow-screen" id="flowScreen3">
+      <div class="success-card" id="successCard">
+        <div class="success-card-top">
+          <div class="success-check-circle" id="checkCircle">
+            <div class="success-check-ring"></div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <div class="success-title">You're all set!</div>
+          <div class="success-subtitle">Your Amazon account is now linked to Greenleaf Market. You'll start earning rewards automatically.</div>
+        </div>
+        <div class="success-reward">
+          <div class="success-reward-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z"/></svg>
+          </div>
+          <div class="success-reward-info">
+            <div class="success-reward-label">2x Points Bonus</div>
+            <div class="success-reward-detail">Active on your next 3 purchases</div>
+          </div>
+          <div class="success-reward-badge">Active</div>
+        </div>
+        <div class="success-card-bottom">
+          <button class="success-done-btn">Start shopping &rarr;</button>
+          <div class="success-secured">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            Your data is protected by Ario
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Replay -->
+<button class="replay-btn" id="replayBtn" onclick="startDemo()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 105.64-8.36L1 10"/></svg>
+  Replay
+</button>
+
+<script>
+  const emailStr = 'sarah@gmail.com';
+  const passwordStr = '••••••••••••';
+  let demoTimeout = [];
+
+  function clearTimers() {
+    demoTimeout.forEach(t => clearTimeout(t));
+    demoTimeout = [];
+  }
+
+  function wait(ms) {
+    return new Promise(resolve => {
+      const t = setTimeout(resolve, ms);
+      demoTimeout.push(t);
+    });
+  }
+
+  function setStep(num) {
+    for (let i = 1; i <= 3; i++) {
+      const el = document.getElementById('step' + i);
+      el.classList.remove('active', 'done');
+      if (i < num) el.classList.add('done');
+      if (i === num) el.classList.add('active');
+    }
+  }
+
+  function setFlowScreen(num) {
+    document.querySelectorAll('.flow-screen').forEach(s => s.classList.remove('active', 'exit'));
+    for (let i = 1; i <= 3; i++) {
+      const el = document.getElementById('flowScreen' + i);
+      if (i < num) el.classList.add('exit');
+      if (i === num) el.classList.add('active');
+    }
+  }
+
+  async function typeText(elementId, text, speed) {
+    const el = document.getElementById(elementId);
+    el.textContent = '';
+    for (let i = 0; i < text.length; i++) {
+      el.textContent += text[i];
+      await wait(speed);
+    }
+  }
+
+  /* ── CURSOR HELPERS ── */
+  const cursor = document.getElementById('fakeCursor');
+  const ripple = document.getElementById('clickRipple');
+  const frame = document.getElementById('demoFrame');
+
+  function moveCursorTo(targetEl, offsetX, offsetY) {
+    return new Promise(resolve => {
+      const frameRect = frame.getBoundingClientRect();
+      const targetRect = targetEl.getBoundingClientRect();
+      const x = targetRect.left - frameRect.left + (offsetX || targetRect.width / 2);
+      const y = targetRect.top - frameRect.top + (offsetY || targetRect.height / 2);
+
+      cursor.classList.add('visible');
+      cursor.style.transition = 'left 0.6s cubic-bezier(0.4, 0, 0.2, 1), top 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+      cursor.style.left = x + 'px';
+      cursor.style.top = y + 'px';
+
+      setTimeout(resolve, 650);
+    });
+  }
+
+  function cursorClick() {
+    return new Promise(resolve => {
+      const x = parseFloat(cursor.style.left);
+      const y = parseFloat(cursor.style.top);
+
+      // Cursor press
+      cursor.classList.add('clicking');
+
+      // Ripple
+      ripple.style.left = x + 'px';
+      ripple.style.top = y + 'px';
+      ripple.classList.remove('animate');
+      void ripple.offsetWidth;
+      ripple.classList.add('animate');
+
+      setTimeout(() => {
+        cursor.classList.remove('clicking');
+        resolve();
+      }, 200);
+    });
+  }
+
+  function hideCursor() {
+    cursor.classList.remove('visible');
+  }
+
+  /* ══════════════════════════════════
+     MAIN DEMO SEQUENCE
+  ══════════════════════════════════ */
+  async function startDemo() {
+    clearTimers();
+
+    // Reset all states
+    document.querySelectorAll('.flow-screen').forEach(s => s.classList.remove('active', 'exit'));
+    document.querySelectorAll('.step-indicator').forEach(s => s.classList.remove('active', 'done'));
+    document.getElementById('emailText').textContent = '';
+    document.getElementById('passwordText').textContent = '';
+    document.getElementById('emailCursor').style.display = 'none';
+    document.getElementById('passwordCursor').style.display = 'none';
+    document.getElementById('emailBox').classList.remove('focused');
+    document.getElementById('passwordBox').classList.remove('focused');
+    document.getElementById('linkBtn').classList.remove('ready', 'pressed');
+    document.getElementById('claimBtn').classList.remove('pressed');
+    document.getElementById('checkCircle').classList.remove('animate');
+    document.getElementById('successCard').classList.remove('animate');
+    document.getElementById('emailMock').classList.remove('entered');
+    hideCursor();
+    cursor.style.left = '480px';
+    cursor.style.top = '600px';
+    cursor.style.transition = 'none';
+
+    await wait(400);
+
+    // ── STEP 1: EMAIL OFFER ──
+    setStep(1);
+    setFlowScreen(1);
+
+    // Staggered entrance animation
+    await wait(200);
+    document.getElementById('emailMock').classList.add('entered');
+
+    // Wait for entrance, then move cursor to button
+    await wait(1200);
+    await moveCursorTo(document.getElementById('claimBtn'));
+    await wait(300);
+    await cursorClick();
+    document.getElementById('claimBtn').classList.add('pressed');
+    await wait(400);
+
+    // ── STEP 2: CUSTOMER LINKS ──
+    setStep(2);
+    setFlowScreen(2);
+    hideCursor();
+    await wait(600);
+
+    // Move cursor to email field and click
+    await moveCursorTo(document.getElementById('emailBox'));
+    await wait(200);
+    await cursorClick();
+    document.getElementById('emailBox').classList.add('focused');
+    document.getElementById('emailCursor').style.display = 'inline-block';
+    hideCursor();
+    await wait(300);
+    await typeText('emailText', emailStr, 55);
+    await wait(250);
+    document.getElementById('emailCursor').style.display = 'none';
+    document.getElementById('emailBox').classList.remove('focused');
+
+    // Move cursor to password field and click
+    await wait(150);
+    await moveCursorTo(document.getElementById('passwordBox'));
+    await wait(200);
+    await cursorClick();
+    document.getElementById('passwordBox').classList.add('focused');
+    document.getElementById('passwordCursor').style.display = 'inline-block';
+    hideCursor();
+    await wait(250);
+    await typeText('passwordText', passwordStr, 70);
+    await wait(250);
+    document.getElementById('passwordCursor').style.display = 'none';
+    document.getElementById('passwordBox').classList.remove('focused');
+
+    // Move cursor to Link account button
+    await wait(200);
+    document.getElementById('linkBtn').classList.add('ready');
+    await wait(300);
+    await moveCursorTo(document.getElementById('linkBtn'));
+    await wait(250);
+    await cursorClick();
+    document.getElementById('linkBtn').classList.add('pressed');
+    await wait(400);
+
+    // ── STEP 3: DATA FLOWS IN ──
+    hideCursor();
+    setStep(3);
+    setFlowScreen(3);
+
+    // Success animation — customer view
+    await wait(300);
+    document.getElementById('checkCircle').classList.add('animate');
+    document.getElementById('successCard').classList.add('animate');
+
+    // Hold at end
+    await wait(5000);
+  }
+
+  // Auto-start
+  window.addEventListener('load', () => {
+    setTimeout(startDemo, 600);
+  });
+</script>
+
+</body>
+</html>
