@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Canonical Design for Consumer Research</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F8F6F2;
+            --bg-dark: #0A0A0A;
+            --bg-blue: #2B5CFF;
+            --text: #111111;
+            --text-secondary: #2A2A2A;
+            --text-muted: #666666;
+            --accent: #2B5CFF;
+            --accent-hover: #1A4AE6;
+            --accent-pale: #EEF2FF;
+            --green: #4caf50;
+            --border: #E0E0E0;
+            --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --font: var(--font-body);
+            --pad-x: clamp(40px, 5vw, 80px);
+            --pad-y: clamp(32px, 4vh, 60px);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; scroll-snap-type: y mandatory; height: 100%; overflow-x: hidden; }
+        body { font-family: var(--font); background: var(--bg); color: var(--text); height: 100%; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+        .slide { width: 100vw; height: 100vh; height: 100dvh; padding: var(--pad-y) var(--pad-x); scroll-snap-align: start; display: flex; flex-direction: column; position: relative; overflow: hidden; background: var(--bg); }
+        .slide-body { flex: 1; display: flex; flex-direction: column; justify-content: center; padding-bottom: clamp(30px, 5vh, 60px); }
+        .ario-logo { position: absolute; bottom: clamp(20px, 3vh, 36px); left: var(--pad-x); height: clamp(20px, 2.5vw, 30px); width: auto; }
+        .page-num { position: absolute; bottom: clamp(20px, 3vh, 36px); right: var(--pad-x); display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+        .page-num .line { width: 24px; height: 1.5px; background: var(--text); }
+        .page-num .num { font-family: var(--font-mono); font-weight: 500; font-size: clamp(12px, 1.2vw, 15px); color: var(--accent); }
+        h1 { font-family: var(--font-heading); font-weight: 900; font-size: clamp(28px, 5vw, 56px); line-height: 1.1; letter-spacing: -0.03em; color: var(--text); margin-bottom: clamp(20px, 3vh, 40px); }
+        h2 { font-family: var(--font-heading); font-weight: 800; font-size: clamp(22px, 3.5vw, 40px); line-height: 1.15; letter-spacing: -0.02em; color: var(--text); margin-bottom: clamp(20px, 3.5vh, 40px); }
+        h3 { font-family: var(--font-heading); font-weight: 700; font-size: clamp(14px, 1.6vw, 20px); line-height: 1.3; color: var(--text); }
+        p, li { font-size: clamp(14px, 1.5vw, 20px); line-height: 1.6; color: var(--text-secondary); }
+        .slide-dark { background: var(--bg-dark); }
+        .slide-dark h1, .slide-dark h2 { color: #f0ece4; font-size: clamp(32px, 6vw, 72px); line-height: 1.05; letter-spacing: -0.03em; }
+        .slide-dark .ario-logo { filter: brightness(0) invert(1); }
+        .slide-dark .page-num .line { background: rgba(255,255,255,0.3); }
+        .slide-dark .page-num .num { color: rgba(255,255,255,0.4); }
+        .slide-dark .slide-body { justify-content: center; }
+        .slide-blue { background: var(--bg-blue); }
+        .slide-blue h1 { color: #c8ff00; font-size: clamp(30px, 5.5vw, 64px); line-height: 1.05; }
+        .slide-blue p { color: rgba(255,255,255,0.9); }
+        .slide-blue .ario-logo { filter: brightness(0) invert(1); }
+        .slide-blue .date { font-size: clamp(14px, 1.5vw, 20px); font-weight: 600; color: #ffffff; margin-top: auto; margin-bottom: clamp(40px, 6vh, 80px); }
+        .stat-big { font-family: var(--font-heading); font-weight: 800; font-size: clamp(24px, 3.5vw, 40px); color: var(--accent); display: block; margin-top: clamp(8px, 1vh, 14px); }
+        .stat-label { font-size: clamp(10px, 1vw, 13px); color: var(--text-muted); font-weight: 500; }
+        .stat-row { display: flex; gap: clamp(32px, 5vw, 80px); margin-bottom: clamp(16px, 2.5vh, 32px); }
+        .stat-item .stat-big { margin-top: 0; }
+        .logo-pills { display: flex; flex-wrap: wrap; gap: clamp(6px, 0.8vw, 10px); }
+        .pill { background: #ffffff; border: 1px solid var(--border); border-radius: 100px; padding: 0.35em 1em; font-weight: 700; font-size: clamp(11px, 1.1vw, 14px); color: var(--text-secondary); white-space: nowrap; }
+        .punchline { font-weight: 700; font-size: clamp(13px, 1.4vw, 18px); color: var(--accent); margin-top: clamp(12px, 1.5vh, 20px); padding: 0.5em 0.8em; background: rgba(0, 71, 255, 0.06); border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; }
+
+        /* ── Rod comparison layout ── */
+        .rod-compare {
+            display: flex;
+            align-items: flex-end;
+            gap: clamp(16px, 2.5vw, 32px);
+            flex: 1;
+            padding-bottom: clamp(20px, 3vh, 40px);
+        }
+        .rod-compare-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(8px, 1vh, 14px);
+        }
+        .rod-compare-item img {
+            border-radius: 10px;
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
+        .rod-compare-item.rod-small {
+            width: clamp(160px, 20vw, 280px);
+            height: clamp(180px, 28vh, 300px);
+        }
+        .rod-compare-item.rod-small img {
+            opacity: 0.7;
+        }
+        .rod-compare-item.rod-large {
+            width: clamp(300px, 40vw, 540px);
+            height: clamp(280px, 50vh, 480px);
+        }
+        .rod-compare-label {
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: clamp(16px, 2vw, 26px);
+            color: var(--text);
+            letter-spacing: -0.02em;
+        }
+        .rod-compare-arrow {
+            font-size: clamp(24px, 3vw, 40px);
+            font-weight: 800;
+            color: var(--accent);
+            align-self: center;
+            flex-shrink: 0;
+        }
+
+        /* ── Photo-driven slide layouts ── */
+
+        /* Split: text left, image right */
+        .split-layout {
+            display: grid;
+            grid-template-columns: 2fr 3fr;
+            gap: clamp(24px, 4vw, 60px);
+            align-items: center;
+            flex: 1;
+        }
+        .split-layout .split-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .split-layout .split-image {
+            width: 100%;
+            height: clamp(360px, 75vh, 620px);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .split-layout .split-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Full-bleed photo with text overlay */
+        .slide-photo {
+            padding: 0;
+            position: relative;
+        }
+        .slide-photo .photo-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+        .slide-photo .photo-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .slide-photo .photo-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+        .slide-photo .slide-body {
+            position: relative;
+            z-index: 2;
+            padding: var(--pad-y) var(--pad-x);
+        }
+        .slide-photo .ario-logo,
+        .slide-photo .page-num {
+            z-index: 3;
+        }
+
+        /* Criteria visual */
+        .criteria-stack {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(16px, 2.5vh, 32px);
+            max-width: 800px;
+        }
+        .criteria-item {
+            display: flex;
+            align-items: flex-start;
+            gap: clamp(16px, 2vw, 28px);
+        }
+        .criteria-num {
+            width: clamp(44px, 5vw, 60px);
+            height: clamp(44px, 5vw, 60px);
+            min-width: clamp(44px, 5vw, 60px);
+            background: var(--accent);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: clamp(18px, 2vw, 26px);
+        }
+        .criteria-text {
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: clamp(17px, 2.2vw, 28px);
+            color: var(--text);
+            line-height: 1.35;
+            padding-top: clamp(6px, 1vh, 14px);
+        }
+
+        /* Q11 visual */
+        .q11-visual {
+            display: flex;
+            align-items: center;
+            gap: clamp(20px, 3vw, 40px);
+            margin-top: clamp(16px, 2vh, 24px);
+        }
+        .q11-survey {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: clamp(20px, 2.5vw, 36px);
+            width: clamp(200px, 30vw, 380px);
+        }
+        .q11-line {
+            height: 10px;
+            background: rgba(0,0,0,0.06);
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .q11-line:nth-child(odd) { width: 90%; }
+        .q11-line:nth-child(even) { width: 70%; }
+        .q11-label {
+            font-family: var(--font-mono);
+            font-weight: 500;
+            font-size: clamp(11px, 1vw, 14px);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 6px;
+        }
+        .q11-plus {
+            font-weight: 900;
+            font-size: clamp(36px, 5vw, 64px);
+            color: var(--accent);
+        }
+        .q11-data {
+            background: rgba(0, 71, 255, 0.06);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: clamp(20px, 2.5vw, 36px);
+            width: clamp(200px, 30vw, 380px);
+        }
+        .q11-receipt {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .q11-receipt-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+            border-bottom: 1px dashed rgba(0,71,255,0.15);
+        }
+        .q11-receipt-row:last-child { border-bottom: none; }
+        .q11-receipt-item {
+            font-size: clamp(11px, 1.1vw, 14px);
+            font-weight: 600;
+            color: var(--text);
+        }
+        .q11-receipt-price {
+            font-size: clamp(11px, 1.1vw, 14px);
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        /* Contradiction layout */
+        .contradiction {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: clamp(16px, 2.5vw, 32px);
+            align-items: center;
+            margin-top: clamp(12px, 2vh, 24px);
+        }
+        .contradiction-side {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: clamp(24px, 3vw, 40px);
+            text-align: center;
+        }
+        .contradiction-side.yes { border-color: var(--green); background: rgba(76, 175, 80, 0.04); }
+        .contradiction-side.no { border-color: #e53935; background: rgba(229, 57, 53, 0.04); }
+        .contradiction-icon {
+            font-size: clamp(36px, 5vw, 56px);
+            margin-bottom: clamp(8px, 1vh, 14px);
+        }
+        .contradiction-desc {
+            font-weight: 700;
+            font-size: clamp(14px, 1.6vw, 22px);
+            color: var(--text);
+            line-height: 1.35;
+        }
+        .contradiction-sub {
+            font-size: clamp(12px, 1.2vw, 16px);
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+        .contradiction-vs {
+            font-weight: 900;
+            font-size: clamp(16px, 2vw, 24px);
+            color: var(--text-muted);
+        }
+
+        /* Data sharing scale */
+        .share-scale {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(14px, 2vh, 24px);
+            margin-top: clamp(12px, 2vh, 20px);
+        }
+        .share-bar-row {
+            display: flex;
+            align-items: center;
+            gap: clamp(12px, 1.5vw, 20px);
+        }
+        .share-bar-label {
+            font-weight: 700;
+            font-size: clamp(13px, 1.3vw, 17px);
+            color: var(--text);
+            min-width: clamp(100px, 12vw, 160px);
+            text-align: right;
+        }
+        .share-bar-track {
+            flex: 1;
+            height: clamp(28px, 3.5vh, 44px);
+            background: rgba(0,0,0,0.04);
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+        .share-bar-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: clamp(8px, 1vw, 14px);
+            transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .share-bar-value {
+            font-weight: 800;
+            font-size: clamp(12px, 1.2vw, 16px);
+            color: #fff;
+        }
+
+        /* Account linking phone mockup grid */
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(16px, 2vw, 28px);
+            margin-top: clamp(12px, 2vh, 20px);
+        }
+        .link-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            text-align: center;
+        }
+        .link-card img {
+            width: 100%;
+            height: clamp(220px, 35vh, 360px);
+            object-fit: contain;
+            background: #F8F6F2;
+            padding: clamp(8px, 1vw, 16px);
+        }
+        .link-card .link-card-body {
+            padding: clamp(12px, 1.5vw, 20px);
+        }
+        .link-card h3 {
+            margin-bottom: 2px;
+        }
+        .link-card p {
+            font-size: clamp(11px, 1vw, 14px);
+            color: var(--text-muted);
+        }
+
+        .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        .slide.visible .reveal { opacity: 1; transform: translateY(0); }
+        .reveal:nth-child(1) { transition-delay: 0.05s; }
+        .reveal:nth-child(2) { transition-delay: 0.12s; }
+        .reveal:nth-child(3) { transition-delay: 0.19s; }
+        .reveal:nth-child(4) { transition-delay: 0.26s; }
+        .reveal:nth-child(5) { transition-delay: 0.33s; }
+        .reveal:nth-child(6) { transition-delay: 0.40s; }
+        .progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--accent); z-index: 1000; width: 0%; transition: width 0.3s ease; }
+        .nav-dots { position: fixed; right: clamp(8px, 1vw, 14px); top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 6px; z-index: 100; }
+        .nav-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(0,0,0,0.15); border: none; cursor: pointer; transition: all 0.3s ease; padding: 0; }
+        .nav-dot.active { background: var(--accent); transform: scale(1.4); }
+        .edit-badge { position: fixed; top: 12px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #fff; font-family: var(--font); font-weight: 700; font-size: 12px; padding: 5px 14px; border-radius: 100px; z-index: 1001; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; letter-spacing: 0.05em; text-transform: uppercase; }
+        .edit-badge.visible { opacity: 1; }
+        body.edit-mode [contenteditable="true"] { outline: 2px dashed var(--accent); outline-offset: 3px; border-radius: 4px; cursor: text; }
+        body.edit-mode [contenteditable="true"]:focus { outline: 2px solid var(--accent); background: rgba(0, 71, 255, 0.04); }
+        @media (max-width: 768px) {
+            .split-layout { grid-template-columns: 1fr; }
+            .split-layout .split-image { height: 200px; }
+            .q11-visual { flex-direction: column; }
+            .contradiction { grid-template-columns: 1fr; }
+            .contradiction-vs { transform: rotate(90deg); }
+            .link-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-height: 600px) { .nav-dots { display: none; } }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; } html { scroll-behavior: auto; } .reveal { opacity: 1; transform: none; } }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    <nav class="nav-dots" id="navDots"></nav>
+    <div class="edit-badge" id="editBadge">Edit Mode — Press E to exit</div>
+
+    <!-- SLIDE 1: Title -->
+    <section class="slide slide-blue" id="slide-1">
+        <div class="slide-body" style="justify-content: flex-start; padding-top: clamp(30px, 5vh, 60px); position: relative; z-index: 1;">
+            <h1 class="reveal" style="max-width: 65%; color: #c8ff00;">The Canonical Design<br>for Consumer Research</h1>
+            <div class="date reveal">Ario — 2026</div>
+        </div>
+        <img src="ario-logo.png" alt="ario" class="ario-logo">
+    </section>
+
+    <!-- SLIDE 2: The Shower Rod — Photo comparison -->
+    <section class="slide" id="slide-2">
+        <div class="slide-body" style="padding-top: clamp(16px, 2vh, 32px);">
+            <h2 class="reveal" style="margin-bottom: clamp(8px, 1.5vh, 16px);">A small curve changes everything.</h2>
+            <p class="reveal" style="max-width: 500px; color: var(--text-muted); font-size: clamp(13px, 1.3vw, 17px); margin-bottom: clamp(12px, 2vh, 24px);">People are trapezoids. A curved rod makes the shower feel twice as big — same cost, same install, instant upgrade.</p>
+            <div class="rod-compare reveal">
+                <div class="rod-compare-item rod-small">
+                    <img src="Waffle-Shower-Curtain.jpg" alt="Straight shower curtain rod">
+                    <span class="rod-compare-label" style="color: var(--text-muted);">Straight</span>
+                </div>
+                <span class="rod-compare-arrow">&rarr;</span>
+                <div class="rod-compare-item rod-large">
+                    <img src="curved-shower-rod.png" alt="Curved shower curtain rod giving extra shower space">
+                    <span class="rod-compare-label">Curved</span>
+                </div>
+            </div>
+        </div>
+        <img src="ario-logo.png" alt="ario" class="ario-logo">
+        <div class="page-num"><span class="line"></span><span class="num">2</span></div>
+    </section>
+
+    <!-- SLIDE 3: Three Criteria — Section Divider -->
+    <section class="slide slide-dark" id="slide-3">
+        <div class="slide-body">
+            <h1 class="reveal">What makes a<br>canonical design?</h1>
+        </div>
+        <img src="ario-logo.png" alt="ario" class="ario-logo">
+        <div class="page-num"><span class="line"></span><span class="num">3</span></div>
+    </section>
+
+    <!-- SLIDE 4: The Three Criteria -->
+    <section class="slide" id="slide-4">
+        <div class="slide-body">
+            <div class="criteria-stack">
+                <div class="criteria-item reveal">
+                    <div class="criteria-num">1</div>
+                    <div class="criteria-text">You instantly know what it is, how it works, and that it's better.</div>
+                </div>
+                <div class="criteria-item reveal">
+                    <div class="criteria-num">2</div>
+                    <div class="criteria-text">Same technology and cost level as what came before.</div>
+                </div>
+                <div class="criteria-item reveal">
+                    <div class="criteria-num">3</div>
+                    <div class="criteria-text">Creates a new, stable plateau that fully displaces the old design.</div>
+                </div>
+            </div>
+        </div>
+        <img src="ario-logo.png" alt="ario" class="ario-logo">
+        <div class="page-num"><span class="line"></span><span class="num">4</span></div>
+    </section>
+
+    <!-- SLIDE 5: Question 11 — Visual -->
+    <section class="slide" id="slide-5">
+        <div class="slide-body">
+            <h2 class="reveal" style="margin-bottom: clamp(6px, 1vh, 12px);">Question 11</h2>
+            <p class="reveal" style="color: var(--text-muted); max-width: 600px; margin-bottom: clamp(16px, 3vh, 32px); font-size: clamp(14px, 1.5vw, 20px);">Add the respondent's real purchase data to every survey.</p>
+            <div class="q11-visual reveal">
+                <div class="q11-survey">
+                    <div class="q11-label">10-Question Survey</div>
+                    <div class="q11-line"></div>
+                    <div class="q11-line"></div>
+                    <div class="q11-line"></div>
+                    <div class="q11-line"></div>
+                    <div class="q11-line"></div>
+                    <div class="q11-line"></div>
+                    <div class="q11-line"></div>
+                    <div class="q11-line"></div>
+                    <div class="q11-line"></div>
+                    <div class="q11-line"></div>
+                </div>
+                <div class="q11-plus">+</div>
+                <div class="q11-data">
+                    <div class="q11-label">Real Purchase History</div>
+                    <div class="q11-receipt">
+                        <div class="q11-receipt-row">
+                            <span class="q11-receipt-item">Anker 622 MagGo Battery</span>
+                            <span class="q11-receipt-price">$27.99</span>
+                        </div>
+                        <div class="q11-receipt-row">
+                            <span class="q11-receipt-item">Apple AirPods Pro (2nd Gen)</span>
+                            <span class="q11-receipt-price">$189.99</span>
+                        </div>
+                        <div class="q11-receipt-row">
+                            <span class="q11-receipt-item">Logitech MX Master 3S</span>
+                            <span class="q11-receipt-price">$89.99</span>
+                        </div>
+                        <div class="q11-receipt-row">
+                            <span class="q11-receipt-item">Anker PowerCore 10000</span>
+                            <span class="q11-receipt-price">$21.99</span>
+                        </div>
+                        <div class="q11-receipt-row">
+                            <span class="q11-receipt-item">Samsung T7 Shield SSD 1TB</span>
+                            <span class="q11-receipt-price">$79.99</span>
+                        </div>
+                        <div class="q11-receipt-row">
+                            <span class="q11-receipt-item">USB-C Charging Cable 3-Pack</span>
+                            <span class="q11-receipt-price">$12.99</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <img src="ario-logo.png" alt="ario" class="ario-logo">
+        <div class="page-num"><span class="line"></span><span class="num">5</span></div>
+    </section>
+
+    <!-- SLIDE 6: Why it meets the criteria -->
+    <section class="slide" id="slide-6">
+        <div class="slide-body">
+            <h2 class="reveal">Same three criteria. Same answer.</h2>
+            <div class="criteria-stack">
+                <div class="criteria-item reveal">
+                    <div class="criteria-num">1</div>
+                    <div class="criteria-text">Hundreds of customer conversations. Zero objections.<br><span style="font-weight: 500; font-size: 0.75em; color: var(--text-muted);">Everyone instantly sees it's better.</span></div>
+                </div>
+                <div class="criteria-item reveal">
+                    <div class="criteria-num">2</div>
+                    <div class="criteria-text">$5 → ~$5.50 per response.<br><span style="font-weight: 500; font-size: 0.75em; color: var(--text-muted);">Marginal cost increase. Same workflow.</span></div>
+                </div>
+                <div class="criteria-item reveal">
+                    <div class="criteria-num">3</div>
+                    <div class="criteria-text">Why would you ever not want real purchase data alongside stated answers?<br><span style="font-weight: 500; font-size: 0.75em; color: var(--text-muted);">This becomes the new default.</span></div>
+                </div>
+            </div>
+        </div>
+        <img src="ario-logo.png" alt="ario" class="ario-logo">
+        <div class="page-num"><span class="line"></span><span class="num">6</span></div>
+    </section>
+
+    <!-- SLIDE 7: Section divider — the objection -->
+    <section class="slide slide-dark" id="slide-7">
+        <div class="slide-body">
+            <h1 class="reveal">"But will users<br>share their data?"</h1>
+        </div>
+        <img src="ario-logo.png" alt="ario" class="ario-logo">
+        <div class="page-num"><span class="line"></span><span class="num">7</span></div>
+    </section>
+
+    <!-- SLIDE 8: They already do — photo cards -->
+    <section class="slide" id="slide-8">
+        <div class="slide-body">
+            <h2 class="reveal">They already do.</h2>
+            <div class="link-grid reveal">
+                <div class="link-card">
+                    <img src="https://images.ctfassets.net/ss5kfr270og3/mIh6ciyIVHTN9ohGUkZcr/a2ad1e3f3309f52cf077558e0260e64a/Graphic.png?fm=webp&w=600&q=70" alt="Plaid Link interface for connecting bank accounts">
+                    <div class="link-card-body">
+                        <h3>Plaid</h3>
+                        <p>1 in 3 US adults link accounts</p>
+                    </div>
+                </div>
+                <div class="link-card">
+                    <img src="https://dp6mhagng1yw3.cloudfront.net/entries/15th/e011a622-7347-41b5-8991-261e71d0766b.png" alt="Delta SkyMiles x Starbucks Rewards partnership">
+                    <div class="link-card-body">
+                        <h3>Delta x Starbucks</h3>
+                        <p>1M links in 16 days</p>
+                    </div>
+                </div>
+                <div class="link-card">
+                    <img src="https://images.ctfassets.net/zucqsg1ttqqy/2NL80fUf83VuaVLuEZ5kz2/3551086dca945b87e7dcd9de08406ad8/link-cross-platform.jpg" alt="Plaid Link cross-platform bank linking interface">
+                    <div class="link-card-body">
+                        <h3>Cross-Platform</h3>
+                        <p>iOS, Android, Web</p>
+                    </div>
+                </div>
+            </div>
+            <div class="punchline reveal">Account linking isn't new. People do it every day, at massive scale.</div>
+        </div>
+        <img src="ario-logo.png" alt="ario" class="ario-logo">
+        <div class="page-num"><span class="line"></span><span class="num">8</span></div>
+    </section>
+
+    <!-- SLIDE 9: Putting it in context -->
+    <section class="slide" id="slide-9">
+        <div class="slide-body">
+            <h2 class="reveal">Putting this in context.</h2>
+            <div class="contradiction reveal">
+                <div class="contradiction-side yes" style="flex: 2;">
+                    <div style="font-family: var(--font-heading); font-weight: 800; font-size: clamp(20px, 2.5vw, 32px); color: var(--text); margin-bottom: clamp(8px, 1vh, 14px);">10–20 survey questions</div>
+                    <div class="contradiction-desc" style="font-size: clamp(13px, 1.4vw, 18px); font-weight: 500; color: var(--text-secondary);">Respondents already sign up to spend 5–15 minutes answering survey questions. That's the baseline effort they've already agreed to.</div>
+                </div>
+                <div class="contradiction-vs">+</div>
+                <div class="contradiction-side" style="flex: 1; border-color: var(--accent); background: var(--accent-pale);">
+                    <div style="font-family: var(--font-heading); font-weight: 800; font-size: clamp(20px, 2.5vw, 32px); color: var(--accent); margin-bottom: clamp(8px, 1vh, 14px);">15-second data link</div>
+                    <div class="contradiction-desc" style="font-size: clamp(13px, 1.4vw, 18px); font-weight: 500; color: var(--text-secondary);">One-time account connection. Minimal incremental effort — not a major friction point in practice.</div>
+                </div>
+            </div>
+            <div class="punchline reveal">The incremental ask is trivial compared to what they're already doing.</div>
+        </div>
+        <img src="ario-logo.png" alt="ario" class="ario-logo">
+        <div class="page-num"><span class="line"></span><span class="num">9</span></div>
+    </section>
+
+    <!-- SLIDE 10: Closing -->
+    <section class="slide" id="slide-10">
+        <div class="slide-body">
+            <h2 class="reveal" style="font-size: clamp(26px, 4vw, 48px);">The curved rod for<br>consumer research.</h2>
+            <div class="reveal" style="border-left: 3px solid var(--accent); padding-left: clamp(16px, 2vw, 28px); max-width: 700px; margin-bottom: clamp(20px, 3vh, 36px);">
+                <p style="font-weight: 600; font-size: clamp(15px, 1.6vw, 21px); color: var(--text); line-height: 1.5;">Survey responses are what people say.<br>Purchase data is what they do.<br>The canonical design combines both.</p>
+            </div>
+            <p class="reveal" style="font-weight: 600; color: var(--accent); font-size: clamp(14px, 1.5vw, 20px);">sumit@ariodata.com</p>
+        </div>
+        <img src="ario-logo.png" alt="ario" class="ario-logo">
+        <div class="page-num"><span class="line"></span><span class="num">10</span></div>
+    </section>
+
+    <script>
+        class SlidePresentation {
+            constructor() {
+                this.slides = document.querySelectorAll('.slide');
+                this.currentSlide = 0;
+                this.totalSlides = this.slides.length;
+                this.isScrolling = false;
+                this.scrollTimeout = null;
+                this.init();
+            }
+            init() {
+                this.createNavDots();
+                this.setupIntersectionObserver();
+                this.setupKeyboardNav();
+                this.setupTouchNav();
+                this.setupWheelNav();
+                this.updateProgress();
+                this.slides[0].classList.add('visible');
+            }
+            createNavDots() {
+                const nav = document.getElementById('navDots');
+                for (let i = 0; i < this.totalSlides; i++) {
+                    const dot = document.createElement('button');
+                    dot.classList.add('nav-dot');
+                    dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+                    if (i === 0) dot.classList.add('active');
+                    dot.addEventListener('click', () => this.goToSlide(i));
+                    nav.appendChild(dot);
+                }
+            }
+            setupIntersectionObserver() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            const index = Array.from(this.slides).indexOf(entry.target);
+                            this.currentSlide = index;
+                            this.updateNavDots();
+                            this.updateProgress();
+                        }
+                    });
+                }, { threshold: 0.5 });
+                this.slides.forEach(slide => observer.observe(slide));
+            }
+            setupKeyboardNav() {
+                document.addEventListener('keydown', (e) => {
+                    switch(e.key) {
+                        case 'ArrowDown': case 'ArrowRight': case ' ': case 'PageDown': e.preventDefault(); this.nextSlide(); break;
+                        case 'ArrowUp': case 'ArrowLeft': case 'PageUp': e.preventDefault(); this.prevSlide(); break;
+                        case 'Home': e.preventDefault(); this.goToSlide(0); break;
+                        case 'End': e.preventDefault(); this.goToSlide(this.totalSlides - 1); break;
+                    }
+                });
+            }
+            setupTouchNav() {
+                let touchStartY = 0, touchStartX = 0;
+                document.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; touchStartX = e.touches[0].clientX; }, { passive: true });
+                document.addEventListener('touchend', (e) => {
+                    const deltaY = touchStartY - e.changedTouches[0].clientY;
+                    const deltaX = touchStartX - e.changedTouches[0].clientX;
+                    if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 50) { if (deltaY > 0) this.nextSlide(); else this.prevSlide(); }
+                }, { passive: true });
+            }
+            setupWheelNav() {
+                document.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    if (this.isScrolling) return;
+                    this.isScrolling = true;
+                    if (e.deltaY > 0) this.nextSlide(); else this.prevSlide();
+                    clearTimeout(this.scrollTimeout);
+                    this.scrollTimeout = setTimeout(() => { this.isScrolling = false; }, 800);
+                }, { passive: false });
+            }
+            nextSlide() { if (this.currentSlide < this.totalSlides - 1) this.goToSlide(this.currentSlide + 1); }
+            prevSlide() { if (this.currentSlide > 0) this.goToSlide(this.currentSlide - 1); }
+            goToSlide(index) { this.currentSlide = index; this.slides[index].scrollIntoView({ behavior: 'smooth' }); this.updateNavDots(); this.updateProgress(); }
+            updateNavDots() { const dots = document.querySelectorAll('.nav-dot'); dots.forEach((dot, i) => { dot.classList.toggle('active', i === this.currentSlide); }); }
+            updateProgress() { const progress = ((this.currentSlide + 1) / this.totalSlides) * 100; document.getElementById('progressBar').style.width = progress + '%'; }
+        }
+        class EditMode {
+            constructor() {
+                this.active = false;
+                this.badge = document.getElementById('editBadge');
+                this.editableSelectors = 'h1, h2, h3, p, li, span.stat-big, span.stat-label, .punchline, .pill, .date, .criteria-text, .q11-label, .q11-receipt-item, .q11-receipt-price, .share-bar-label, .share-bar-value, .contradiction-desc, .contradiction-sub, .contradiction-vs';
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'e' || e.key === 'E') {
+                        if (document.activeElement && document.activeElement.isContentEditable) return;
+                        e.preventDefault();
+                        this.toggle();
+                    }
+                });
+            }
+            toggle() {
+                this.active = !this.active;
+                document.body.classList.toggle('edit-mode', this.active);
+                this.badge.classList.toggle('visible', this.active);
+                document.querySelectorAll(this.editableSelectors).forEach(el => {
+                    if (this.active) {
+                        el.setAttribute('contenteditable', 'true');
+                    } else {
+                        el.removeAttribute('contenteditable');
+                    }
+                });
+            }
+        }
+        document.addEventListener('DOMContentLoaded', () => { new SlidePresentation(); new EditMode(); });
+    </script>
+</body>
+</html>
