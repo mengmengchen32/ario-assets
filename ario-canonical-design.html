@@ -612,6 +612,55 @@
             color: var(--text-muted);
             opacity: 0.5;
         }
+        .aug-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(8px, 1.2vh, 14px);
+            margin-bottom: clamp(10px, 1.5vh, 16px);
+        }
+        .aug-timeline-row {
+            display: flex;
+            align-items: center;
+            gap: clamp(8px, 1vw, 14px);
+        }
+        .aug-timeline-label {
+            font-family: var(--font-mono);
+            font-size: clamp(10px, 1vw, 13px);
+            font-weight: 500;
+            color: var(--text-muted);
+            min-width: clamp(60px, 7vw, 80px);
+            text-align: right;
+        }
+        .aug-timeline-bars {
+            flex: 1;
+            display: flex;
+            gap: 2px;
+            height: clamp(20px, 2.5vh, 30px);
+            background: rgba(0,0,0,0.03);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .aug-tbar {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.6s ease;
+        }
+        .aug-timeline-legend {
+            display: flex;
+            gap: clamp(14px, 2vw, 24px);
+            margin-bottom: clamp(10px, 1.5vh, 16px);
+            font-size: clamp(10px, 1vw, 13px);
+            font-weight: 600;
+            color: var(--text);
+        }
+        .aug-legend-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 4px;
+            vertical-align: middle;
+        }
         @media (max-width: 768px) {
             .aug-layout { grid-template-columns: 1fr; gap: 12px; }
             .aug-plus { width: 100%; padding: 4px 0; }
@@ -875,10 +924,10 @@
         <div class="page-num"><span class="line"></span><span class="num">11</span></div>
     </section>
 
-    <!-- SLIDE 12: Brand Preference -->
+    <!-- SLIDE 12: Brand Preference — Time Dimension -->
     <section class="slide" id="slide-12">
         <div class="slide-body" style="justify-content: flex-start; padding-top: clamp(16px, 3vh, 32px);">
-            <h2 class="reveal" style="font-size: clamp(20px, 3vw, 36px); margin-bottom: clamp(4px, 0.8vh, 8px);">Brand Preference</h2>
+            <h2 class="reveal" style="font-size: clamp(20px, 3vw, 36px); margin-bottom: clamp(4px, 0.8vh, 8px);">Q1: Brand Preference</h2>
             <p class="reveal" style="color: var(--text-muted); font-size: clamp(12px, 1.2vw, 16px); margin-bottom: clamp(14px, 2.5vh, 28px);">Survey response + behavioral data enrichment</p>
             <div class="reveal aug-layout">
                 <div class="aug-panel aug-survey">
@@ -886,38 +935,57 @@
                     <div class="aug-question"><span style="color: var(--accent); font-weight: 700;">Q1</span> Select your top battery brands</div>
                     <div class="aug-badge" style="background: rgba(232,168,56,0.1); color: #E8A838;">Multi-select</div>
                     <div class="aug-options">
-                        <div class="aug-option checked">a. Brand A</div>
-                        <div class="aug-option checked">b. Brand B</div>
-                        <div class="aug-option">c. Brand C</div>
-                        <div class="aug-option">d. Brand D</div>
-                        <div class="aug-option">e. Brand E</div>
+                        <div class="aug-option checked">a. Energizer</div>
+                        <div class="aug-option checked">b. Duracell</div>
+                        <div class="aug-option">c. Rayovac</div>
+                        <div class="aug-option">d. Panasonic</div>
+                        <div class="aug-option">e. Amazon Basics</div>
                         <div class="aug-option">f. Other</div>
                     </div>
                 </div>
                 <div class="aug-plus">+</div>
                 <div class="aug-panel aug-data">
                     <div class="aug-panel-label" style="color: #E8A838;">Transactional Data</div>
-                    <h3 style="font-size: clamp(14px, 1.6vw, 20px); margin-bottom: 2px;">Share of Wallet &mdash; Battery Spend by Brand</h3>
-                    <p style="font-size: clamp(10px, 1vw, 13px); color: var(--text-muted); margin-bottom: clamp(10px, 1.5vh, 18px);">User 3313 &middot; $357 across 23 battery orders, 2021&ndash;2025</p>
-                    <div class="aug-bars">
-                        <div class="aug-bar-row">
-                            <span class="aug-bar-name">Brand C</span>
-                            <div class="aug-bar-track"><div class="aug-bar-fill" style="width: 38%; background: var(--accent);"></div></div>
-                            <span class="aug-bar-pct">38%</span>
-                        </div>
-                        <div class="aug-bar-row">
-                            <span class="aug-bar-name">Brand A</span>
-                            <div class="aug-bar-track"><div class="aug-bar-fill" style="width: 11%; background: #E8A838;"></div></div>
-                            <span class="aug-bar-pct">11%</span>
-                        </div>
-                        <div class="aug-bar-row">
-                            <span class="aug-bar-name">Brand B</span>
-                            <div class="aug-bar-track"><div class="aug-bar-fill" style="width: 5%; background: #4caf50;"></div></div>
-                            <span class="aug-bar-pct">5%</span>
+                    <h3 style="font-size: clamp(14px, 1.6vw, 20px); margin-bottom: 2px;">Share of Orders Over Time</h3>
+                    <p style="font-size: clamp(10px, 1vw, 13px); color: var(--text-muted); margin-bottom: clamp(10px, 1.5vh, 18px);">User 3313 &middot; Battery orders by brand, 3-year history</p>
+                    <div style="position: relative; height: clamp(120px, 18vh, 180px); margin-bottom: clamp(8px, 1vh, 14px);">
+                        <!-- Y-axis labels -->
+                        <span style="position: absolute; left: 0; top: 4px; font-family: var(--font-mono); font-size: clamp(9px, 0.8vw, 11px); color: var(--text-muted);">100%</span>
+                        <span style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); font-family: var(--font-mono); font-size: clamp(9px, 0.8vw, 11px); color: var(--text-muted);">50%</span>
+                        <span style="position: absolute; left: 0; bottom: 4px; font-family: var(--font-mono); font-size: clamp(9px, 0.8vw, 11px); color: var(--text-muted);">0%</span>
+                        <!-- Chart area -->
+                        <div style="position: absolute; left: 36px; right: 60px; top: 8px; bottom: 8px;">
+                            <!-- Grid lines -->
+                            <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--border);"></div>
+                            <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border); opacity: 0.5;"></div>
+                            <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: var(--border);"></div>
+                            <!-- Energizer line: 100% → 100% → 95% → 20% -->
+                            <svg viewBox="-6 -6 312 112" preserveAspectRatio="none" style="position: absolute; inset: -6px; width: calc(100% + 12px); height: calc(100% + 12px); overflow: visible;">
+                                <polyline points="0,0 100,0 200,5 300,80" fill="none" stroke="#E8A838" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="0" cy="0" r="4" fill="#E8A838"/>
+                                <circle cx="100" cy="0" r="4" fill="#E8A838"/>
+                                <circle cx="200" cy="5" r="5" fill="#E8A838"/>
+                                <circle cx="300" cy="80" r="5" fill="#E8A838" stroke="#fff" stroke-width="2"/>
+                            </svg>
+                            <!-- Duracell line: 0% → 0% → 5% → 80% -->
+                            <svg viewBox="-6 -6 312 112" preserveAspectRatio="none" style="position: absolute; inset: -6px; width: calc(100% + 12px); height: calc(100% + 12px); overflow: visible;">
+                                <polyline points="0,100 100,100 200,95 300,20" fill="none" stroke="#4caf50" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="200" cy="95" r="5" fill="#4caf50"/>
+                                <circle cx="300" cy="20" r="5" fill="#4caf50" stroke="#fff" stroke-width="2"/>
+                            </svg>
+                            <!-- X-axis labels -->
+                            <span style="position: absolute; bottom: -20px; left: 0; transform: translateX(-50%); font-family: var(--font-mono); font-size: clamp(9px, 0.8vw, 11px); color: var(--text-muted);">3y ago</span>
+                            <span style="position: absolute; bottom: -20px; left: 33.3%; transform: translateX(-50%); font-family: var(--font-mono); font-size: clamp(9px, 0.8vw, 11px); color: var(--text-muted);">1y ago</span>
+                            <span style="position: absolute; bottom: -20px; left: 66.6%; transform: translateX(-50%); font-family: var(--font-mono); font-size: clamp(9px, 0.8vw, 11px); color: var(--text-muted);">6mo</span>
+                            <span style="position: absolute; bottom: -20px; right: 0; transform: translateX(50%); font-family: var(--font-mono); font-size: clamp(9px, 0.8vw, 11px); color: var(--text-muted); font-weight: 700;">Today</span>
+                            <!-- End labels on lines -->
+                            <span style="position: absolute; right: -8px; top: calc(80% - 14px); transform: translateX(100%); font-family: var(--font-heading); font-weight: 900; font-size: clamp(16px, 1.8vw, 24px); color: #E8A838; padding-left: 8px;">20%</span>
+                            <span style="position: absolute; right: -8px; top: calc(20% - 14px); transform: translateX(100%); font-family: var(--font-heading); font-weight: 900; font-size: clamp(16px, 1.8vw, 24px); color: #4caf50; padding-left: 8px;">80%</span>
                         </div>
                     </div>
-                    <div class="aug-insight">
-                        <strong>Key Insight:</strong> User selects Brand A and Brand B &mdash; but Brand C quietly captures 38% of battery spend, more than both named brands combined (16%).
+                    <div class="aug-timeline-legend" style="margin-top: clamp(20px, 3vh, 30px);">
+                        <span><span class="aug-legend-dot" style="background: #E8A838;"></span> Energizer</span>
+                        <span><span class="aug-legend-dot" style="background: #4caf50;"></span> Duracell</span>
                     </div>
                 </div>
             </div>
@@ -928,7 +996,7 @@
     <!-- SLIDE 13: Device Usage -->
     <section class="slide" id="slide-13">
         <div class="slide-body" style="justify-content: flex-start; padding-top: clamp(16px, 3vh, 32px);">
-            <h2 class="reveal" style="font-size: clamp(20px, 3vw, 36px); margin-bottom: clamp(4px, 0.8vh, 8px);">Device Usage</h2>
+            <h2 class="reveal" style="font-size: clamp(20px, 3vw, 36px); margin-bottom: clamp(4px, 0.8vh, 8px);">Q2: Device Usage</h2>
             <p class="reveal" style="color: var(--text-muted); font-size: clamp(12px, 1.2vw, 16px); margin-bottom: clamp(14px, 2.5vh, 28px);">Survey response + behavioral data enrichment</p>
             <div class="reveal aug-layout">
                 <div class="aug-panel aug-survey">
@@ -936,11 +1004,11 @@
                     <div class="aug-question"><span style="color: var(--accent); font-weight: 700;">Q2</span> Which devices in your home are most frequently powered by batteries?</div>
                     <div class="aug-badge" style="background: rgba(232,168,56,0.1); color: #E8A838;">Multi-select</div>
                     <div class="aug-options">
-                        <div class="aug-option">a. TV / entertainment remotes</div>
+                        <div class="aug-option checked">a. TV / entertainment remotes</div>
                         <div class="aug-option">b. Smoke / CO detectors</div>
                         <div class="aug-option">c. Flashlights / lanterns</div>
                         <div class="aug-option checked">d. Children's toys</div>
-                        <div class="aug-option">e. Gaming peripherals</div>
+                        <div class="aug-option checked">e. Gaming peripherals</div>
                         <div class="aug-option">f. Clocks</div>
                         <div class="aug-option">g. Smart home devices</div>
                     </div>
@@ -967,9 +1035,6 @@
                             <span class="aug-cat-val">3 orders</span>
                         </div>
                     </div>
-                    <div class="aug-insight">
-                        <strong>Key Insight:</strong> User picks "Toys" &mdash; data confirms it's the #1 driver with 20 battery-powered toy purchases. Battery purchases often show up 1&ndash;2 weeks after the toy purchase, toy unboxing time! Promotion timing around holiday toy-buying could capture 3&ndash;4x normal battery volume.
-                    </div>
                 </div>
             </div>
         </div>
@@ -979,7 +1044,7 @@
     <!-- SLIDE 14: Price Perception -->
     <section class="slide" id="slide-14">
         <div class="slide-body" style="justify-content: flex-start; padding-top: clamp(16px, 3vh, 32px);">
-            <h2 class="reveal" style="font-size: clamp(20px, 3vw, 36px); margin-bottom: clamp(4px, 0.8vh, 8px);">Price Perception</h2>
+            <h2 class="reveal" style="font-size: clamp(20px, 3vw, 36px); margin-bottom: clamp(4px, 0.8vh, 8px);">Q3: Price Perception</h2>
             <p class="reveal" style="color: var(--text-muted); font-size: clamp(12px, 1.2vw, 16px); margin-bottom: clamp(14px, 2.5vh, 28px);">Survey response + behavioral data enrichment</p>
             <div class="reveal aug-layout">
                 <div class="aug-panel aug-survey">
@@ -1030,22 +1095,19 @@
                     <div class="aug-purchase-list">
                         <div class="aug-purchase-row">
                             <span class="aug-purchase-date">Jun 2023</span>
-                            <span class="aug-purchase-item">Brand A AA Rechargeable 16-pk</span>
+                            <span class="aug-purchase-item">Energizer AA Rechargeable 16-pk</span>
                             <span class="aug-purchase-price" style="color: #e53935;">$23.67</span>
                         </div>
                         <div class="aug-purchase-row">
                             <span class="aug-purchase-date">Dec 2024</span>
-                            <span class="aug-purchase-item">Brand A Rechargeable 16-pk</span>
+                            <span class="aug-purchase-item">Energizer Rechargeable 16-pk</span>
                             <span class="aug-purchase-price" style="color: #e53935;">$20.94</span>
                         </div>
                         <div class="aug-purchase-row">
                             <span class="aug-purchase-date">Dec 2025</span>
-                            <span class="aug-purchase-item">Brand A Rechargeable 16-pk</span>
+                            <span class="aug-purchase-item">Energizer Rechargeable 16-pk</span>
                             <span class="aug-purchase-price" style="color: #4caf50;">$14.09</span>
                         </div>
-                    </div>
-                    <div class="aug-insight">
-                        <strong>Key Insight:</strong> Stated price ceiling differs from actual behavior. When the need is real, this user pays well above their stated limit &mdash; a gap surveys alone can't reveal.
                     </div>
                 </div>
             </div>
