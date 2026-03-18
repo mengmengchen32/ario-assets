@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    { "source": "/one-pager", "destination": "/ario-one-pager.html" },
+    { "source": "/one-pager", "destination": "/ario-one-pager.pdf" },
     { "source": "/brand", "destination": "/ario-brand-guide.html" }
   ]
 }

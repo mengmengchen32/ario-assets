@@ -57,7 +57,7 @@
       align-items: center;
       padding-bottom: 10px;
       border-bottom: 1.5px solid var(--rule);
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
     .top-bar img { height: 22px; }
     .top-bar span {
@@ -71,24 +71,60 @@
     /* ── HERO ── */
     .hero {
       margin-bottom: 14px;
-      padding: 14px 0 12px;
+      padding: 8px 0 0;
     }
     .hero h1 {
       font-family: 'Outfit', sans-serif;
-      font-size: 36px;
-      font-weight: 800;
-      line-height: 1.15;
-      letter-spacing: -0.025em;
+      font-size: 42px;
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
       color: var(--ink);
-      margin-bottom: 30px;
-      max-width: 85%;
+      margin-bottom: 14px;
+      max-width: 100%;
     }
     .hero h1 em { font-style: normal; color: var(--blue); }
     .hero p {
-      font-size: 11px;
-      line-height: 1.6;
-      color: var(--ink-soft);
-      max-width: 85%;
+      font-size: 11.5px;
+      line-height: 1.55;
+      color: var(--ink-muted);
+      max-width: 80%;
+    }
+
+    /* ── STAT STRIP ── */
+    .stat-strip {
+      display: flex;
+      gap: 0;
+      margin-bottom: 16px;
+      border-top: 1.5px solid var(--ink);
+      border-bottom: 1.5px solid var(--rule);
+    }
+    .stat-item {
+      flex: 1;
+      padding: 10px 0;
+      text-align: center;
+      border-right: 1px solid var(--rule);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-number {
+      font-family: 'Outfit', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 3px;
+    }
+    .stat-number span {
+      color: var(--blue);
+    }
+    .stat-desc {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--ink-muted);
     }
 
     /* ── HOW IT WORKS ── */
@@ -96,7 +132,7 @@
       background: var(--blue-pale);
       border-radius: 8px;
       padding: 12px 16px 10px;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
     }
     .hiw-label {
       font-family: 'JetBrains Mono', monospace;
@@ -272,32 +308,9 @@
       line-height: 1.3;
     }
 
-    /* ── WHY ARIO ── */
-    .why-ario {
-      margin-bottom: 10px;
-      padding: 10px 14px;
-      background: var(--paper);
-      border-radius: 6px;
-      border-left: 3px solid var(--blue);
-    }
-    .why-ario-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 8px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--blue);
-      margin-bottom: 4px;
-    }
-    .why-ario p {
-      font-size: 9px;
-      line-height: 1.5;
-      color: var(--ink-soft);
-    }
-
     /* ── USE CASES ── */
     .use-cases {
-      margin-bottom: 10px;
+      margin-bottom: 16px;
     }
     .uc-label {
       font-family: 'JetBrains Mono', monospace;
@@ -322,9 +335,9 @@
       flex-direction: column;
     }
     .uc-card-graphic {
-      height: 90px;
+      height: 110px;
       background: var(--blue-pale);
-      padding: 10px 14px;
+      padding: 12px 14px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -360,7 +373,7 @@
     .ucg-bars {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
       width: 100%;
     }
     .ucg-bar-row {
@@ -379,14 +392,14 @@
     }
     .ucg-bar-track {
       flex: 1;
-      height: 8px;
+      height: 10px;
       background: rgba(255,255,255,0.8);
-      border-radius: 4px;
+      border-radius: 5px;
       overflow: hidden;
     }
     .ucg-bar-fill {
       height: 100%;
-      border-radius: 4px;
+      border-radius: 5px;
     }
     .ucg-bar-fill.b1 { background: var(--blue); width: 72%; }
     .ucg-bar-fill.b2 { background: var(--blue); opacity: 0.6; width: 48%; }
@@ -394,7 +407,7 @@
     .ucg-bar-fill.b4 { background: var(--blue); opacity: 0.2; width: 18%; }
     .ucg-bar-pct {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 8px;
+      font-size: 9px;
       font-weight: 500;
       color: var(--blue);
       width: 22px;
@@ -413,8 +426,8 @@
       gap: 4px;
     }
     .ucg-avatar {
-      width: 30px;
-      height: 30px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
       background: var(--blue);
       display: flex;
@@ -423,7 +436,7 @@
     }
     .ucg-profile:nth-child(2) .ucg-avatar { opacity: 0.7; }
     .ucg-profile:nth-child(3) .ucg-avatar { opacity: 0.45; }
-    .ucg-avatar svg { width: 14px; height: 14px; color: #fff; }
+    .ucg-avatar svg { width: 16px; height: 16px; color: #fff; }
     .ucg-tag {
       font-family: 'JetBrains Mono', monospace;
       font-size: 6px;
@@ -471,22 +484,22 @@
     }
     .ucg-twin-q {
       font-family: 'Outfit', sans-serif;
-      font-size: 8px;
+      font-size: 9px;
       font-weight: 600;
       color: var(--ink);
       line-height: 1.35;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       padding-left: 8px;
       border-left: 2px solid var(--blue);
     }
     .ucg-twin-bars {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 5px;
     }
     .ucg-twin-bar-track {
       flex: 1;
-      height: 6px;
+      height: 7px;
       background: var(--blue-pale);
       border-radius: 3px;
       overflow: hidden;
@@ -500,6 +513,51 @@
     .ucg-twin-bar-fill.w2 { width: 24%; background: #D4A843; }
     .ucg-twin-bar-fill.w3 { width: 14%; background: #999; }
 
+    /* ── WHY ARIO ── */
+    .why-ario {
+      margin-bottom: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .why-ario-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 5px;
+    }
+    .why-item {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .why-marker {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--blue);
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+    .why-item p {
+      font-size: 9.5px;
+      line-height: 1.45;
+      color: var(--ink-soft);
+    }
+    .why-item strong {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
     /* ── BOTTOM BAR ── */
     .bottom-bar {
       display: flex;
@@ -507,7 +565,7 @@
       align-items: center;
       padding-top: 8px;
       border-top: 1.5px solid var(--rule);
-      margin-top: 10px;
+      margin-top: auto;
     }
     .bottom-left {
       display: flex;
@@ -567,8 +625,27 @@
   <!-- HERO -->
   <div class="hero">
     <h1>Unlock your customers' <em>true buying patterns</em> beyond your brand</h1>
-    <p>Ario enables your customers to share their item-level purchase history from any retailer &mdash; even your direct competitors. Trade points, discounts, or VIP access for a consented data connection. Verified, SKU-level transactions flow directly into your CDP in seconds &mdash; no cookies, no fingerprinting, no data co-ops.</p>
-    <p style="margin-top: 6px;">Today, most brands are making decisions with incomplete data. Your own transactions only tell half the story &mdash; competitor activity, category behavior, and cross-retailer patterns are invisible. By the time a churn signal shows up in your data, the customer has already switched. Ario closes that gap.</p>
+    <p>Ario enables your customers to share item-level purchase history from any retailer &mdash; even competitors. Trade points, discounts, or VIP access for a consented data connection. Verified, SKU-level transactions flow into your CDP in seconds. No cookies, no fingerprinting, no data co-ops.</p>
+  </div>
+
+  <!-- STAT STRIP -->
+  <div class="stat-strip">
+    <div class="stat-item">
+      <div class="stat-number"><span>100+</span></div>
+      <div class="stat-desc">Retailer Connections</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">SKU-Level</div>
+      <div class="stat-desc">Transaction Granularity</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">Seconds</div>
+      <div class="stat-desc">Not Weeks</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">1<span>st</span> Party</div>
+      <div class="stat-desc">Consented &amp; Direct</div>
+    </div>
   </div>
 
   <!-- HOW IT WORKS -->
@@ -616,9 +693,8 @@
           </div>
         </div>
         <div class="uc-card-body">
-          <span class="uc-eyebrow">Customer Insights</span>
-          <h3>Share of Wallet &amp; Competitive Behavior</h3>
-          <p>Share of wallet, brand switching, and competitive behavior &mdash; all grounded in verified purchases across retailers, not surveys.</p>
+          <h3>Customer Insights</h3>
+          <p>Brand switching and competitive behavior grounded in verified purchases across retailers, not surveys.</p>
         </div>
       </div>
 
@@ -643,9 +719,8 @@
           </div>
         </div>
         <div class="uc-card-body">
-          <span class="uc-eyebrow">Segment-of-One Marketing</span>
-          <h3>Personalization at the Individual Level</h3>
-          <p>A unified 1:1 view of every shopper. AI-driven personalized promotions and loyalty triggers based on what they actually buy everywhere.</p>
+          <h3>Segment-of-One Marketing</h3>
+          <p>A unified 1:1 view of every shopper. Personalized promotions and loyalty triggers based on what they actually buy everywhere.</p>
         </div>
       </div>
 
@@ -663,9 +738,8 @@
           </div>
         </div>
         <div class="uc-card-body">
-          <span class="uc-eyebrow">Agentic Simulation</span>
-          <h3>Twin Persona</h3>
-          <p>Digital twins built from real purchase data. Simulate pricing, competition, and launches before committing budget &mdash; in hours, not months.</p>
+          <h3>Agentic Simulation</h3>
+          <p>Digital twins built from real purchase data. Simulate pricing, competition, and launches before committing budget.</p>
         </div>
       </div>
 
@@ -675,7 +749,24 @@
   <!-- WHY ARIO -->
   <div class="why-ario">
     <div class="why-ario-label">Why Ario</div>
-    <p>Founded by the Shape Security team (acquired by F5 for $1B), Ario was built by cybersecurity veterans who spent a decade protecting Fortune 500 data. Every line of code reflects enterprise-grade security &mdash; GDPR &amp; CCPA compliant, with automatic data expiry. Ario is not a data co-op. Data flows directly from consumer to brand, with explicit consent. No one else sees it. Backed by Wing, BCV, Floodgate, and Moxxie Ventures.</p>
+    <div class="why-grid">
+      <div class="why-item">
+        <div class="why-marker"></div>
+        <p><strong>Shape Security team</strong> &mdash; acquired by F5 for $1B. Built by cybersecurity veterans.</p>
+      </div>
+      <div class="why-item">
+        <div class="why-marker"></div>
+        <p><strong>Not a data co-op.</strong> Data flows directly from consumer to brand with explicit consent.</p>
+      </div>
+      <div class="why-item">
+        <div class="why-marker"></div>
+        <p><strong>GDPR &amp; CCPA compliant</strong> with automatic data expiry. Enterprise-grade security.</p>
+      </div>
+      <div class="why-item">
+        <div class="why-marker"></div>
+        <p><strong>Backed by Wing, BCV, Floodgate, and Moxxie Ventures.</strong></p>
+      </div>
+    </div>
   </div>
 
   <!-- BOTTOM BAR -->
