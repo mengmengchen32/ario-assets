@@ -354,6 +354,10 @@
       delay += pair.q.length * 30 + 300 + 500 + 1800 + 1200; // typing + pause + thinking + answer + reading
       if (idx < conversation.length - 1) delay += 500; // gap between exchanges
     });
+    // Loop after a pause
+    t(function() {
+      runConversation();
+    }, delay + 3000);
   }
 
   runConversation();
