@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ario — Product Mockup</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #111;
+      --ink-soft: #2A2A2A;
+      --ink-muted: #666;
+      --ink-faint: #999;
+      --paper: #F7F7F5;
+      --rule: #E8E8E6;
+      --rule-light: #F0F0EE;
+      --blue: #2B5CFF;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--paper);
+      font-family: 'Satoshi', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .product-frame {
+      width: 100%;
+      max-width: 1060px;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 40px rgba(0,0,0,0.06), 0 24px 80px rgba(0,0,0,0.04);
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 20px; border-bottom: 1px solid var(--rule); background: #FAFAF9;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 10px; }
+    .topbar-logo { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--blue); }
+    .topbar-sep { width: 1px; height: 16px; background: var(--rule); }
+    .topbar-title { font-size: 13px; font-weight: 500; color: var(--ink-muted); }
+    .topbar-right { display: flex; align-items: center; gap: 16px; }
+    .topbar-badge { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 8px; border-radius: 4px; background: #E8F5E9; color: #2E7D32; display: flex; align-items: center; gap: 4px; }
+    .topbar-dot { width: 5px; height: 5px; border-radius: 50%; background: #4CAF50; }
+    .topbar-user { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-muted); }
+    .topbar-avatar { width: 24px; height: 24px; border-radius: 50%; background: var(--ink); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; }
+
+    /* ── SPLIT ── */
+    .split { display: grid; grid-template-columns: 1fr 1fr; height: 560px; }
+
+    /* ── LEFT: DATA ── */
+    .data-panel { border-right: 1px solid var(--rule); display: flex; flex-direction: column; }
+    .data-tabs { display: flex; border-bottom: 1px solid var(--rule); padding: 0 24px; }
+    .data-tab { font-size: 13px; font-weight: 600; color: var(--ink-faint); padding: 14px 0; margin-right: 28px; border-bottom: 2px solid transparent; cursor: default; }
+    .data-tab.active { color: var(--ink); border-bottom-color: var(--ink); }
+    .data-summary { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; border-bottom: 1px solid var(--rule-light); background: #FCFCFB; }
+    .data-summary-left { font-size: 13px; font-weight: 600; color: var(--ink); }
+    .data-summary-left span { color: var(--ink-faint); font-weight: 400; }
+    .data-summary-right { display: flex; gap: 16px; }
+    .summary-stat { text-align: right; }
+    .summary-stat-val { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; color: var(--ink); }
+    .summary-stat-label { font-size: 10px; color: var(--ink-faint); }
+
+    .order-list-wrap { flex: 1; position: relative; overflow: hidden; }
+    .order-list-wrap::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 80px; background: linear-gradient(to bottom, transparent, #fff); pointer-events: none; }
+    .order-item { display: grid; grid-template-columns: 48px 1fr auto auto; gap: 12px; align-items: center; padding: 14px 24px; border-bottom: 1px solid var(--rule-light); }
+    .order-img { width: 48px; height: 48px; border-radius: 6px; background: #f5f5f3; overflow: hidden; }
+    .order-img img { width: 100%; height: 100%; object-fit: contain; }
+    .order-name { font-size: 13px; font-weight: 500; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; }
+    .order-meta { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-faint); margin-top: 3px; letter-spacing: 0.02em; }
+    .order-price { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; color: var(--ink); text-align: right; white-space: nowrap; }
+    .order-status { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; padding: 3px 8px; border-radius: 4px; white-space: nowrap; }
+    .s-shipped { background: #E3F2FD; color: #1565C0; }
+    .s-delivered { background: #E8F5E9; color: #2E7D32; }
+    .s-returned { background: #FFF3E0; color: #E65100; }
+
+    /* ── RIGHT: CHAT ── */
+    .chat-panel { display: flex; flex-direction: column; background: #FAFAF9; min-height: 0; }
+    .chat-header { padding: 14px 20px; border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 8px; }
+    .chat-header-icon { width: 28px; height: 28px; border-radius: 8px; background: var(--ink); display: flex; align-items: center; justify-content: center; }
+    .chat-header-icon svg { width: 14px; height: 14px; color: #fff; }
+    .chat-header-title { font-size: 13px; font-weight: 600; color: var(--ink); }
+    .chat-header-sub { font-size: 11px; color: var(--ink-faint); }
+
+    .chat-messages { flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto; overflow-x: hidden; scroll-behavior: smooth; min-height: 0; }
+    .chat-msg { max-width: 92%; opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease, transform 0.4s ease; }
+    .chat-msg.visible { opacity: 1; transform: translateY(0); }
+    .chat-msg-user { align-self: flex-end; }
+    .chat-msg-ai { align-self: flex-start; }
+    .chat-bubble { padding: 12px 16px; border-radius: 14px; font-size: 13px; line-height: 1.55; color: var(--ink); }
+    .chat-msg-user .chat-bubble { background: var(--ink); color: #fff; border-bottom-right-radius: 4px; }
+    .chat-msg-ai .chat-bubble { background: #fff; border: 1px solid var(--rule); border-bottom-left-radius: 4px; }
+    .chat-msg-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-faint); margin-bottom: 6px; }
+    .chat-msg-user .chat-msg-label { text-align: right; }
+
+    .chat-data-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--rule-light); font-size: 12px; }
+    .chat-data-row:last-child { border-bottom: none; }
+    .chat-data-label { color: var(--ink-muted); }
+    .chat-data-val { font-family: 'JetBrains Mono', monospace; font-weight: 500; color: var(--ink); }
+    .chat-data-val.red { color: #D44343; }
+    .chat-data-val.green { color: #2D9D5C; }
+
+    .chat-insight { margin-top: 8px; font-size: 12px; color: var(--ink-muted); line-height: 1.5; padding-top: 8px; border-top: 1px solid var(--rule-light); }
+    .chat-insight strong { color: var(--ink); }
+
+    .chat-input-wrap { padding: 16px 20px; border-top: 1px solid var(--rule); }
+    .chat-input { display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid var(--rule); border-radius: 10px; padding: 10px 14px; }
+    .chat-input-text { flex: 1; font-size: 13px; color: var(--ink-faint); }
+    .chat-typing { color: var(--ink); }
+    .typing-cursor { display: inline-block; width: 2px; height: 13px; background: var(--blue); margin-left: 1px; vertical-align: text-bottom; animation: blink 0.8s infinite; }
+    @keyframes blink { 0%,50% { opacity: 1; } 51%,100% { opacity: 0; } }
+    .chat-input-btn { width: 28px; height: 28px; border-radius: 6px; background: var(--ink); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .chat-input-btn svg { width: 14px; height: 14px; color: #fff; }
+
+    /* Thinking indicator */
+    .chat-thinking .chat-bubble {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 14px 20px;
+    }
+    .thinking-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--ink-faint);
+      animation: dotPulse 1.2s ease-in-out infinite;
+    }
+    .thinking-dot:nth-child(2) { animation-delay: 0.15s; }
+    .thinking-dot:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes dotPulse {
+      0%, 60%, 100% { opacity: 0.3; transform: scale(0.8); }
+      30% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Replay */
+    .replay-btn { position: fixed; bottom: 24px; right: 24px; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-faint); background: #fff; border: 1px solid var(--rule); border-radius: 8px; padding: 8px 16px; cursor: pointer; transition: color 0.2s, border-color 0.2s; z-index: 10; }
+    .replay-btn:hover { color: var(--blue); border-color: var(--blue); }
+  </style>
+</head>
+<body>
+
+<div class="product-frame">
+  <div class="topbar">
+    <div class="topbar-left">
+      <img src="ario-logo-black.png" alt="Ario" style="height:20px;display:block;">
+      <div class="topbar-sep"></div>
+      <div class="topbar-title">Consumer Profile #865</div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-user"><div class="topbar-avatar">S</div></div>
+    </div>
+  </div>
+
+  <div class="split">
+    <!-- LEFT -->
+    <div class="data-panel">
+      <div class="data-tabs">
+        <div class="data-tab active">Orders</div>
+        <div class="data-tab">Browsing History</div>
+      </div>
+      <div class="data-summary">
+        <div class="data-summary-left">Your Orders <span>· 847 items</span></div>
+        <div class="data-summary-right">
+          <div class="summary-stat"><div class="summary-stat-val">$14,280</div><div class="summary-stat-label">Total spend</div></div>
+          <div class="summary-stat"><div class="summary-stat-val">5 yrs</div><div class="summary-stat-label">History</div></div>
+        </div>
+      </div>
+      <div class="order-list-wrap">
+        <div class="order-list">
+          <div class="order-item">
+            <div class="order-img"><img src="https://m.media-amazon.com/images/I/51gZXdUHXML._SS142_.jpg" alt=""></div>
+            <div><div class="order-name">PRODUCE Green Onion</div><div class="order-meta">01/03/2023</div></div>
+            <div class="order-price">$1.59</div>
+            <div class="order-status s-delivered">Delivered</div>
+          </div>
+          <div class="order-item">
+            <div class="order-img"><img src="https://m.media-amazon.com/images/I/71aVggfA3rL._SS142_.jpg" alt=""></div>
+            <div><div class="order-name">POSH Apple Cider Donut 6Pk</div><div class="order-meta">01/02/2023</div></div>
+            <div class="order-price">$10.00</div>
+            <div class="order-status s-delivered">Delivered</div>
+          </div>
+          <div class="order-item">
+            <div class="order-img"><img src="https://m.media-amazon.com/images/I/81wXL5CK5dL._SS142_.jpg" alt=""></div>
+            <div><div class="order-name">Vitafusion MultiVites Gummies, 150ct Pack of 2</div><div class="order-meta">01/24/2023</div></div>
+            <div class="order-price">$25.90</div>
+            <div class="order-status s-shipped">Shipped</div>
+          </div>
+          <div class="order-item">
+            <div class="order-img"><img src="https://m.media-amazon.com/images/I/81bbHRTP9LL._SS142_.jpg" alt=""></div>
+            <div><div class="order-name">EXPO Low-Odor Dry Erase Markers, Chisel Tip, 4-Count</div><div class="order-meta">02/01/2023</div></div>
+            <div class="order-price">$5.17</div>
+            <div class="order-status s-delivered">Delivered</div>
+          </div>
+          <div class="order-item">
+            <div class="order-img"><img src="https://m.media-amazon.com/images/I/61N6E6V3zWL._SS142_.jpg" alt=""></div>
+            <div><div class="order-name">53mm Coffee Distributor & Tamper, MATOW</div><div class="order-meta">02/14/2023</div></div>
+            <div class="order-price">$35.99</div>
+            <div class="order-status s-delivered">Delivered</div>
+          </div>
+          <div class="order-item">
+            <div class="order-img"><img src="https://m.media-amazon.com/images/I/71wZDZ6Sd3L._SS142_.jpg" alt=""></div>
+            <div><div class="order-name">HOMAR No Tie Shoelaces for Kids Adults</div><div class="order-meta">02/12/2023</div></div>
+            <div class="order-price">$9.99</div>
+            <div class="order-status s-returned">Returned</div>
+          </div>
+          <div class="order-item">
+            <div class="order-img"><img src="https://m.media-amazon.com/images/I/51tbGBfljwL._SS142_.jpg" alt=""></div>
+            <div><div class="order-name">MaxGear Acrylic Decorative Tray Set of 2</div><div class="order-meta">03/05/2023</div></div>
+            <div class="order-price">$39.99</div>
+            <div class="order-status s-delivered">Delivered</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: CHAT -->
+    <div class="chat-panel">
+      <div class="chat-header">
+        <div class="chat-header-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+        <div>
+          <div class="chat-header-title">Ask about this consumer</div>
+        </div>
+      </div>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input-wrap">
+        <div class="chat-input">
+          <span class="chat-input-text" id="chatInputText">Ask a question about this consumer...</span>
+          <div class="chat-input-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4z"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="replay-btn" id="replayBtn">↻ Replay</button>
+
+<script>
+(function() {
+  var msgs = document.getElementById('chatMessages');
+  var inputText = document.getElementById('chatInputText');
+  var timeouts = [];
+  function t(fn, ms) { timeouts.push(setTimeout(fn, ms)); }
+  function clearAll() { timeouts.forEach(clearTimeout); timeouts = []; }
+
+  // Chat conversation sequence
+  var conversation = [
+    {
+      q: "What brands does this customer actually buy in batteries?",
+      a: 'Based on 3 years of purchase data, here\'s the brand share:' +
+         '<div style="margin-top:10px">' +
+         '<div class="chat-data-row"><span class="chat-data-label">Brand A</span><span class="chat-data-val">80% → <span class="chat-data-val red">20%</span></span></div>' +
+         '<div class="chat-data-row"><span class="chat-data-label">Brand B</span><span class="chat-data-val">20% → <span class="chat-data-val green">80%</span></span></div>' +
+         '</div>' +
+         '<div class="chat-insight"><strong>Alert:</strong> brand switch in progress.</div>'
+    },
+    {
+      q: "What categories drive their battery purchases?",
+      a: 'From 5 years of electronics purchases, this user owns the following battery-powered products:' +
+         '<div style="margin-top:10px">' +
+         '<div class="chat-data-row"><span class="chat-data-label">Children\'s toys</span><span class="chat-data-val">20 orders (71%)</span></div>' +
+         '<div class="chat-data-row"><span class="chat-data-label">Remotes / clocks</span><span class="chat-data-val">5 orders (18%)</span></div>' +
+         '<div class="chat-data-row"><span class="chat-data-label">Gaming peripherals</span><span class="chat-data-val">3 orders (11%)</span></div>' +
+         '</div>'
+    },
+    {
+      q: "If we raised prices 15%, would this customer leave?",
+      a: '<strong>High risk.</strong> This consumer is already switching away from Brand A — a price increase would accelerate it.' +
+         '<div style="margin-top:10px">' +
+         '<div class="chat-data-row"><span class="chat-data-label">Current Brand A share</span><span class="chat-data-val red">20% (was 80%)</span></div>' +
+         '<div class="chat-data-row"><span class="chat-data-label">Price sensitivity</span><span class="chat-data-val">High — shops deals</span></div>' +
+         '<div class="chat-data-row"><span class="chat-data-label">Lifestyle signal</span><span class="chat-data-val">Young parent, value-conscious</span></div>' +
+         '</div>' +
+         '<div class="chat-insight">They buy organic but compare prices across retailers. A 15% increase would likely <strong>push remaining Brand A purchases to Brand B entirely</strong>.</div>'
+    }
+  ];
+
+  function typeInInput(text, cb) {
+    inputText.innerHTML = '';
+    inputText.classList.add('chat-typing');
+    var i = 0;
+    var int = setInterval(function() {
+      if (i < text.length) {
+        inputText.innerHTML = text.substring(0, i + 1) + '<span class="typing-cursor"></span>';
+        i++;
+      } else {
+        clearInterval(int);
+        inputText.innerHTML = text;
+        if (cb) cb();
+      }
+    }, 25);
+  }
+
+  function addMsg(type, content) {
+    var div = document.createElement('div');
+    div.className = 'chat-msg chat-msg-' + type;
+    div.innerHTML =
+      '<div class="chat-bubble">' + content + '</div>';
+    msgs.appendChild(div);
+    // Scroll to bottom
+    msgs.scrollTop = msgs.scrollHeight;
+    // Animate in
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        div.classList.add('visible');
+      });
+    });
+  }
+
+  function resetInput() {
+    inputText.classList.remove('chat-typing');
+    inputText.innerHTML = 'Ask a question about this consumer...';
+  }
+
+  function runConversation() {
+    clearAll();
+    msgs.innerHTML = '';
+    resetInput();
+
+    var delay = 800;
+    conversation.forEach(function(pair, idx) {
+      // Type question in input
+      t(function() {
+        typeInInput(pair.q, function() {
+          // Send as user message
+          t(function() {
+            resetInput();
+            addMsg('user', pair.q);
+            // Show thinking dots
+            t(function() {
+              var thinking = document.createElement('div');
+              thinking.className = 'chat-msg chat-msg-ai chat-thinking';
+              thinking.id = 'thinking-' + idx;
+              thinking.innerHTML =
+                '<div class="chat-bubble"><span class="thinking-dot"></span><span class="thinking-dot"></span><span class="thinking-dot"></span></div>';
+              msgs.appendChild(thinking);
+              requestAnimationFrame(function() { requestAnimationFrame(function() { thinking.classList.add('visible'); }); });
+              msgs.scrollTop = msgs.scrollHeight;
+              // Replace with real answer
+              t(function() {
+                var el = document.getElementById('thinking-' + idx);
+                if (el) el.remove();
+                addMsg('ai', pair.a);
+              }, 1800);
+            }, 600);
+          }, 400);
+        });
+      }, delay);
+      delay += pair.q.length * 30 + 300 + 500 + 1800 + 1200; // typing + pause + thinking + answer + reading
+      if (idx < conversation.length - 1) delay += 500; // gap between exchanges
+    });
+  }
+
+  runConversation();
+  document.getElementById('replayBtn').addEventListener('click', runConversation);
+})();
+</script>
+
+</body>
+</html>
