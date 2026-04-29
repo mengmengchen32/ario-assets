@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ario CoreLens — 1-Pager</title>
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    @page {
+      size: letter;
+      margin: 0;
+    }
+
+    :root {
+      --blue: #2B5CFF;
+      --blue-deep: #1A4AE6;
+      --blue-pale: #EEF2FF;
+      --blue-dim: rgba(43, 92, 255, 0.12);
+      --ink: #111111;
+      --ink-soft: #2A2A2A;
+      --ink-muted: #666666;
+      --ink-faint: #999999;
+      --paper: #FAFAFA;
+      --rule: #E0E0E0;
+      --gold: #D4A843;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 8.5in;
+      height: 11in;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #fff;
+      color: var(--ink);
+      font-family: 'Satoshi', sans-serif;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      width: 8.5in;
+      height: 11in;
+      padding: 0.4in 0.5in 0.3in;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── TOP BAR ── */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 10px;
+      border-bottom: 1.5px solid var(--rule);
+      margin-bottom: 14px;
+    }
+    .top-bar img { height: 22px; }
+    .top-bar span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--ink-soft);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      margin-bottom: 14px;
+      padding: 8px 0 0;
+    }
+    .hero-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+    .hero h1 {
+      font-family: 'Satoshi', sans-serif;
+      font-size: 42px;
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-bottom: 14px;
+      max-width: 100%;
+    }
+    .hero h1 em { font-style: normal; color: var(--blue); }
+    .hero p {
+      font-size: 11.5px;
+      line-height: 1.55;
+      color: var(--ink-muted);
+      max-width: 88%;
+    }
+
+    /* ── STAT STRIP ── */
+    .stat-strip {
+      display: flex;
+      gap: 0;
+      margin-bottom: 16px;
+      border-top: 1.5px solid var(--ink);
+      border-bottom: 1.5px solid var(--rule);
+    }
+    .stat-item {
+      flex: 1;
+      padding: 10px 0;
+      text-align: center;
+      border-right: 1px solid var(--rule);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-number {
+      font-family: 'Satoshi', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 3px;
+    }
+    .stat-number span { color: var(--blue); }
+    .stat-desc {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--ink-muted);
+    }
+
+    /* ── HOW IT WORKS ── */
+    .hiw {
+      background: var(--blue-pale);
+      border-radius: 8px;
+      padding: 12px 16px 14px;
+      margin-bottom: 16px;
+    }
+    .hiw-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+    .hiw-steps {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
+    .hiw-step {
+      text-align: left;
+    }
+    .hiw-step-number {
+      font-family: 'Satoshi', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .hiw-step-mock {
+      background: #fff;
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin-bottom: 6px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      height: 110px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+    }
+    .hiw-step p {
+      font-size: 8.5px;
+      color: var(--ink-soft);
+      line-height: 1.4;
+    }
+
+    /* Mock content for HIW steps */
+    .crit-line {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 7.5px;
+      color: var(--ink-soft);
+      margin-bottom: 4px;
+    }
+    .crit-line:last-child { margin-bottom: 0; }
+    .crit-check {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 6px;
+      font-weight: 700;
+    }
+    .crit-line .val {
+      margin-left: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7px;
+      color: var(--blue);
+    }
+    .recruit-static {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: stretch;
+      justify-content: center;
+      flex: 1;
+    }
+    .recruit-static-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 4px;
+      width: 100%;
+    }
+    .recruit-static-person {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--blue);
+    }
+    .recruit-static-person svg {
+      width: 100%;
+      height: 100%;
+      fill: currentColor;
+    }
+    .recruit-static-result {
+      font-family: 'Satoshi', sans-serif;
+      font-size: 10px;
+      color: var(--ink-soft);
+      text-align: center;
+      letter-spacing: -0.005em;
+    }
+    .recruit-static-result strong {
+      font-weight: 700;
+      color: var(--blue);
+      font-size: 12px;
+    }
+    .recruit-static-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7px;
+      color: var(--ink-faint);
+      text-align: center;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .data-row {
+      display: grid;
+      grid-template-columns: 1fr 32px;
+      gap: 6px;
+      font-size: 7px;
+      padding: 3px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      align-items: center;
+    }
+    .data-row:last-child { border-bottom: none; }
+    .data-row .sku {
+      color: var(--ink-soft);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .data-row .price {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--blue);
+      font-weight: 600;
+      text-align: right;
+    }
+
+    /* ── USE CASES ── */
+    .use-cases {
+      margin-bottom: 16px;
+    }
+    .uc-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+    .uc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+    .uc-card {
+      background: #fff;
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .uc-card-graphic {
+      height: 110px;
+      background: var(--blue-pale);
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      overflow: hidden;
+    }
+    .uc-card-body {
+      padding: 10px 12px 12px;
+    }
+    .uc-card-body h3 {
+      font-family: 'Satoshi', sans-serif;
+      font-weight: 700;
+      font-size: 11.5px;
+      color: var(--ink);
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+    .uc-card-body p {
+      font-size: 9.5px;
+      color: var(--ink-soft);
+      line-height: 1.45;
+    }
+
+    /* UC bars */
+    .ucg-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .ucg-bar-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7px;
+      color: var(--ink-soft);
+      width: 36px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .ucg-bar-track {
+      flex: 1;
+      height: 8px;
+      background: rgba(255,255,255,0.85);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .ucg-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: var(--blue);
+    }
+    .ucg-bar-fill.muted { background: rgba(43,92,255,0.4); }
+    .ucg-bar-fill.gold { background: var(--gold); }
+    .ucg-bar-pct {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      font-weight: 500;
+      color: var(--blue);
+      width: 22px;
+      text-align: right;
+    }
+
+    /* UC rows (audience portrait) */
+    .ucg-portrait-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 4px;
+      font-size: 8px;
+      padding: 3px 0;
+      border-bottom: 1px solid rgba(43,92,255,0.12);
+    }
+    .ucg-portrait-row:last-child { border-bottom: none; }
+    .ucg-portrait-row .label {
+      color: var(--ink-soft);
+    }
+    .ucg-portrait-row .val {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 500;
+      color: var(--blue);
+    }
+
+    /* ── WHY CORELENS ── */
+    .why-cl {
+      margin-bottom: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .why-cl-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 5px;
+    }
+    .why-item {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .why-marker {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--blue);
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+    .why-item p {
+      font-size: 9.5px;
+      line-height: 1.45;
+      color: var(--ink-soft);
+    }
+    .why-item strong {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    /* ── BOTTOM BAR ── */
+    .bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 8px;
+      border-top: 1.5px solid var(--rule);
+      margin-top: auto;
+    }
+    .bottom-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .bottom-left img { height: 16px; }
+    .bottom-left span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      color: var(--ink-soft);
+      letter-spacing: 0.04em;
+    }
+    .bottom-right {
+      text-align: right;
+    }
+    .bottom-right .site {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--blue);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      html, body {
+        width: 8.5in;
+        height: 11in;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .page {
+        page-break-after: avoid;
+        page-break-inside: avoid;
+      }
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      ::-webkit-scrollbar { display: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <img src="ario-logo-black.png" alt="Ario">
+    <span>ariodata.com / ario-corelens</span>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Ario CoreLens</div>
+    <h1>Real purchase behavior from <em>any audience.</em></h1>
+    <p>Ario CoreLens is on-demand audience research with real purchase data built in. Tell us who you want to study &mdash; competitors' shoppers, the buyers in a new category, a demographic outside your CRM &mdash; and we deliver an audience recruited to spec, with rich purchase history attached. Ready to derive insights in days.</p>
+  </div>
+
+  <!-- STAT STRIP -->
+  <div class="stat-strip">
+    <div class="stat-item">
+      <div class="stat-number"><span>5 yrs</span></div>
+      <div class="stat-desc">SKU-Level History</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number"><span>80M</span></div>
+      <div class="stat-desc">Consumer Network</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number"><span>&lt;3 days</span></div>
+      <div class="stat-desc">To Stand Up</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">Consented</div>
+      <div class="stat-desc">First-Party, Direct</div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="hiw">
+    <div class="hiw-label">How It Works</div>
+    <div class="hiw-steps">
+      <div class="hiw-step">
+        <div class="hiw-step-number">1. Define</div>
+        <div class="hiw-step-mock">
+          <div class="crit-line"><div class="crit-check">&#10003;</div><span>Age</span><span class="val">25&ndash;34</span></div>
+          <div class="crit-line"><div class="crit-check">&#10003;</div><span>HHI</span><span class="val">$100K+</span></div>
+          <div class="crit-line"><div class="crit-check">&#10003;</div><span>Has child &lt;2</span><span class="val">Yes</span></div>
+          <div class="crit-line"><div class="crit-check">&#10003;</div><span>Region</span><span class="val">Priority zips</span></div>
+        </div>
+        <p>Specify the audience: demographics, geography, household, declared interests.</p>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-step-number">2. Recruit</div>
+        <div class="hiw-step-mock">
+          <div class="recruit-static">
+            <div class="recruit-static-grid">
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+              <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+            </div>
+            <div class="recruit-static-result"><strong>500</strong> matched &middot; onboarded</div>
+          </div>
+        </div>
+        <p>We pull matching members from the Ario network and onboard them through the consent flow.</p>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-step-number">3. Learn</div>
+        <div class="hiw-step-mock">
+          <div class="data-row"><span class="sku">Pampers Swaddlers, Sz 2</span><span class="price">$31.94</span></div>
+          <div class="data-row"><span class="sku">Burt's Bees Baby Lotion</span><span class="price">$8.49</span></div>
+          <div class="data-row"><span class="sku">Aquaphor Healing Ointment</span><span class="price">$15.27</span></div>
+          <div class="data-row"><span class="sku">Munchkin Sippy Cups</span><span class="price">$11.99</span></div>
+          <div class="data-row"><span class="sku">Earth's Best Baby Food</span><span class="price">$9.49</span></div>
+        </div>
+        <p>Audience ready &mdash; rich purchase history attached, ready to derive insights from.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- USE CASES -->
+  <div class="use-cases">
+    <div class="uc-label">Example Questions</div>
+    <div class="uc-grid">
+
+      <!-- Cross-retailer spend -->
+      <div class="uc-card">
+        <div class="uc-card-graphic">
+          <div class="ucg-bar-row"><span class="ucg-bar-label">Amazon</span><div class="ucg-bar-track"><div class="ucg-bar-fill" style="width:54%;"></div></div><span class="ucg-bar-pct">54%</span></div>
+          <div class="ucg-bar-row"><span class="ucg-bar-label">Walmart</span><div class="ucg-bar-track"><div class="ucg-bar-fill" style="width:22%;"></div></div><span class="ucg-bar-pct">22%</span></div>
+          <div class="ucg-bar-row"><span class="ucg-bar-label">Target</span><div class="ucg-bar-track"><div class="ucg-bar-fill" style="width:14%;"></div></div><span class="ucg-bar-pct">14%</span></div>
+          <div class="ucg-bar-row"><span class="ucg-bar-label">Other</span><div class="ucg-bar-track"><div class="ucg-bar-fill muted" style="width:10%;"></div></div><span class="ucg-bar-pct">10%</span></div>
+        </div>
+        <div class="uc-card-body">
+          <h3>Where do my customers spend besides me?</h3>
+          <p>Cross-retailer purchase history, item by item, on the audience you recruited.</p>
+        </div>
+      </div>
+
+      <!-- Brand switching -->
+      <div class="uc-card">
+        <div class="uc-card-graphic">
+          <div class="ucg-bar-row"><span class="ucg-bar-label">A 24mo</span><div class="ucg-bar-track"><div class="ucg-bar-fill" style="width:72%;"></div></div><span class="ucg-bar-pct">72%</span></div>
+          <div class="ucg-bar-row"><span class="ucg-bar-label">A today</span><div class="ucg-bar-track"><div class="ucg-bar-fill gold" style="width:41%;"></div></div><span class="ucg-bar-pct">41%</span></div>
+          <div class="ucg-bar-row"><span class="ucg-bar-label">B 24mo</span><div class="ucg-bar-track"><div class="ucg-bar-fill muted" style="width:18%;"></div></div><span class="ucg-bar-pct">18%</span></div>
+          <div class="ucg-bar-row"><span class="ucg-bar-label">B today</span><div class="ucg-bar-track"><div class="ucg-bar-fill" style="width:47%;"></div></div><span class="ucg-bar-pct">47%</span></div>
+        </div>
+        <div class="uc-card-body">
+          <h3>Who's switching brands &mdash; and what triggered it?</h3>
+          <p>Defection moments surfaced from longitudinal purchase data.</p>
+        </div>
+      </div>
+
+      <!-- Audience portrait -->
+      <div class="uc-card">
+        <div class="uc-card-graphic">
+          <div class="ucg-portrait-row"><span class="label">Avg. spend (12mo)</span><span class="val">$1,840</span></div>
+          <div class="ucg-portrait-row"><span class="label">Repeat rate</span><span class="val">67%</span></div>
+          <div class="ucg-portrait-row"><span class="label">Top demo</span><span class="val">F 30&ndash;44</span></div>
+          <div class="ucg-portrait-row"><span class="label">Co-shop</span><span class="val">Pet, P.Care</span></div>
+        </div>
+        <div class="uc-card-body">
+          <h3>Who actually buys this category?</h3>
+          <p>Audience portraits from real purchase behavior, not declared interest.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- WHY CORELENS -->
+  <div class="why-cl">
+    <div class="why-cl-label">Why CoreLens</div>
+    <div class="why-grid">
+      <div class="why-item">
+        <div class="why-marker"></div>
+        <p><strong>Real purchases, not stated preference.</strong> Longitudinal SKU-level history means you study what people actually bought, not what they say.</p>
+      </div>
+      <div class="why-item">
+        <div class="why-marker"></div>
+        <p><strong>No customer relationship required.</strong> Study any audience &mdash; even ones outside your CRM &mdash; without owning the recruitment funnel.</p>
+      </div>
+      <div class="why-item">
+        <div class="why-marker"></div>
+        <p><strong>Cross-retailer visibility.</strong> See what your audience buys across every retailer they connect, item-by-item.</p>
+      </div>
+      <div class="why-item">
+        <div class="why-marker"></div>
+        <p><strong>Consented and audited.</strong> GDPR &amp; CCPA compliant; revocable consent with append-only audit log.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="bottom-bar">
+    <div class="bottom-left">
+      <img src="ario-logo-black.png" alt="Ario">
+      <span>enterprise@ariodata.com</span>
+    </div>
+    <div class="bottom-right">
+      <span class="site">ariodata.com / ario-corelens</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

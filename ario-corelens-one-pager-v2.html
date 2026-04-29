@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ario CoreLens — 1-Pager (sidebar layout)</title>
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    @page { size: letter; margin: 0; }
+
+    :root {
+      --blue: #2B5CFF;
+      --blue-deep: #1A4AE6;
+      --blue-pale: #EEF2FF;
+      --blue-dim: rgba(43, 92, 255, 0.12);
+      --ink: #111111;
+      --ink-soft: #2A2A2A;
+      --ink-muted: #555555;
+      --ink-faint: #777777;
+      --paper: #F7F7F5;
+      --rule: #E0E0E0;
+      --gold: #D4A843;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 8.5in;
+      height: 11in;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #fff;
+      color: var(--ink);
+      font-family: 'Satoshi', sans-serif;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      width: 8.5in;
+      height: 11in;
+      padding: 0.4in 0.5in 0.3in;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── TOP BAR (full width) ── */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 10px;
+      border-bottom: 1.5px solid var(--rule);
+      margin-bottom: 18px;
+    }
+    .top-bar img { height: 22px; }
+    .top-bar span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--ink-soft);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── HERO TOP (full width) ── */
+    .hero-top {
+      padding-bottom: 16px;
+      margin-bottom: 18px;
+      border-bottom: 1.5px solid var(--rule);
+    }
+    .hero-top-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--blue);
+      margin-bottom: 14px;
+    }
+    .hero-top-h1 {
+      font-family: 'Satoshi', sans-serif;
+      font-size: 40px;
+      font-weight: 800;
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-bottom: 14px;
+      max-width: 7.4in;
+    }
+    .hero-top-h1 em { font-style: normal; color: var(--blue); }
+    .hero-top-sub {
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--ink-muted);
+      max-width: 6.4in;
+    }
+
+    /* ── BODY: 2-column split ── */
+    .body {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 2.2in 1fr;
+      gap: 0;
+      min-height: 0;
+    }
+
+    /* ── SIDEBAR (left rail — stats only) ── */
+    .sidebar {
+      background: var(--paper);
+      padding: 22px 22px;
+      margin-right: 24px;
+      display: flex;
+      flex-direction: column;
+      border-radius: 6px;
+    }
+    .sb-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--blue);
+      margin-bottom: 18px;
+    }
+    .sb-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+    }
+    .sb-stat-num {
+      font-family: 'Satoshi', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .sb-stat-num span { color: var(--blue); }
+    .sb-stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8.5px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--ink-muted);
+      line-height: 1.45;
+    }
+    .sb-spacer { flex: 1; }
+    .sb-tagline {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-top: 22px;
+    }
+
+    /* ── MAIN (right area) ── */
+    .main {
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-width: 0;
+      min-height: 0;
+    }
+    .main > .main-cta {
+      margin-top: auto;
+      margin-bottom: 8px;
+    }
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--blue);
+      margin-bottom: 9px;
+    }
+
+    /* ── HOW IT WORKS (in main) ── */
+    .hiw {
+      background: var(--blue-pale);
+      border-radius: 8px;
+      padding: 13px 14px 14px;
+    }
+    .hiw-steps {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+    .hiw-step-number {
+      font-family: 'Satoshi', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .hiw-step-mock {
+      background: #fff;
+      border-radius: 5px;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      height: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+    }
+    .hiw-step p {
+      font-size: 8px;
+      color: var(--ink-soft);
+      line-height: 1.4;
+    }
+
+    /* Define mock */
+    .crit-line {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 7px;
+      color: var(--ink-soft);
+      margin-bottom: 3px;
+    }
+    .crit-line:last-child { margin-bottom: 0; }
+    .crit-check {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 5.5px;
+      font-weight: 700;
+    }
+    .crit-line .val {
+      margin-left: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 6.5px;
+      color: var(--blue);
+    }
+
+    /* Recruit mock */
+    .recruit-static {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      align-items: stretch;
+      flex: 1;
+    }
+    .recruit-static-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 2px;
+      width: 100%;
+    }
+    .recruit-static-person {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--blue);
+    }
+    .recruit-static-person svg {
+      width: 100%;
+      height: 100%;
+      fill: currentColor;
+    }
+    .recruit-static-result {
+      font-family: 'Satoshi', sans-serif;
+      font-size: 9px;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+    .recruit-static-result strong {
+      font-weight: 700;
+      color: var(--blue);
+      font-size: 10px;
+    }
+
+    /* Learn mock (data rows) */
+    .data-row {
+      display: grid;
+      grid-template-columns: 1fr 28px;
+      gap: 5px;
+      font-size: 6.5px;
+      padding: 2px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      align-items: center;
+    }
+    .data-row:last-child { border-bottom: none; }
+    .data-row .sku {
+      color: var(--ink-soft);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .data-row .price {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--blue);
+      font-weight: 600;
+      text-align: right;
+    }
+
+    /* ── EXAMPLE QUESTIONS (compact, in main) ── */
+    .uc-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .uc-list .uc-card {
+      background: #fff;
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      padding: 10px 12px 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .uc-list h3 {
+      font-family: 'Satoshi', sans-serif;
+      font-weight: 700;
+      font-size: 10.5px;
+      color: var(--ink);
+      line-height: 1.25;
+      letter-spacing: -0.005em;
+    }
+    .uc-list .uc-graphic {
+      background: var(--paper);
+      border-radius: 4px;
+      padding: 7px 9px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .uc-list .uc-graphic.tall { padding: 7px 9px; gap: 5px; }
+    .ucg-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .ucg-bar-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 6px;
+      color: var(--ink-soft);
+      width: 38px;
+      text-transform: uppercase;
+    }
+    .ucg-bar-track {
+      flex: 1;
+      height: 5px;
+      background: rgba(255,255,255,0.85);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .ucg-bar-fill { height: 100%; border-radius: 3px; background: var(--blue); }
+    .ucg-bar-fill.muted { background: rgba(43,92,255,0.4); }
+    .ucg-bar-fill.gold { background: var(--gold); }
+    .ucg-bar-pct {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 6.5px;
+      font-weight: 500;
+      color: var(--blue);
+      width: 18px;
+      text-align: right;
+    }
+    .ucg-portrait-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 4px;
+      font-size: 7px;
+      padding: 2px 0;
+    }
+    .ucg-portrait-row .label { color: var(--ink-soft); }
+    .ucg-portrait-row .val {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 500;
+      color: var(--blue);
+    }
+    .ucg-spend-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .ucg-spend-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .ucg-spend-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 6px;
+      color: var(--ink-soft);
+      width: 28px;
+    }
+    .ucg-spend-track { flex: 1; height: 5px; background: rgba(255,255,255,0.85); border-radius: 3px; overflow: hidden; }
+    .ucg-spend-fill { height: 100%; background: var(--blue); border-radius: 3px; }
+    .ucg-spend-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 6.5px;
+      color: var(--blue);
+      width: 30px;
+      text-align: right;
+    }
+
+    /* ── WHY CORELENS (compact, in main) ── */
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .why-item {
+      display: flex;
+      align-items: baseline;
+      gap: 7px;
+    }
+    .why-marker {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--blue);
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+    .why-item p {
+      font-size: 9px;
+      line-height: 1.45;
+      color: var(--ink-soft);
+    }
+    .why-item strong { font-weight: 600; color: var(--ink); }
+
+    /* ── MAIN CTA (bottom of right column) ── */
+    .main-cta {
+      background: var(--blue-pale);
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .main-cta-text {
+      font-size: 10px;
+      line-height: 1.55;
+      color: var(--ink-soft);
+      flex: 1;
+    }
+    .main-cta-text strong {
+      font-weight: 700;
+      color: var(--ink);
+      display: block;
+      font-size: 11px;
+      margin-bottom: 2px;
+    }
+    .main-cta-email {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--blue);
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    /* ── BOTTOM BAR (full width) ── */
+    .bottom-bar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1.5px solid var(--rule);
+      margin-top: 22px;
+    }
+    .bottom-email {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--blue);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      html, body {
+        width: 8.5in;
+        height: 11in;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .page { page-break-after: avoid; page-break-inside: avoid; }
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      ::-webkit-scrollbar { display: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <img src="ario-logo-black.png" alt="Ario">
+    <span>ariodata.com / ario-corelens</span>
+  </div>
+
+  <!-- HERO TOP (full width) -->
+  <div class="hero-top">
+    <div class="hero-top-eyebrow">Ario CoreLens</div>
+    <h1 class="hero-top-h1">Real purchase behavior from <em>any audience.</em></h1>
+    <p class="hero-top-sub">Ario CoreLens is on-demand audience research with real purchase data built in. Tell us who you want to study and we deliver an audience recruited to spec, with rich purchase history attached. Ready to derive insights in days.</p>
+  </div>
+
+  <!-- BODY (sidebar + main) -->
+  <div class="body">
+
+    <!-- SIDEBAR (stats only) -->
+    <div class="sidebar">
+      <div class="sb-label">By the numbers</div>
+      <div class="sb-stats">
+        <div class="sb-stat">
+          <div class="sb-stat-num"><span>5 yrs</span></div>
+          <div class="sb-stat-label">SKU-Level Purchase History</div>
+        </div>
+        <div class="sb-stat">
+          <div class="sb-stat-num"><span>80M</span></div>
+          <div class="sb-stat-label">Consumer Network</div>
+        </div>
+        <div class="sb-stat">
+          <div class="sb-stat-num"><span>&lt; 3 days</span></div>
+          <div class="sb-stat-label">To Stand Up</div>
+        </div>
+        <div class="sb-stat">
+          <div class="sb-stat-num">Consented</div>
+          <div class="sb-stat-label">First-Party, Direct</div>
+        </div>
+      </div>
+      <div class="sb-spacer"></div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+
+      <!-- How it works -->
+      <div>
+        <div class="section-label">How it works</div>
+        <div class="hiw">
+          <div class="hiw-steps">
+            <div class="hiw-step">
+              <div class="hiw-step-number">1. Define</div>
+              <div class="hiw-step-mock">
+                <div class="crit-line"><div class="crit-check">&#10003;</div><span>Age</span><span class="val">25&ndash;34</span></div>
+                <div class="crit-line"><div class="crit-check">&#10003;</div><span>HHI</span><span class="val">$100K+</span></div>
+                <div class="crit-line"><div class="crit-check">&#10003;</div><span>Child &lt;2</span><span class="val">Yes</span></div>
+                <div class="crit-line"><div class="crit-check">&#10003;</div><span>Region</span><span class="val">Priority</span></div>
+              </div>
+              <p>Specify the audience: demographics, geography, household, declared interests.</p>
+            </div>
+            <div class="hiw-step">
+              <div class="hiw-step-number">2. Recruit</div>
+              <div class="hiw-step-mock">
+                <div class="recruit-static">
+                  <div class="recruit-static-grid">
+                    <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+                    <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+                    <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+                    <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+                    <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+                    <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+                    <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+                    <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+                    <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+                    <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+                    <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+                    <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+                    <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+                    <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+                    <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+                    <div class="recruit-static-person"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M8 9c-3.3 0-6 2.4-6 5.4V16h12v-1.6c0-3-2.7-5.4-6-5.4z"/></svg></div>
+                  </div>
+                  <div class="recruit-static-result"><strong>500</strong> matched &middot; onboarded</div>
+                </div>
+              </div>
+              <p>Match members from the Ario network and onboard them via the consent flow.</p>
+            </div>
+            <div class="hiw-step">
+              <div class="hiw-step-number">3. Learn</div>
+              <div class="hiw-step-mock">
+                <div class="data-row"><span class="sku">Pampers Swaddlers</span><span class="price">$31.94</span></div>
+                <div class="data-row"><span class="sku">Burt's Bees Lotion</span><span class="price">$8.49</span></div>
+                <div class="data-row"><span class="sku">Aquaphor Ointment</span><span class="price">$15.27</span></div>
+                <div class="data-row"><span class="sku">Munchkin Sippy</span><span class="price">$11.99</span></div>
+                <div class="data-row"><span class="sku">Earth's Best Food</span><span class="price">$9.49</span></div>
+              </div>
+              <p>Audience ready &mdash; rich purchase history attached, ready for insight.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Example questions -->
+      <div>
+        <div class="section-label">What CoreLens reveals</div>
+        <div class="uc-list">
+          <div class="uc-card">
+            <h3>Where do my customers spend besides me?</h3>
+            <div class="uc-graphic">
+              <div class="ucg-bar-row"><span class="ucg-bar-label">Amazon</span><div class="ucg-bar-track"><div class="ucg-bar-fill" style="width:54%;"></div></div><span class="ucg-bar-pct">54%</span></div>
+              <div class="ucg-bar-row"><span class="ucg-bar-label">Walmart</span><div class="ucg-bar-track"><div class="ucg-bar-fill" style="width:22%;"></div></div><span class="ucg-bar-pct">22%</span></div>
+              <div class="ucg-bar-row"><span class="ucg-bar-label">Target</span><div class="ucg-bar-track"><div class="ucg-bar-fill" style="width:14%;"></div></div><span class="ucg-bar-pct">14%</span></div>
+              <div class="ucg-bar-row"><span class="ucg-bar-label">Other</span><div class="ucg-bar-track"><div class="ucg-bar-fill muted" style="width:10%;"></div></div><span class="ucg-bar-pct">10%</span></div>
+            </div>
+          </div>
+          <div class="uc-card">
+            <h3>Who's switching brands &mdash; and what triggered it?</h3>
+            <div class="uc-graphic">
+              <div class="ucg-bar-row"><span class="ucg-bar-label">A 24mo</span><div class="ucg-bar-track"><div class="ucg-bar-fill" style="width:72%;"></div></div><span class="ucg-bar-pct">72%</span></div>
+              <div class="ucg-bar-row"><span class="ucg-bar-label">A today</span><div class="ucg-bar-track"><div class="ucg-bar-fill gold" style="width:41%;"></div></div><span class="ucg-bar-pct">41%</span></div>
+              <div class="ucg-bar-row"><span class="ucg-bar-label">B 24mo</span><div class="ucg-bar-track"><div class="ucg-bar-fill muted" style="width:18%;"></div></div><span class="ucg-bar-pct">18%</span></div>
+              <div class="ucg-bar-row"><span class="ucg-bar-label">B today</span><div class="ucg-bar-track"><div class="ucg-bar-fill" style="width:47%;"></div></div><span class="ucg-bar-pct">47%</span></div>
+            </div>
+          </div>
+          <div class="uc-card">
+            <h3>Who actually buys this category?</h3>
+            <div class="uc-graphic tall">
+              <div class="ucg-portrait-row"><span class="label">Avg. spend (12mo)</span><span class="val">$1,840</span></div>
+              <div class="ucg-portrait-row"><span class="label">Repeat rate</span><span class="val">67%</span></div>
+              <div class="ucg-portrait-row"><span class="label">Top demo</span><span class="val">F 30&ndash;44</span></div>
+              <div class="ucg-portrait-row"><span class="label">Co-shop</span><span class="val">Pet, P.Care</span></div>
+            </div>
+          </div>
+          <div class="uc-card">
+            <h3>How is their spend evolving over time?</h3>
+            <div class="uc-graphic">
+              <div class="ucg-spend-row"><span class="ucg-spend-label">2022</span><div class="ucg-spend-track"><div class="ucg-spend-fill" style="width:40%;"></div></div><span class="ucg-spend-val">$780</span></div>
+              <div class="ucg-spend-row"><span class="ucg-spend-label">2023</span><div class="ucg-spend-track"><div class="ucg-spend-fill" style="width:60%;"></div></div><span class="ucg-spend-val">$1,140</span></div>
+              <div class="ucg-spend-row"><span class="ucg-spend-label">2024</span><div class="ucg-spend-track"><div class="ucg-spend-fill" style="width:85%;"></div></div><span class="ucg-spend-val">$1,580</span></div>
+              <div class="ucg-spend-row"><span class="ucg-spend-label">3yr</span><div class="ucg-spend-track"><div class="ucg-spend-fill" style="width:100%;background:var(--gold);"></div></div><span class="ucg-spend-val">+102%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Why CoreLens -->
+      <div>
+        <div class="section-label">Why CoreLens</div>
+        <div class="why-grid">
+          <div class="why-item">
+            <div class="why-marker"></div>
+            <p><strong>Real purchases, not stated preference.</strong> Longitudinal SKU-level history.</p>
+          </div>
+          <div class="why-item">
+            <div class="why-marker"></div>
+            <p><strong>No customer relationship required.</strong> Study any audience &mdash; even outside your CRM.</p>
+          </div>
+          <div class="why-item">
+            <div class="why-marker"></div>
+            <p><strong>Cross-retailer visibility.</strong> See every retailer they connect, item-by-item.</p>
+          </div>
+          <div class="why-item">
+            <div class="why-marker"></div>
+            <p><strong>Consented &amp; audited.</strong> GDPR &amp; CCPA compliant; revocable consent.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom CTA -->
+      <div class="main-cta">
+        <div class="main-cta-text">
+          <strong>Have a study in mind?</strong>
+          Send us your spec &mdash; we'll come back with a scope and quote within a day.
+        </div>
+        <div class="main-cta-email">enterprise@ariodata.com</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="bottom-bar">
+    <span class="bottom-email">enterprise@ariodata.com</span>
+  </div>
+
+</div>
+</body>
+</html>

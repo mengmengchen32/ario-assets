@@ -1,6 +1,9 @@
 {
   "rewrites": [
     { "source": "/one-pager", "destination": "/ario-one-pager.pdf" },
+    { "source": "/ario-link", "destination": "/ario-one-pager.html" },
+    { "source": "/ario-corelens", "destination": "/ario-corelens-one-pager-v2.html" },
+    { "source": "/iiex-booth", "destination": "/iiex-booth.html" },
     { "source": "/brand", "destination": "/ario-brand-guide.html" },
     { "source": "/canonical-design", "destination": "/ario-canonical-design.html" }
   ]
