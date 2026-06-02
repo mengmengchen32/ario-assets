@@ -2682,6 +2682,14 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'r') { resetBtn.click(); }
 });
 
+// Autoplay + capture-mode via ?autoplay=1 (used by the headless recorder)
+if (new URLSearchParams(location.search).get('autoplay') === '1') {
+  document.body.classList.add('capture-mode');
+  tl.time(0);
+  tl.play();
+  playBtn.textContent = 'Pause';
+}
+
 </script>
 </body>
 </html>
