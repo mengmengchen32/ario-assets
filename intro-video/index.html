@@ -1,0 +1,2679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ario Intro Video — v2</title>
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+:root {
+  --cream: #f7f2e9;
+  --cream-2: #efe9dc;
+  --ink: #1a1814;
+  --ink-2: #4b4742;
+  --text-2: #6b6661;
+  --text-3: #9c958d;
+  --border: #e8e2d4;
+  --border-soft: #f0ebde;
+  --card: #ffffff;
+  --blue: #2b5cff;
+  --blue-dark: #1a3db3;
+  --blue-3: rgba(43, 92, 255, 0.04);
+  --blue-8: rgba(43, 92, 255, 0.10);
+  --blue-30: rgba(43, 92, 255, 0.30);
+  --emerald: #00bb7f;
+  --rose: #ff2357;
+  --shadow-soft: 0 4px 12px rgba(34, 26, 16, 0.06), 0 24px 60px rgba(34, 26, 16, 0.10);
+  --shadow-card: 0 2px 6px rgba(34, 26, 16, 0.05), 0 16px 48px rgba(34, 26, 16, 0.10);
+  --shadow-hero: 0 8px 24px rgba(34, 26, 16, 0.08), 0 40px 80px rgba(34, 26, 16, 0.14);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: 'Satoshi', system-ui, sans-serif;
+  background: #000;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+
+/* ============================================================
+   STAGE
+   ============================================================ */
+.stage {
+  position: absolute;
+  inset: 0;
+  background: var(--cream);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.camera {
+  position: absolute;
+  inset: 0;
+  transform-origin: center center;
+  will-change: transform, filter;
+}
+.scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+
+/* ============================================================
+   BEAT 1 — OPENING (0:00–0:08) — ChatGPT-style explosion
+   ============================================================ */
+#beat-1 {
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+/* Background panels for the "explosion" moment — match ChatGPT reference layout */
+.b1-panel {
+  position: absolute;
+  opacity: 0;
+  will-change: opacity, transform;
+}
+.b1-panel-warm {
+  top: 4%;
+  left: 0;
+  width: 38vw;
+  height: 42vh;
+  background: var(--cream-2);
+}
+.b1-panel-green {
+  top: 22%;
+  left: 36%;
+  width: 30vw;
+  height: 56vh;
+  background: rgba(0, 187, 127, 0.22);
+}
+.b1-panel-yellow {
+  top: 4%;
+  right: 0;
+  width: 30vw;
+  height: 44vh;
+  background: rgba(255, 215, 90, 0.50);
+}
+
+/* UI fragments at the four corners — bleed in during explosion */
+.b1-frag {
+  position: absolute;
+  opacity: 0;
+  background: white;
+  border-radius: 14px;
+  box-shadow: var(--shadow-card);
+  padding: 18px 22px;
+  will-change: opacity, transform;
+}
+
+/* Top-left: Loss Tracker fragment */
+.b1-frag-tl {
+  top: 7vh;
+  left: 7vw;
+  width: 360px;
+  transform: rotate(-1.5deg);
+}
+.b1-frag-tl-pill {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+}
+.b1-frag-tl-title {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 14px;
+  letter-spacing: -0.02em;
+}
+.b1-frag-bars { display: flex; flex-direction: column; gap: 6px; }
+.b1-frag-bar-row { display: grid; grid-template-columns: 110px 1fr 40px; align-items: center; gap: 8px; }
+.b1-frag-bar-label { font-size: 11px; color: var(--text-2); }
+.b1-frag-bar-track { height: 8px; background: var(--cream-2); border-radius: 2px; overflow: hidden; }
+.b1-frag-bar-fill { height: 100%; background: var(--blue); border-radius: 2px; }
+.b1-frag-bar-fill.muted { background: var(--blue-8); }
+.b1-frag-bar-value { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink); text-align: right; font-weight: 500; }
+
+/* Top-right: SKU column ghosted */
+.b1-frag-tr {
+  top: 8vh;
+  right: 7vw;
+  width: 300px;
+  transform: rotate(1.5deg);
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+.b1-frag-tr-row {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--text-2);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+/* Bottom-left: Skinny Shot partial chart */
+.b1-frag-bl {
+  bottom: 7vh;
+  left: 7vw;
+  width: 360px;
+  transform: rotate(1.5deg);
+}
+.b1-frag-bl-pill {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+}
+.b1-frag-bl-title {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+/* Bottom-right: Ask Ario input pill */
+.b1-frag-br {
+  bottom: 18vh;
+  right: 22vw;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  border-radius: 999px;
+  padding: 12px 18px;
+  width: 260px;
+  transform: rotate(-1.5deg);
+}
+.b1-frag-br-plus {
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.b1-frag-br-plus img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+.b1-frag-br-text {
+  flex: 1;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 13px;
+  color: var(--text-2);
+  font-weight: 500;
+}
+.b1-frag-br-send {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  color: white;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+/* Three explosion words — absolutely positioned to match reference. Appear in sequence. */
+.b1-explosion {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 6;
+}
+.b1-exp-word {
+  position: absolute;
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  color: var(--ink);
+  font-size: clamp(140px, 18vw, 280px);
+  line-height: 0.9;
+  opacity: 0;
+}
+.b1-exp-now { top: 16%; left: 6%; }
+.b1-exp-you { top: 38%; left: 36%; }
+.b1-exp-can { top: 18%; right: 5%; }
+
+/* Main typography for Beat 1 — gets swapped via GSAP */
+.b1-text {
+  position: relative;
+  z-index: 5;
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.045em;
+  color: var(--ink);
+  line-height: 0.9;
+  text-align: center;
+  padding: 0 4vw;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2em;
+  flex-wrap: wrap;
+  opacity: 0; /* hidden by default; GSAP snaps to visible at each beat */
+}
+.b1-text.size-small {
+  font-size: clamp(60px, 7.5vw, 130px);
+}
+.b1-text.size-explosion {
+  font-size: clamp(120px, 18vw, 280px);
+  letter-spacing: -0.05em;
+}
+.b1-text.size-final {
+  font-size: clamp(40px, 5vw, 84px);
+  letter-spacing: -0.035em;
+  line-height: 1.0;
+  max-width: 78vw;
+}
+.b1-text.size-kicker {
+  font-size: clamp(80px, 11vw, 180px);
+  letter-spacing: -0.045em;
+  line-height: 1.0;
+}
+
+/* Bidirectional word reveal — words appear from center outward */
+.b1-w {
+  display: none;
+  margin-right: 0.25em;
+}
+.b1-w.show { display: inline-block; }
+.b1-w:last-child { margin-right: 0; }
+
+/* Typewriter — ghost reserves layout space, real text overlays as single text node
+   so font kerning works correctly between characters. */
+.typed-wrap {
+  position: relative;
+  display: inline-block;
+  vertical-align: baseline;
+}
+.typed-ghost { visibility: hidden; }
+.typed-real {
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+}
+
+/* "With Ario" — Ario letters scale-pop in one frame at a time. "With" stays in its final position. */
+.b1-ario { display: inline-block; }
+.b1-ario-letter {
+  display: inline-block;
+  opacity: 1;
+  transform: scale(0);
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+
+/* Skeleton chart that appears with "With Ario," */
+.b1-skeleton-donut {
+  position: absolute;
+  top: 6vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 200px;
+  opacity: 0;
+}
+.b1-skeleton-donut svg { width: 100%; height: 100%; }
+
+/* ============================================================
+   DIVIDER SCENES — text-only chapter titles
+   ============================================================ */
+.divider {
+  flex-direction: column;
+  padding: 0 4vw;
+}
+.divider-text {
+  font-family: 'Satoshi', sans-serif;
+  font-size: clamp(32px, 4vw, 64px);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+  line-height: 1.05;
+  text-align: center;
+  overflow: visible;
+}
+.divider-text .typed-ghost { white-space: nowrap; }
+.divider-eyebrow {
+  font-family: 'Satoshi', sans-serif;
+  font-size: clamp(32px, 4vw, 64px);
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+/* ============================================================
+   BEAT 2 — PHONE CONNECT (0:08–0:18)
+   ============================================================ */
+#beat-2 {
+  perspective: 1400px;
+}
+.phone-frame {
+  width: 360px;
+  height: 720px;
+  background: #1a1814;
+  border-radius: 50px;
+  padding: 16px;
+  box-shadow: var(--shadow-hero);
+  position: relative;
+  transform: scale(0.9);
+  will-change: transform, opacity;
+}
+.phone-screen {
+  background: #ffffff;
+  border-radius: 36px;
+  height: 100%;
+  padding: 28px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  overflow: hidden;
+}
+.phone-brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 2px;
+}
+.phone-brand img {
+  height: 14px;
+  width: auto;
+  display: block;
+}
+.phone-brand-label {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-3);
+  letter-spacing: -0.005em;
+}
+.phone-header {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  white-space: nowrap;
+}
+.phone-sub {
+  font-size: 13px;
+  color: var(--text-2);
+  margin-top: -8px;
+}
+.phone-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  transform: translateY(20px);
+  opacity: 0;
+}
+.phone-row-name { display: flex; align-items: center; gap: 12px; }
+.phone-row-logo {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.phone-row-logo img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  display: block;
+}
+.phone-row-cta {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.phone-row.syncing .phone-row-cta {
+  color: var(--text-2);
+  display: flex; align-items: center; gap: 6px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 12px;
+  font-weight: 500;
+}
+.phone-row.syncing .phone-row-cta::after {
+  content: '';
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 1.5px solid var(--text-3);
+  border-right-color: transparent;
+  animation: phone-spin 0.7s linear infinite;
+}
+@keyframes phone-spin { to { transform: rotate(360deg); } }
+
+.phone-row.connected { border-color: rgba(0,187,127,0.3); background: rgba(0,187,127,0.04); }
+.phone-row.connected .phone-row-cta {
+  color: var(--ink);
+  display: flex; align-items: center; gap: 6px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 12px;
+  font-weight: 500;
+}
+.phone-row.connected .phone-row-cta::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--emerald);
+  display: inline-block;
+}
+
+/* 3 highlighted features that reveal on the right after phone slides to left */
+.b2-features {
+  position: absolute;
+  right: 8vw;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  max-width: 500px;
+  pointer-events: none;
+}
+.b2-feat {
+  opacity: 0;
+}
+.b2-feat .big {
+  display: block;
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 700;
+  font-size: clamp(48px, 5.2vw, 88px);
+  color: var(--ink);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.b2-feat .big .accent { color: var(--blue); }
+.b2-feat .sm {
+  display: block;
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 500;
+  font-size: clamp(20px, 1.6vw, 28px);
+  color: var(--text-2);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+/* ============================================================
+   BEAT 3A-2 — BASKET BUDDY (bubble affinity chart)
+   ============================================================ */
+:root {
+  --violet: #6e56ff;
+  --violet-8: rgba(110, 86, 255, 0.10);
+  --violet-soft: #eee9ff;
+}
+#beat-3a2 {
+  padding: 0 6vw;
+}
+.b3a2-hero {
+  background: white;
+  border-radius: 24px;
+  padding: 48px 56px 56px;
+  box-shadow: var(--shadow-hero);
+  width: 820px;
+  max-width: 64vw;
+  position: relative;
+  opacity: 0;
+  transform: scale(0.96);
+}
+.b3a2-pill {
+  display: inline-block;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--violet);
+  background: var(--violet-8);
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 24px;
+}
+.b3a2-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 36px;
+}
+.b3a2-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
+  background: var(--violet-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.b3a2-icon svg { width: 36px; height: 36px; stroke: var(--violet); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.b3a2-title {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+
+/* Vertical column chart — distinct from horizontal bars in B3a */
+.b3a2-survey-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.b3a2-survey-label {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.b3a2-survey-sub {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-3);
+  margin-top: 4px;
+  letter-spacing: -0.005em;
+}
+.b3a2-survey-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-3);
+  letter-spacing: -0.005em;
+}
+.b3a2-cols {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 10px;
+  align-items: end;
+  height: 280px;
+  padding: 0 4px;
+  border-bottom: 1px solid var(--border);
+}
+.b3a2-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+  position: relative;
+}
+.b3a2-col-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 8px;
+  opacity: 0;
+}
+.b3a2-col-bar {
+  width: 100%;
+  max-width: 56px;
+  background: rgba(110, 86, 255, 0.40);
+  border-radius: 8px 8px 0 0;
+  height: 0%;
+}
+.b3a2-col-bar.accent {
+  background: var(--violet);
+}
+.b3a2-col-labels {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 10px;
+  margin-top: 14px;
+  padding: 0 4px;
+}
+.b3a2-col-label {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-2);
+  text-align: center;
+  letter-spacing: -0.005em;
+  line-height: 1.25;
+}
+
+/* ============================================================
+   BEAT 3A — LOSS TRACKER HERO (0:20–0:26)
+   ============================================================ */
+#beat-3a {
+  padding: 0 6vw;
+}
+.b3a-hero {
+  background: white;
+  border-radius: 24px;
+  padding: 56px 64px;
+  box-shadow: var(--shadow-hero);
+  width: 720px;
+  max-width: 60vw;
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  transform: scale(0.96);
+}
+.b3a-pill {
+  display: inline-block;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--blue);
+  background: var(--blue-8);
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 24px;
+}
+.b3a-title {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.025em;
+  margin-bottom: 32px;
+  line-height: 1.1;
+}
+.b3a-chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.b3a-chart-label {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.b3a-range {
+  display: inline-flex;
+  gap: 6px;
+}
+.b3a-range-pill {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  background: white;
+  border: 1px solid var(--border);
+  padding: 7px 14px;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+}
+.b3a-range-pill.active {
+  background: var(--ink);
+  color: white;
+  border-color: var(--ink);
+}
+.b3a-sub {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--text-2);
+  letter-spacing: -0.015em;
+  margin-bottom: 32px;
+}
+.b3a-stat-row {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.b3a-stat-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 72px;
+  font-weight: 500;
+  color: var(--blue);
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.b3a-stat-label {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--ink-2);
+  letter-spacing: -0.015em;
+}
+.b3a-bars { display: flex; flex-direction: column; gap: 22px; }
+.b3a-bar-row { display: grid; grid-template-columns: 200px 1fr 70px; align-items: center; gap: 20px; }
+.b3a-bar-label { font-size: 17px; color: var(--ink-2); font-weight: 500; }
+.b3a-bar-track { height: 22px; background: var(--cream-2); border-radius: 11px; overflow: hidden; }
+.b3a-bar-fill { height: 100%; background: var(--blue-8); border-radius: 11px; width: 0%; }
+.b3a-bar-fill.accent { background: var(--blue); }
+.b3a-bar-value { font-family: 'JetBrains Mono', monospace; font-size: 17px; color: var(--ink); font-weight: 500; text-align: right; }
+
+.b3a-edge-peek {
+  position: absolute;
+  left: 62vw;
+  top: 52%;
+  transform: translateY(-50%) rotate(3deg);
+  width: 380px;
+  background: white;
+  border-radius: 20px;
+  padding: 32px 28px;
+  box-shadow: var(--shadow-card);
+  opacity: 0;
+  filter: blur(1px);
+}
+.b3a-edge-peek-pill {
+  display: inline-block;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+.b3a-edge-peek-title {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+.b3a-edge-peek-stat {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 36px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.025em;
+}
+
+/* ============================================================
+   BEAT 3B — SKINNY SHOT REPORT (0:28–0:34)
+   ============================================================ */
+#beat-3b {
+  padding: 0 6vw;
+}
+.b3b-hero {
+  background: white;
+  border-radius: 24px;
+  box-shadow: var(--shadow-hero);
+  width: 820px;
+  max-width: 68vw;
+  height: 78vh;
+  max-height: 660px;
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  transform: scale(0.96);
+  overflow: hidden;
+}
+.b3b-report {
+  padding: 56px 64px 64px;
+  will-change: transform;
+}
+.b3b-block {
+  margin-top: 56px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border);
+}
+.b3b-block-title {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.015em;
+  margin-bottom: 6px;
+}
+.b3b-block-sub {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-3);
+  margin-bottom: 28px;
+}
+
+/* Audience growth column chart */
+.b3b-growth {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 10px;
+  align-items: end;
+  height: 200px;
+  border-bottom: 1px solid var(--border);
+  padding: 0 2px;
+}
+.b3b-growth-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+}
+.b3b-growth-bar {
+  width: 100%;
+  max-width: 42px;
+  background: var(--blue);
+  border-radius: 4px 4px 0 0;
+  height: 0%;
+}
+.b3b-growth-bar.projected {
+  background-image: repeating-linear-gradient(45deg, var(--blue) 0, var(--blue) 4px, rgba(43,92,255,0.45) 4px, rgba(43,92,255,0.45) 8px);
+  background-color: transparent;
+}
+.b3b-growth-labels {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+  padding: 0 2px;
+}
+.b3b-growth-label {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-3);
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+/* Who they are — 4-column composition */
+.b3b-comp {
+  display: grid;
+  grid-template-columns: 1.05fr 0.85fr 1.1fr 1fr;
+  gap: 28px;
+}
+.b3b-comp-col-label {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 14px;
+}
+.b3b-comp-bar-row { display: grid; grid-template-columns: 56px 1fr 36px; align-items: center; gap: 8px; margin-bottom: 10px; }
+.b3b-comp-bar-row:last-child { margin-bottom: 0; }
+.b3b-comp-bar-label { font-family: 'Satoshi', sans-serif; font-size: 11px; color: var(--ink-2); font-weight: 500; }
+.b3b-comp-bar-track { height: 6px; background: var(--cream-2); border-radius: 3px; overflow: hidden; }
+.b3b-comp-bar-fill { height: 100%; background: var(--blue); border-radius: 3px; width: 0%; }
+.b3b-comp-bar-fill.muted { background: #c2bdc8; }
+.b3b-comp-bar-value { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-2); font-weight: 500; text-align: right; }
+
+.b3b-gender-card {
+  background: var(--blue-3);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+.b3b-gender-card:last-child { margin-bottom: 0; }
+.b3b-gender-pct {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.b3b-gender-label {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: 6px;
+}
+
+.b3b-metro-row { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; }
+.b3b-metro-row + .b3b-metro-row { border-top: 1px solid var(--border-soft); }
+.b3b-metro-name { font-family: 'Satoshi', sans-serif; font-size: 13px; color: var(--ink-2); font-weight: 500; }
+.b3b-metro-idx { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--emerald); font-weight: 600; }
+
+/* Aisle index chart — where the cohort over- and under-shops */
+.b3b-aisle { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+.b3b-aisle-row {
+  display: grid;
+  grid-template-columns: 220px 1fr 60px;
+  align-items: center;
+  gap: 16px;
+}
+.b3b-aisle-label {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-2);
+  letter-spacing: -0.005em;
+  line-height: 1.2;
+}
+.b3b-aisle-track {
+  height: 14px;
+  background: var(--cream-2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.b3b-aisle-fill { height: 100%; width: 0%; border-radius: 4px; }
+.b3b-aisle-fill.up { background: var(--emerald); }
+.b3b-aisle-fill.down { background: #e89c3a; }
+.b3b-aisle-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  letter-spacing: -0.005em;
+}
+.b3b-aisle-value.up { color: var(--emerald); }
+.b3b-aisle-value.down { color: #d68a2a; }
+
+/* Full-width Ask Ario bar at the bottom of the report */
+.b3b-ask-area { margin-top: 56px; }
+.b3b-ask-pill {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 18px 24px 18px 20px;
+  width: 100%;
+  box-shadow: var(--shadow-card);
+}
+.b3b-ask-pill-mark { width: 38px; height: 38px; flex-shrink: 0; }
+.b3b-ask-pill-mark img { width: 100%; height: 100%; display: block; object-fit: contain; }
+.b3b-ask-pill-text { flex: 1; font-family: 'Satoshi', sans-serif; font-size: 20px; color: var(--text-2); font-weight: 500; letter-spacing: -0.01em; }
+.b3b-ask-pill-text.typed { color: var(--ink); }
+.b3b-ask-pill-send {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 17px;
+  flex-shrink: 0;
+  transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+.b3b-ask-pill-send.pressed {
+  background: var(--blue);
+  transform: scale(0.9);
+  box-shadow: 0 0 0 6px rgba(43, 92, 255, 0.22);
+}
+.b3b-pill {
+  display: inline-block;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--blue);
+  background: var(--blue-8);
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 24px;
+}
+.b3b-title {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.025em;
+  margin-bottom: 32px;
+  line-height: 1.1;
+}
+
+/* Diverging change chart — own-brand winners (green) vs competitor losers (grey) */
+.b3b-rows { display: flex; flex-direction: column; gap: 18px; }
+.b3b-row {
+  display: grid;
+  grid-template-columns: 220px 1fr 90px;
+  align-items: center;
+  gap: 20px;
+}
+.b3b-row-label { display: flex; flex-direction: column; }
+.b3b-row-brand {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.b3b-row-type {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: 4px;
+}
+.b3b-row-bar {
+  height: 26px;
+  position: relative;
+}
+.b3b-row-bar::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -8px;
+  bottom: -8px;
+  width: 1px;
+  background: var(--border);
+  transform: translateX(-0.5px);
+}
+.b3b-row-fill {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-radius: 6px;
+  width: 0%;
+  background: var(--emerald);
+}
+.b3b-row-fill.positive { left: 50%; background: var(--emerald); }
+.b3b-row-fill.negative { right: 50%; background: #a8a4b8; }
+.b3b-row-value {
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--emerald);
+  text-align: left;
+  letter-spacing: -0.01em;
+}
+.b3b-row-value.negative { color: var(--text-2); }
+.b3b-section-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0;
+}
+.b3b-bar-value { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--ink); font-weight: 500; text-align: right; }
+
+/* ============================================================
+   BEAT 3C-ASK — ASK ARIO PROMPT (0:36–0:40)
+   ============================================================ */
+#beat-3c-ask, #beat-3c-answer {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 7vh 0;
+}
+
+/* Chat-style deep-dive layout */
+.b3c-chat {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 6vw;
+  gap: 28px;
+}
+.b3c-user-bubble {
+  align-self: flex-end;
+  background: var(--cream-2);
+  padding: 14px 22px;
+  border-radius: 999px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  max-width: 78%;
+  opacity: 0;
+}
+.b3c-thinking, .b3c-thought-done {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 4px 0;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-2);
+  letter-spacing: -0.005em;
+  opacity: 0;
+}
+.b3c-thinking-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border);
+  border-top-color: var(--ink-2);
+  border-radius: 50%;
+  animation: b3c-spin 0.9s linear infinite;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+@keyframes b3c-spin { to { transform: rotate(360deg); } }
+.b3c-thinking-text { line-height: 1.3; }
+.b3c-sources {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.b3c-source-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-2);
+  opacity: 0;
+}
+.b3c-source-chip img { width: 16px; height: 16px; border-radius: 4px; }
+.b3c-source-chip .check { color: var(--emerald); font-weight: 700; margin-left: 2px; }
+.b3c-source-chip .meta { color: var(--text-3); font-size: 12px; }
+
+/* "Thought" trace — primary line mirrors the thinking text in past tense,
+   with a small "Thought for Xs" subline below */
+.b3c-thought-check {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--emerald);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.b3c-thought-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.b3c-thought-primary {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-2);
+  line-height: 1.3;
+}
+.b3c-thought-secondary {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-3);
+  line-height: 1.3;
+}
+
+#beat-3c-ask {
+  /* still uses .b3c-chat layout via children */
+}
+.b3c-ask-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0;
+}
+.b3c-input-pill {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: white;
+  border-radius: 999px;
+  padding: 18px 22px;
+  box-shadow: var(--shadow-card);
+  width: 720px;
+  max-width: 70vw;
+  opacity: 0;
+}
+.b3c-input-plus {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: var(--cream-2);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-2);
+  font-size: 24px;
+  font-weight: 400;
+  flex-shrink: 0;
+}
+.b3c-input-text {
+  flex: 1;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.015em;
+  min-height: 28px;
+}
+.b3c-input-text::after {
+  content: '|';
+  color: var(--blue);
+  animation: blink 0.8s steps(1) infinite;
+}
+.b3c-input-text.no-cursor::after { content: ''; }
+@keyframes blink {
+  50% { opacity: 0; }
+}
+.b3c-input-send {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   BEAT 3C-ANSWER — RESPONSE
+   ============================================================ */
+.b3c-answer-text {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+  min-height: 32px;
+}
+.b3c-answer-text .accent { color: var(--blue); font-weight: 700; }
+.b3c-answer-text strong { font-weight: 700; }
+.b3c-answer-chart {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 28px 32px;
+  margin-top: 12px;
+  opacity: 0;
+}
+.b3c-chart-headline {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-2);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 20px;
+}
+.b3c-chart-row { display: grid; grid-template-columns: 220px 1fr 70px; align-items: center; gap: 16px; margin-bottom: 12px; opacity: 0; }
+.b3c-chart-label { font-family: 'Satoshi', sans-serif; font-size: 16px; color: var(--ink); font-weight: 500; }
+.b3c-chart-track { height: 18px; background: var(--cream-2); border-radius: 4px; overflow: hidden; }
+.b3c-chart-fill { height: 100%; background: var(--emerald); border-radius: 4px; width: 0%; }
+.b3c-chart-fill.muted { background: #a8a4b8; }
+.b3c-chart-value { font-family: 'JetBrains Mono', monospace; font-size: 16px; color: var(--ink); font-weight: 500; text-align: right; }
+
+/* ============================================================
+   BEAT 4 — AND MANY MORE (0:48–0:54)
+   ============================================================ */
+#beat-4 {
+  flex-direction: column;
+  gap: 64px;
+}
+.b4-header {
+  font-family: 'Satoshi', sans-serif;
+  font-size: clamp(56px, 8vw, 120px);
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  overflow: hidden;
+  text-align: center;
+}
+.b4-header-inner {
+  display: inline-block;
+  transform: translateY(102%);
+}
+.b4-questions {
+  position: relative;
+  width: 86vw;
+  max-width: 1400px;
+  height: 50vh;
+}
+.b4-q {
+  position: absolute;
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 500;
+  color: var(--ink-2);
+  opacity: 0;
+  transform: translateY(20px);
+  white-space: nowrap;
+  letter-spacing: -0.015em;
+}
+.b4-q.q1 { top: 6%;  left: 3%;  font-size: clamp(20px, 1.7vw, 28px); font-weight: 700; color: var(--ink); }
+.b4-q.q2 { top: 24%; right: 5%; font-size: clamp(18px, 1.4vw, 24px); }
+.b4-q.q3 { top: 42%; left: 14%; font-size: clamp(22px, 1.9vw, 32px); font-weight: 700; color: var(--ink); }
+.b4-q.q4 { top: 58%; right: 7%; font-size: clamp(16px, 1.3vw, 22px); }
+.b4-q.q5 { top: 74%; left: 6%; font-size: clamp(18px, 1.4vw, 24px); }
+.b4-q.q6 { top: 88%; right: 12%; font-size: clamp(20px, 1.6vw, 26px); font-weight: 700; color: var(--ink); }
+
+/* ============================================================
+   BEAT 5 — OUTRO LOGO (0:54–1:00)
+   ============================================================ */
+#beat-5 { flex-direction: column; }
+.b5-logo {
+  height: clamp(36px, 4.5vw, 72px);
+  width: auto;
+  opacity: 0;
+  transform: scale(1.025) translateY(3px);
+  display: block;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+}
+
+/* ============================================================
+   CONTROLS
+   ============================================================ */
+.controls {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 14, 12, 0.92);
+  backdrop-filter: blur(10px);
+  color: white;
+  padding: 12px 18px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  z-index: 100;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+}
+body.capture-mode .controls { display: none; }
+.ctrl-btn {
+  background: rgba(255,255,255,0.08);
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.ctrl-btn:hover { background: rgba(255,255,255,0.16); }
+.ctrl-btn.primary { background: var(--blue); }
+.ctrl-btn.primary:hover { background: var(--blue-dark); }
+.ctrl-time {
+  font-variant-numeric: tabular-nums;
+  color: rgba(255,255,255,0.85);
+  min-width: 56px;
+  text-align: center;
+}
+.ctrl-scrub {
+  width: 240px;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: rgba(255,255,255,0.18);
+  border-radius: 2px;
+  outline: none;
+}
+.ctrl-scrub::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--blue);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.ctrl-jumps { display: flex; gap: 4px; }
+
+/* ============================================================
+   K-BEAUTY DEEP DIVE — second Ask Ario interaction
+   ============================================================ */
+.kb-ask-center {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 3vw;
+}
+
+#beat-kb-think, #beat-kb-answer {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 5vh 0;
+}
+#beat-kb-answer .b3c-chat { gap: 32px; }
+
+/* Opening headline / punchline */
+.kb-headline {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  min-height: 40px;
+  opacity: 0;
+}
+
+/* Product-line chart card — replaces simple percentage callouts */
+.kb-stats-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 24px 28px;
+  opacity: 0;
+}
+.kb-chart-headline {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  margin-bottom: 18px;
+}
+.kb-chart-rows { display: flex; flex-direction: column; gap: 12px; }
+.kb-chart-row {
+  display: grid;
+  grid-template-columns: 130px 1fr 60px;
+  align-items: center;
+  gap: 16px;
+}
+.kb-chart-label {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-2);
+  letter-spacing: -0.005em;
+}
+.kb-chart-track {
+  height: 16px;
+  background: var(--cream-2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.kb-chart-fill { height: 100%; width: 0%; border-radius: 4px; }
+.kb-chart-fill.up { background: var(--emerald); }
+.kb-chart-fill.down { background: #e89c3a; }
+.kb-chart-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: left;
+  letter-spacing: -0.005em;
+}
+.kb-chart-value.up { color: var(--emerald); }
+.kb-chart-value.down { color: #d68a2a; }
+.kb-stat-footer {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-3);
+  border-top: 1px solid var(--border-soft);
+  padding-top: 14px;
+  margin-top: 18px;
+  letter-spacing: -0.005em;
+}
+
+/* Paragraph caption under the chart */
+.kb-caption {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 19px;
+  font-weight: 500;
+  color: var(--ink-2);
+  letter-spacing: -0.005em;
+  line-height: 1.5;
+  opacity: 0;
+}
+.kb-caption strong { color: var(--ink); font-weight: 700; }
+
+/* Headlined sections */
+.kb-section { opacity: 0; }
+.kb-section-title {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.015em;
+  margin-bottom: 10px;
+}
+.kb-section-body {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 19px;
+  font-weight: 500;
+  color: var(--ink-2);
+  letter-spacing: -0.005em;
+  line-height: 1.5;
+}
+
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="camera" id="camera">
+
+    <!-- BEAT 1 — OPENING (0:00–0:08) — ChatGPT-style explosion -->
+    <section class="scene" id="beat-1">
+      <!-- background panels for explosion (cream/green/yellow, like the reference) -->
+      <div class="b1-panel b1-panel-warm"></div>
+      <div class="b1-panel b1-panel-green"></div>
+      <div class="b1-panel b1-panel-yellow"></div>
+
+      <!-- explosion words: now / you / can — appear in sequence -->
+      <div class="b1-explosion">
+        <span class="b1-exp-word b1-exp-now">now</span>
+        <span class="b1-exp-word b1-exp-you">you</span>
+        <span class="b1-exp-word b1-exp-can">can</span>
+      </div>
+
+      <!-- Skeleton donut that drifts in with "With Ario," -->
+      <div class="b1-skeleton-donut">
+        <svg viewBox="0 0 200 200" fill="none" stroke="rgba(26,24,20,0.18)" stroke-width="1.5">
+          <circle cx="100" cy="100" r="80"/>
+          <circle cx="100" cy="100" r="40"/>
+          <line x1="100" y1="20" x2="100" y2="60"/>
+          <line x1="170" y1="140" x2="135" y2="120"/>
+          <line x1="120" y1="178" x2="115" y2="138"/>
+          <line x1="50" y1="160" x2="80" y2="130"/>
+        </svg>
+      </div>
+
+      <!-- UI fragments at four corners (bleed in during explosion) -->
+      <div class="b1-frag b1-frag-tl">
+        <div class="b1-frag-tl-pill">Loss Tracker</div>
+        <div class="b1-frag-tl-title">Where do my buyers go?</div>
+        <div class="b1-frag-bars">
+          <div class="b1-frag-bar-row"><div class="b1-frag-bar-label">→ Duracell</div><div class="b1-frag-bar-track"><div class="b1-frag-bar-fill" style="width:82%"></div></div><div class="b1-frag-bar-value">34%</div></div>
+          <div class="b1-frag-bar-row"><div class="b1-frag-bar-label">→ AmznBasics</div><div class="b1-frag-bar-track"><div class="b1-frag-bar-fill muted" style="width:50%"></div></div><div class="b1-frag-bar-value">21%</div></div>
+          <div class="b1-frag-bar-row"><div class="b1-frag-bar-label">→ Rayovac</div><div class="b1-frag-bar-track"><div class="b1-frag-bar-fill muted" style="width:20%"></div></div><div class="b1-frag-bar-value">8%</div></div>
+        </div>
+      </div>
+
+      <div class="b1-frag b1-frag-tr">
+        <div class="b1-frag-tr-row">Cheerios Honey Nut · $4.99</div>
+        <div class="b1-frag-tr-row">Magic Spoon Cocoa · $8.99</div>
+        <div class="b1-frag-tr-row">Three Wishes · $7.49</div>
+        <div class="b1-frag-tr-row">CeraVe Moisturizer · $14.99</div>
+        <div class="b1-frag-tr-row">Beauty of Joseon · $17.00</div>
+        <div class="b1-frag-tr-row">Anua Cleanser · $22.00</div>
+      </div>
+
+      <div class="b1-frag b1-frag-bl">
+        <div class="b1-frag-bl-pill">The Skinny Shot</div>
+        <div class="b1-frag-bl-title">GLP-1's grip on the basket</div>
+        <div class="b1-frag-bars">
+          <div class="b1-frag-bar-row"><div class="b1-frag-bar-label">Pre-Rx</div><div class="b1-frag-bar-track"><div class="b1-frag-bar-fill muted" style="width:92%"></div></div><div class="b1-frag-bar-value">$24</div></div>
+          <div class="b1-frag-bar-row"><div class="b1-frag-bar-label">Mo 1–3</div><div class="b1-frag-bar-track"><div class="b1-frag-bar-fill muted" style="width:78%"></div></div><div class="b1-frag-bar-value">$20</div></div>
+          <div class="b1-frag-bar-row"><div class="b1-frag-bar-label">Mo 7–12</div><div class="b1-frag-bar-track"><div class="b1-frag-bar-fill" style="width:58%"></div></div><div class="b1-frag-bar-value">$16</div></div>
+        </div>
+      </div>
+
+      <div class="b1-frag b1-frag-br">
+        <div class="b1-frag-br-plus"><img src="ario-circle-black.png" alt="Ario" /></div>
+        <div class="b1-frag-br-text">Ask Ario</div>
+        <div class="b1-frag-br-send">↑</div>
+      </div>
+
+      <!-- "With Ario" — Ario types out letter-by-letter via opacity stagger. "With" stays put. -->
+      <div class="b1-text size-small" id="b1-text">With&nbsp;<span class="b1-ario"><span class="b1-ario-letter">A</span><span class="b1-ario-letter">r</span><span class="b1-ario-letter">i</span><span class="b1-ario-letter">o</span></span></div>
+    </section>
+
+    <!-- DIVIDER 1 (0:08–0:09.5) — pre-Beat 2 text frame, typewriter effect -->
+    <section class="scene divider" id="divider-1">
+      <div class="divider-eyebrow">Powered by</div>
+      <div class="divider-text">
+        <span class="typed-wrap">
+          <span class="typed-ghost">User-permissioned account linking</span>
+          <span class="typed-real" id="d1-typed"></span>
+        </span>
+      </div>
+    </section>
+
+    <!-- BEAT 2 — PHONE CONNECT (0:08–0:18) -->
+    <section class="scene" id="beat-2">
+      <div class="phone-frame" id="phone">
+        <div class="phone-screen">
+          <div class="phone-brand">
+            <span class="phone-brand-label">powered by</span>
+            <img src="ario-logo-black.png" alt="Ario" />
+          </div>
+          <div>
+            <div class="phone-header">Connect your accounts</div>
+          </div>
+          <div class="phone-row syncing" data-retailer="amazon"><div class="phone-row-name"><div class="phone-row-logo"><img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" alt="" /></div>Amazon</div><div class="phone-row-cta">Syncing</div></div>
+          <div class="phone-row syncing" data-retailer="walmart"><div class="phone-row-name"><div class="phone-row-logo"><img src="https://www.google.com/s2/favicons?domain=walmart.com&sz=64" alt="" /></div>Walmart</div><div class="phone-row-cta">Syncing</div></div>
+          <div class="phone-row syncing" data-retailer="costco"><div class="phone-row-name"><div class="phone-row-logo"><img src="costco-logo.png" alt="" /></div>Costco</div><div class="phone-row-cta">Syncing</div></div>
+          <div class="phone-row syncing" data-retailer="target"><div class="phone-row-name"><div class="phone-row-logo"><img src="https://www.google.com/s2/favicons?domain=target.com&sz=64" alt="" /></div>Target</div><div class="phone-row-cta">Syncing</div></div>
+          <div class="phone-row syncing" data-retailer="doordash"><div class="phone-row-name"><div class="phone-row-logo"><img src="https://www.google.com/s2/favicons?domain=doordash.com&sz=64" alt="" /></div>DoorDash</div><div class="phone-row-cta">Syncing</div></div>
+          <div class="phone-row syncing" data-retailer="instacart"><div class="phone-row-name"><div class="phone-row-logo"><img src="https://www.google.com/s2/favicons?domain=instacart.com&sz=64" alt="" /></div>Instacart</div><div class="phone-row-cta">Syncing</div></div>
+        </div>
+      </div>
+      <div class="b2-features">
+        <div class="b2-feat" data-feat="1">
+          <span class="big"><span class="accent">SKU-level</span></span>
+          <span class="sm">granularity on every transaction.</span>
+        </div>
+        <div class="b2-feat" data-feat="2">
+          <span class="big"><span class="accent">Longitudinal</span></span>
+          <span class="sm">from day 1.</span>
+        </div>
+        <div class="b2-feat" data-feat="3">
+          <span class="big"><span class="accent">Zero fraud</span></span>
+          <span class="sm">100% consented. Verified at source.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIVIDER 2 (0:18–0:20) -->
+    <section class="scene divider" id="divider-2">
+      <div class="divider-text">
+        <span class="typed-wrap">
+          <span class="typed-ghost">Track your brand vitals</span>
+          <span class="typed-real" id="d2-typed"></span>
+        </span>
+      </div>
+    </section>
+
+    <!-- BEAT 3A — LOSS TRACKER HERO (0:20–0:26) -->
+    <section class="scene" id="beat-3a">
+      <div class="b3a-hero">
+        <div class="b3a-pill">Brand Vital · Loss Tracker</div>
+        <div class="b3a-title">When my buyers churn, where do they go?</div>
+        <div class="b3a-chart-header">
+          <div class="b3a-chart-label">Distribution</div>
+          <div class="b3a-range">
+            <span class="b3a-range-pill active">Lifetime</span>
+            <span class="b3a-range-pill">12mo</span>
+            <span class="b3a-range-pill">90d</span>
+          </div>
+        </div>
+        <div class="b3a-bars" id="b3a-bars">
+          <div class="b3a-bar-row"><div class="b3a-bar-label">→ Duracell</div><div class="b3a-bar-track"><div class="b3a-bar-fill accent" data-width="68"></div></div><div class="b3a-bar-value">34%</div></div>
+          <div class="b3a-bar-row"><div class="b3a-bar-label">→ AmazonBasics</div><div class="b3a-bar-track"><div class="b3a-bar-fill" data-width="42"></div></div><div class="b3a-bar-value">21%</div></div>
+          <div class="b3a-bar-row"><div class="b3a-bar-label">→ Rayovac</div><div class="b3a-bar-track"><div class="b3a-bar-fill" data-width="16"></div></div><div class="b3a-bar-value">8%</div></div>
+          <div class="b3a-bar-row"><div class="b3a-bar-label">→ Panasonic</div><div class="b3a-bar-track"><div class="b3a-bar-fill" data-width="10"></div></div><div class="b3a-bar-value">5%</div></div>
+          <div class="b3a-bar-row"><div class="b3a-bar-label">→ Long tail</div><div class="b3a-bar-track"><div class="b3a-bar-fill" data-width="64"></div></div><div class="b3a-bar-value">32%</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BEAT 3A-2 — BASKET BUDDY (survey-style chart) -->
+    <section class="scene" id="beat-3a2">
+      <div class="b3a2-hero">
+        <div class="b3a2-pill">Brand Vital · Basket Buddy</div>
+        <div class="b3a2-header">
+          <div class="b3a2-icon">
+            <svg viewBox="0 0 24 24"><path d="M3 8h18l-1.5 11a2 2 0 0 1-2 1.8H6.5a2 2 0 0 1-2-1.8L3 8z"/><path d="M8 8V5a4 4 0 0 1 8 0v3"/><circle cx="9.5" cy="13.5" r="1.2"/><circle cx="14.5" cy="13.5" r="1.2"/></svg>
+          </div>
+          <div class="b3a2-title">What devices are people buying my product for?</div>
+        </div>
+        <div class="b3a2-survey-head">
+          <div>
+            <div class="b3a2-survey-label">Device Categories</div>
+            <div class="b3a2-survey-sub">Each respondent may appear in multiple categories</div>
+          </div>
+          <div class="b3a2-survey-count">100 respondents</div>
+        </div>
+        <div class="b3a2-cols" id="b3a2-cols">
+          <div class="b3a2-col" data-srow="0"><div class="b3a2-col-num">47</div><div class="b3a2-col-bar accent" data-h="94"></div></div>
+          <div class="b3a2-col" data-srow="1"><div class="b3a2-col-num">42</div><div class="b3a2-col-bar accent" data-h="84"></div></div>
+          <div class="b3a2-col" data-srow="2"><div class="b3a2-col-num">21</div><div class="b3a2-col-bar" data-h="42"></div></div>
+          <div class="b3a2-col" data-srow="3"><div class="b3a2-col-num">15</div><div class="b3a2-col-bar" data-h="30"></div></div>
+          <div class="b3a2-col" data-srow="4"><div class="b3a2-col-num">15</div><div class="b3a2-col-bar" data-h="30"></div></div>
+          <div class="b3a2-col" data-srow="5"><div class="b3a2-col-num">11</div><div class="b3a2-col-bar" data-h="22"></div></div>
+          <div class="b3a2-col" data-srow="6"><div class="b3a2-col-num">8</div><div class="b3a2-col-bar" data-h="16"></div></div>
+          <div class="b3a2-col" data-srow="7"><div class="b3a2-col-num">4</div><div class="b3a2-col-bar" data-h="8"></div></div>
+        </div>
+        <div class="b3a2-col-labels">
+          <div class="b3a2-col-label">Toys</div>
+          <div class="b3a2-col-label">Remote<br>controls</div>
+          <div class="b3a2-col-label">Flashlights</div>
+          <div class="b3a2-col-label">Game<br>controllers</div>
+          <div class="b3a2-col-label">Keyboards<br>/ Mice</div>
+          <div class="b3a2-col-label">Smart<br>home</div>
+          <div class="b3a2-col-label">Smoke<br>detectors</div>
+          <div class="b3a2-col-label">Clocks</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIVIDER 3 (0:26–0:28) -->
+    <section class="scene divider" id="divider-3">
+      <div class="divider-text">
+        <span class="typed-wrap">
+          <span class="typed-ghost">Stay on top of market shifts</span>
+          <span class="typed-real" id="d3-typed"></span>
+        </span>
+      </div>
+    </section>
+
+    <!-- BEAT 3B — SKINNY SHOT REPORT (0:28–0:34) -->
+    <section class="scene" id="beat-3b">
+      <div class="b3b-hero">
+        <div class="b3b-report" id="b3b-report">
+        <div class="b3b-pill">Featured Report · Skinny Shot</div>
+        <div class="b3b-title">How are GLP-1 buyers shopping differently for food?</div>
+
+        <!-- BLOCK 2: GLP-1 audience growth over time -->
+        <div class="b3b-block">
+          <div class="b3b-block-title">GLP-1 audience growth over time</div>
+          <div class="b3b-growth" id="b3b-growth">
+            <div class="b3b-growth-col"><div class="b3b-growth-bar" data-h="2"></div></div>
+            <div class="b3b-growth-col"><div class="b3b-growth-bar" data-h="3"></div></div>
+            <div class="b3b-growth-col"><div class="b3b-growth-bar" data-h="4"></div></div>
+            <div class="b3b-growth-col"><div class="b3b-growth-bar" data-h="12"></div></div>
+            <div class="b3b-growth-col"><div class="b3b-growth-bar" data-h="22"></div></div>
+            <div class="b3b-growth-col"><div class="b3b-growth-bar" data-h="38"></div></div>
+            <div class="b3b-growth-col"><div class="b3b-growth-bar" data-h="46"></div></div>
+            <div class="b3b-growth-col"><div class="b3b-growth-bar" data-h="62"></div></div>
+            <div class="b3b-growth-col"><div class="b3b-growth-bar" data-h="82"></div></div>
+            <div class="b3b-growth-col"><div class="b3b-growth-bar projected" data-h="98"></div></div>
+          </div>
+          <div class="b3b-growth-labels">
+            <div class="b3b-growth-label">'24 Q1</div>
+            <div class="b3b-growth-label">Q2</div>
+            <div class="b3b-growth-label">Q3</div>
+            <div class="b3b-growth-label">Q4</div>
+            <div class="b3b-growth-label">'25 Q1</div>
+            <div class="b3b-growth-label">Q2</div>
+            <div class="b3b-growth-label">Q3</div>
+            <div class="b3b-growth-label">Q4</div>
+            <div class="b3b-growth-label">'26 Q1</div>
+            <div class="b3b-growth-label">Q2*</div>
+          </div>
+        </div>
+
+        <!-- BLOCK 3: Who they are -->
+        <div class="b3b-block">
+          <div class="b3b-block-title">Who they are</div>
+          <div class="b3b-block-sub">Composition of the GLP-1 cohort vs. the broader panel.</div>
+          <div class="b3b-comp">
+            <div class="b3b-comp-col">
+              <div class="b3b-comp-col-label">Age</div>
+              <div class="b3b-comp-bar-row"><div class="b3b-comp-bar-label">18–34</div><div class="b3b-comp-bar-track"><div class="b3b-comp-bar-fill muted" data-w="16"></div></div><div class="b3b-comp-bar-value">8%</div></div>
+              <div class="b3b-comp-bar-row"><div class="b3b-comp-bar-label">35–44</div><div class="b3b-comp-bar-track"><div class="b3b-comp-bar-fill" data-w="32"></div></div><div class="b3b-comp-bar-value">16%</div></div>
+              <div class="b3b-comp-bar-row"><div class="b3b-comp-bar-label">45–54</div><div class="b3b-comp-bar-track"><div class="b3b-comp-bar-fill" data-w="48"></div></div><div class="b3b-comp-bar-value">24%</div></div>
+              <div class="b3b-comp-bar-row"><div class="b3b-comp-bar-label">55–64</div><div class="b3b-comp-bar-track"><div class="b3b-comp-bar-fill" data-w="62"></div></div><div class="b3b-comp-bar-value">31%</div></div>
+              <div class="b3b-comp-bar-row"><div class="b3b-comp-bar-label">65+</div><div class="b3b-comp-bar-track"><div class="b3b-comp-bar-fill" data-w="42"></div></div><div class="b3b-comp-bar-value">21%</div></div>
+            </div>
+            <div class="b3b-comp-col">
+              <div class="b3b-comp-col-label">Gender</div>
+              <div class="b3b-gender-card">
+                <div class="b3b-gender-pct">71%</div>
+                <div class="b3b-gender-label">Female</div>
+              </div>
+              <div class="b3b-gender-card">
+                <div class="b3b-gender-pct">29%</div>
+                <div class="b3b-gender-label">Male</div>
+              </div>
+            </div>
+            <div class="b3b-comp-col">
+              <div class="b3b-comp-col-label">Household Income</div>
+              <div class="b3b-comp-bar-row"><div class="b3b-comp-bar-label">&lt;$50K</div><div class="b3b-comp-bar-track"><div class="b3b-comp-bar-fill muted" data-w="22"></div></div><div class="b3b-comp-bar-value">11%</div></div>
+              <div class="b3b-comp-bar-row"><div class="b3b-comp-bar-label">$50–75K</div><div class="b3b-comp-bar-track"><div class="b3b-comp-bar-fill muted" data-w="34"></div></div><div class="b3b-comp-bar-value">17%</div></div>
+              <div class="b3b-comp-bar-row"><div class="b3b-comp-bar-label">$75–100K</div><div class="b3b-comp-bar-track"><div class="b3b-comp-bar-fill" data-w="44"></div></div><div class="b3b-comp-bar-value">22%</div></div>
+              <div class="b3b-comp-bar-row"><div class="b3b-comp-bar-label">$100–150K</div><div class="b3b-comp-bar-track"><div class="b3b-comp-bar-fill" data-w="62"></div></div><div class="b3b-comp-bar-value">31%</div></div>
+              <div class="b3b-comp-bar-row"><div class="b3b-comp-bar-label">$150K+</div><div class="b3b-comp-bar-track"><div class="b3b-comp-bar-fill" data-w="38"></div></div><div class="b3b-comp-bar-value">19%</div></div>
+            </div>
+            <div class="b3b-comp-col">
+              <div class="b3b-comp-col-label">Top Metros (Index vs. Panel)</div>
+              <div class="b3b-metro-row"><span class="b3b-metro-name">Dallas–Ft. Worth</span><span class="b3b-metro-idx">163</span></div>
+              <div class="b3b-metro-row"><span class="b3b-metro-name">Atlanta</span><span class="b3b-metro-idx">154</span></div>
+              <div class="b3b-metro-row"><span class="b3b-metro-name">Phoenix</span><span class="b3b-metro-idx">149</span></div>
+              <div class="b3b-metro-row"><span class="b3b-metro-name">Houston</span><span class="b3b-metro-idx">141</span></div>
+              <div class="b3b-metro-row"><span class="b3b-metro-name">Tampa</span><span class="b3b-metro-idx">137</span></div>
+              <div class="b3b-metro-row"><span class="b3b-metro-name">Charlotte</span><span class="b3b-metro-idx">128</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BLOCK 4: Where they over- and under-shop -->
+        <div class="b3b-block">
+          <div class="b3b-block-title">Where they over- and under-shop</div>
+          <div class="b3b-aisle" id="b3b-aisle">
+            <div class="b3b-aisle-row"><div class="b3b-aisle-label">Protein bars</div><div class="b3b-aisle-track"><div class="b3b-aisle-fill up" data-w="100"></div></div><div class="b3b-aisle-value up">+218</div></div>
+            <div class="b3b-aisle-row"><div class="b3b-aisle-label">Fiber &amp; supplements</div><div class="b3b-aisle-track"><div class="b3b-aisle-fill up" data-w="92"></div></div><div class="b3b-aisle-value up">+201</div></div>
+            <div class="b3b-aisle-row"><div class="b3b-aisle-label">Greek / hi-protein yogurt</div><div class="b3b-aisle-track"><div class="b3b-aisle-fill up" data-w="77"></div></div><div class="b3b-aisle-value up">+168</div></div>
+            <div class="b3b-aisle-row"><div class="b3b-aisle-label">Whole-grain cereal</div><div class="b3b-aisle-track"><div class="b3b-aisle-fill up" data-w="65"></div></div><div class="b3b-aisle-value up">+142</div></div>
+            <div class="b3b-aisle-row"><div class="b3b-aisle-label">Electrolytes</div><div class="b3b-aisle-track"><div class="b3b-aisle-fill up" data-w="59"></div></div><div class="b3b-aisle-value up">+128</div></div>
+            <div class="b3b-aisle-row"><div class="b3b-aisle-label">Frozen pizza / appetizers</div><div class="b3b-aisle-track"><div class="b3b-aisle-fill down" data-w="16"></div></div><div class="b3b-aisle-value down">−34</div></div>
+            <div class="b3b-aisle-row"><div class="b3b-aisle-label">Soda / sugary beverages</div><div class="b3b-aisle-track"><div class="b3b-aisle-fill down" data-w="15"></div></div><div class="b3b-aisle-value down">−33</div></div>
+            <div class="b3b-aisle-row"><div class="b3b-aisle-label">Salty snacks / chips</div><div class="b3b-aisle-track"><div class="b3b-aisle-fill down" data-w="13"></div></div><div class="b3b-aisle-value down">−28</div></div>
+            <div class="b3b-aisle-row"><div class="b3b-aisle-label">Cookies &amp; sweet baked</div><div class="b3b-aisle-track"><div class="b3b-aisle-fill down" data-w="10"></div></div><div class="b3b-aisle-value down">−21</div></div>
+          </div>
+        </div>
+
+        <!-- BOTTOM: Ask Ario full-width bar -->
+        <div class="b3b-ask-area" id="b3b-ask-area">
+          <div class="b3b-ask-pill">
+            <div class="b3b-ask-pill-mark"><img src="ario-circle-black.png" alt="Ario" /></div>
+            <div class="b3b-ask-pill-text" id="b3b-ask-typed">Ask Ario</div>
+            <div class="b3b-ask-pill-send" id="b3b-ask-send">↑</div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIVIDER 4 (0:34–0:36) -->
+    <section class="scene divider" id="divider-4">
+      <div class="divider-text">
+        <span class="typed-wrap">
+          <span class="typed-ghost">Ask anything</span>
+          <span class="typed-real" id="d4-typed"></span>
+        </span>
+      </div>
+    </section>
+
+    <!-- BEAT 3C-ASK — Thinking state -->
+    <section class="scene" id="beat-3c-ask">
+      <div class="b3c-chat">
+        <div class="b3c-user-bubble" id="b3c-ask-bubble">How is GLP-1 impacting my brand vs. competitors?</div>
+        <div class="b3c-thinking" id="b3c-thinking">
+          <div class="b3c-thinking-spinner"></div>
+          <div class="b3c-thinking-text">Looking through verified purchases of Northgrain and the cereal category across retailers…</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BEAT 3C-ANSWER — Thought summary + text + chart -->
+    <section class="scene" id="beat-3c-answer">
+      <div class="b3c-chat" id="b3c-answer-chat">
+        <div class="b3c-user-bubble" id="b3c-ans-bubble">How is GLP-1 impacting my brand vs. competitors?</div>
+        <div class="b3c-thought-done" id="b3c-thought-done">
+          <span class="b3c-thought-check">✓</span>
+          <div class="b3c-thought-lines">
+            <div class="b3c-thought-primary">Looked through verified purchases of Northgrain and the cereal category across retailers</div>
+            <div class="b3c-thought-secondary">Thought for 24s</div>
+          </div>
+        </div>
+        <div class="b3c-answer-text" id="b3c-response"></div>
+        <div class="b3c-answer-chart" id="b3c-chart">
+          <div class="b3c-chart-headline">Your brand's GLP-1 buyer impact · 12mo</div>
+          <div class="b3b-rows" id="b3c-diverge">
+            <div class="b3b-row">
+              <div class="b3b-row-label">
+                <div class="b3b-row-brand">Northgrain Multigrain</div>
+                <div class="b3b-row-type">My Brand</div>
+              </div>
+              <div class="b3b-row-bar"><div class="b3b-row-fill positive" data-width="48"></div></div>
+              <div class="b3b-row-value">+48%</div>
+            </div>
+            <div class="b3b-row">
+              <div class="b3b-row-label">
+                <div class="b3b-row-brand">Northgrain Oat Bran</div>
+                <div class="b3b-row-type">My Brand</div>
+              </div>
+              <div class="b3b-row-bar"><div class="b3b-row-fill positive" data-width="22"></div></div>
+              <div class="b3b-row-value">+22%</div>
+            </div>
+            <div class="b3b-section-divider"></div>
+            <div class="b3b-row">
+              <div class="b3b-row-label">
+                <div class="b3b-row-brand">Cocoa Bombs</div>
+                <div class="b3b-row-type">Competitor</div>
+              </div>
+              <div class="b3b-row-bar"><div class="b3b-row-fill negative" data-width="30"></div></div>
+              <div class="b3b-row-value negative">−30%</div>
+            </div>
+            <div class="b3b-row">
+              <div class="b3b-row-label">
+                <div class="b3b-row-brand">Sugar Loops</div>
+                <div class="b3b-row-type">Competitor</div>
+              </div>
+              <div class="b3b-row-bar"><div class="b3b-row-fill negative" data-width="26"></div></div>
+              <div class="b3b-row-value negative">−26%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIVIDER 5 (kept in DOM but no longer animated — superseded by KB deep dive) -->
+    <section class="scene divider" id="divider-5">
+      <div class="divider-text">
+        <span class="typed-wrap">
+          <span class="typed-ghost">And many more</span>
+          <span class="typed-real" id="d5-typed"></span>
+        </span>
+      </div>
+    </section>
+
+    <!-- BEAT KB-ASK — empty Ask Ario bar centered, question types in -->
+    <section class="scene" id="beat-kb-ask">
+      <div class="kb-ask-center">
+        <div class="b3b-ask-pill">
+          <div class="b3b-ask-pill-mark"><img src="ario-circle-black.png" alt="Ario" /></div>
+          <div class="b3b-ask-pill-text" id="kb-ask-typed">Ask Ario</div>
+          <div class="b3b-ask-pill-send" id="kb-ask-send">↑</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BEAT KB-THINK — chat layout with question + thinking -->
+    <section class="scene" id="beat-kb-think">
+      <div class="b3c-chat">
+        <div class="b3c-user-bubble" id="kb-think-bubble">How are Korean beauty brands affecting my anti-aging product line?</div>
+        <div class="b3c-thinking" id="kb-thinking">
+          <div class="b3c-thinking-spinner"></div>
+          <div class="b3c-thinking-text">Looking through verified skincare purchases across retailers…</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BEAT KB-ANSWER — done state + headline + stats + caption + sections -->
+    <section class="scene" id="beat-kb-answer">
+      <div class="b3c-chat" id="kb-answer-chat">
+        <div class="b3c-user-bubble" id="kb-ans-bubble">How are Korean beauty brands affecting my anti-aging product line?</div>
+        <div class="b3c-thought-done" id="kb-thought-done">
+          <span class="b3c-thought-check">✓</span>
+          <div class="b3c-thought-lines">
+            <div class="b3c-thought-primary">Looked through verified skincare purchases across retailers</div>
+            <div class="b3c-thought-secondary">Thought for 22s</div>
+          </div>
+        </div>
+        <div class="kb-headline" id="kb-headline"></div>
+        <div class="kb-stats-card" id="kb-stats">
+          <div class="kb-chart-headline">Linden anti-aging line growth · 12mo after first Korean beauty purchase</div>
+          <div class="kb-chart-rows" id="kb-chart">
+            <div class="kb-chart-row"><div class="kb-chart-label">Eye creams</div><div class="kb-chart-track"><div class="kb-chart-fill up" data-w="92"></div></div><div class="kb-chart-value up">+31%</div></div>
+            <div class="kb-chart-row"><div class="kb-chart-label">Retinol night cream</div><div class="kb-chart-track"><div class="kb-chart-fill up" data-w="78"></div></div><div class="kb-chart-value up">+26%</div></div>
+            <div class="kb-chart-row"><div class="kb-chart-label">Anti-aging moisturizer</div><div class="kb-chart-track"><div class="kb-chart-fill up" data-w="54"></div></div><div class="kb-chart-value up">+18%</div></div>
+            <div class="kb-chart-row"><div class="kb-chart-label">Firming serum</div><div class="kb-chart-track"><div class="kb-chart-fill down" data-w="26"></div></div><div class="kb-chart-value down">−9%</div></div>
+          </div>
+          <div class="kb-stat-footer">n=280 verified Linden buyers · purchases at Amazon, Walmart, Sephora</div>
+        </div>
+        <div class="kb-caption" id="kb-caption">Linden anti-aging buyers added +34% more SKUs per routine — growth came from eye creams, retinol, and anti-aging moisturizers, not firming serums.</div>
+        <div class="kb-section" id="kb-section-1">
+          <div class="kb-section-title">Why this is happening</div>
+          <div class="kb-section-body" id="kb-section-1-body">Korean beauty's anti-aging story is layering, not substitution. Buyers apply snail mucin and PDRN essences before their Linden retinol — but standalone firming serums lose to Anua, Beauty of Joseon, and Numbuzin on PDRN concentration at a third of the price.</div>
+        </div>
+        <div class="kb-section" id="kb-section-2">
+          <div class="kb-section-title">The opportunity</div>
+          <div class="kb-section-body" id="kb-section-2-body">Position Linden's retinol night cream and eye cream as the dermatologist-grade core of the multi-step routine. Rethink firming serums — and watch PDRN, the $400 clinic injection now in $15 OTC creams across nearly every K-beauty anti-aging basket.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BEAT 4 — FLOATING QUESTIONS -->
+    <section class="scene" id="beat-4">
+      <div class="b4-questions">
+        <div class="b4-q q1">Where do churned buyers actually go?</div>
+        <div class="b4-q q2">Are Amazon dupes eating my SKUs?</div>
+        <div class="b4-q q3">Cheerios → Magic Spoon: who, and why?</div>
+        <div class="b4-q q4">What's the Costco midnight basket?</div>
+        <div class="b4-q q5">K-Beauty's effect on moisturizer share?</div>
+        <div class="b4-q q6">What did the GLP-1 buyer eat last Tuesday?</div>
+      </div>
+    </section>
+
+    <!-- BEAT 5 — OUTRO LOGO (0:54–1:00) -->
+    <section class="scene" id="beat-5">
+      <img class="b5-logo" src="ario-logo-black.png" alt="Ario" />
+    </section>
+
+  </div>
+</div>
+
+<!-- DEV CONTROLS -->
+<div class="controls">
+  <button class="ctrl-btn primary" id="play-btn">Play</button>
+  <button class="ctrl-btn" id="reset-btn">↺</button>
+  <input type="range" class="ctrl-scrub" id="scrub" min="0" max="63" step="0.05" value="0">
+  <div class="ctrl-time" id="time">00.00</div>
+  <div class="ctrl-jumps">
+    <button class="ctrl-btn" data-jump="0">B1</button>
+    <button class="ctrl-btn" data-jump="8">D1</button>
+    <button class="ctrl-btn" data-jump="10.5">B2</button>
+    <button class="ctrl-btn" data-jump="18">D2</button>
+    <button class="ctrl-btn" data-jump="20">B3a</button>
+    <button class="ctrl-btn" data-jump="23">B3a2</button>
+    <button class="ctrl-btn" data-jump="26">D3</button>
+    <button class="ctrl-btn" data-jump="28">B3b</button>
+    <button class="ctrl-btn" data-jump="32.5">Ask</button>
+    <button class="ctrl-btn" data-jump="35.4">Think</button>
+    <button class="ctrl-btn" data-jump="36.9">Answer</button>
+    <button class="ctrl-btn" data-jump="41.8">KB-Ask</button>
+    <button class="ctrl-btn" data-jump="44.4">KB-Think</button>
+    <button class="ctrl-btn" data-jump="46.1">KB-Ans</button>
+    <button class="ctrl-btn" data-jump="53.5">B5</button>
+  </div>
+  <button class="ctrl-btn" id="capture-btn">Hide [c]</button>
+</div>
+
+<script>
+gsap.registerPlugin();
+
+const tl = gsap.timeline({
+  paused: true,
+  onUpdate: () => {
+    const t = tl.time();
+    document.getElementById('time').textContent = t.toFixed(2).padStart(5, '0');
+    document.getElementById('scrub').value = t;
+  }
+});
+
+const scenes = {
+  b1: document.getElementById('beat-1'),
+  d1: document.getElementById('divider-1'),
+  b2: document.getElementById('beat-2'),
+  d2: document.getElementById('divider-2'),
+  b3a: document.getElementById('beat-3a'),
+  b3a2: document.getElementById('beat-3a2'),
+  d3: document.getElementById('divider-3'),
+  b3b: document.getElementById('beat-3b'),
+  d4: document.getElementById('divider-4'),
+  b3cAsk: document.getElementById('beat-3c-ask'),
+  b3cAnswer: document.getElementById('beat-3c-answer'),
+  kbAsk: document.getElementById('beat-kb-ask'),
+  kbThink: document.getElementById('beat-kb-think'),
+  kbAnswer: document.getElementById('beat-kb-answer'),
+  d5: document.getElementById('divider-5'),
+  b4: document.getElementById('beat-4'),
+  b5: document.getElementById('beat-5'),
+};
+
+// ============================================================
+// BEAT 1 — OPENING (0:00–0:08) — Snap-on-the-beat ChatGPT style
+// All snaps locked to 0.5s musical grid. Easing: expo.out (start fast, decelerate hard).
+// ============================================================
+const b1Text = document.getElementById('b1-text');
+const setText = (html, sizeClass) => {
+  b1Text.innerHTML = html;
+  b1Text.classList.remove('size-small', 'size-explosion', 'size-final', 'size-kicker');
+  if (sizeClass) b1Text.classList.add(sizeClass);
+};
+
+// Phrase 1 HTML — words in correct visual order, revealed via .show class.
+// Visual order: "learn what customers are actually buying"
+// Reveal order: starts with "are actually buying" appearing in sequence
+//               then back-fills "customers what learn" to the left
+const phraseHTML =
+  '<span class="b1-w" data-w="learn">learn</span>' +
+  '<span class="b1-w" data-w="what">what</span>' +
+  '<span class="b1-w" data-w="customers">customers</span>' +
+  '<span class="b1-w" data-w="are">are</span>' +
+  '<span class="b1-w" data-w="actually">actually</span>' +
+  '<span class="b1-w" data-w="buying">buying</span>';
+
+const revealWord = (w) => () => {
+  const el = document.querySelector(`.b1-w[data-w="${w}"]`);
+  if (el) el.classList.add('show');
+};
+
+// 0:00.00 — empty cream
+tl.set(scenes.b1, { opacity: 1 }, 0);
+
+// =====================================================================
+// SECTION A — "With Ario" with letter-by-letter scale (0:00.50–0:02.00)
+// Each text moment holds long enough to actually READ. Snap cuts on beats.
+// =====================================================================
+
+// 0:00.50 — "With" snaps in. Wireframe drops from top.
+tl.set('.b1-text', { opacity: 1 }, 0.5);
+tl.fromTo('.b1-skeleton-donut',
+  { opacity: 0, y: -50 },
+  { opacity: 1, y: 0, duration: 0.2, ease: 'expo.out' }, 0.5);
+
+// 0:00.55–0:00.70 — Ario letters scale 0→1.05 staggered (the brand-reveal moment)
+tl.to('.b1-ario-letter', {
+  scale: 1.05,
+  duration: 0.05,
+  stagger: 0.045,
+  ease: 'power2.out'
+}, 0.55);
+
+// 0:00.78 — letters settle 1.05→1.0
+tl.to('.b1-ario-letter', {
+  scale: 1,
+  duration: 0.08,
+  ease: 'power2.in'
+}, 0.78);
+
+// 0:00.86–0:02.00 — HOLD "With Ario" (~1.1s — time to read the brand)
+
+// =====================================================================
+// SECTION B — "now you can" (0:02.00–0:04.00) — quick reveal then HOLD
+// =====================================================================
+
+// 0:02.00 — clear greeting. Warm panel + "now" snap in.
+tl.set('.b1-text', { opacity: 0 }, 2.0);
+tl.set('.b1-skeleton-donut', { opacity: 0 }, 2.0);
+tl.set('.b1-panel-warm', { opacity: 1, x: 0 }, 2.0);
+tl.set('.b1-exp-now', { opacity: 1 }, 2.0);
+
+// 0:02.20 — green panel slides in from the right + "you" pops as it docks
+tl.fromTo('.b1-panel-green',
+  { opacity: 1, x: 250 },
+  { x: 0, duration: 0.18, ease: 'expo.out' }, 2.20);
+tl.set('.b1-exp-you', { opacity: 1 }, 2.35);
+
+// 0:02.70 — yellow panel + "can" snap in
+tl.set('.b1-panel-yellow', { opacity: 1, x: 0 }, 2.70);
+tl.set('.b1-exp-can', { opacity: 1 }, 2.70);
+
+// 0:02.70–0:04.00 — HOLD "now you can" (~1.3s — time to take in the three-word composition)
+
+// =====================================================================
+// SECTION C — Phrase (0:04.00–0:06.70)
+// Bidirectional reveal: "actually" anchors center, words appear outward both ways.
+// =====================================================================
+
+// 0:04.00 — flash cut: clear all explosion. Phrase HTML set (all words hidden). Wireframe returns.
+tl.set('.b1-panel-warm', { opacity: 0 }, 4.0);
+tl.set('.b1-panel-green', { opacity: 0 }, 4.0);
+tl.set('.b1-panel-yellow', { opacity: 0 }, 4.0);
+tl.set('.b1-exp-word', { opacity: 0 }, 4.0);
+
+// 0:04.00 — "learn what customers" snaps in. The second half is a ghost (visibility:hidden)
+//           that reserves layout space, with an overlaid empty real-text element that gets
+//           typewriter-typed as a single text node (proper kerning).
+tl.call(() => {
+  setText(
+    'learn what customers ' +
+    '<span class="typed-wrap">' +
+      '<span class="typed-ghost">are actually buying</span>' +
+      '<span class="typed-real" id="b1-typed"></span>' +
+    '</span>',
+    'size-final'
+  );
+}, null, 4.0);
+tl.set('.b1-text', { opacity: 1, scale: 1 }, 4.0);
+tl.fromTo('.b1-skeleton-donut',
+  { opacity: 0, y: -50 },
+  { opacity: 0.35, y: 0, duration: 0.2, ease: 'expo.out' }, 4.0);
+
+// 0:04.25 — Typewriter types into the overlay span at ~25 chars/sec
+tl.call(() => typeText('#b1-typed', 'are actually buying', 25), null, 4.25);
+
+// 0:05.05–0:06.70 — HOLD full phrase + cards (~1.65s)
+
+// =====================================================================
+// SECTION D — "instantly" kicker (0:05.50–0:07.50) + cards build
+// =====================================================================
+
+// =====================================================================
+// CARDS build during phrase reveal (0:04.30–0:05.40)
+// =====================================================================
+
+// 0:04.30 — Loss Tracker POPS top-left (scale 0 → 1.05 → 1)
+tl.set('.b1-frag-tl', { opacity: 1, scale: 0, rotation: -1.5 }, 4.3);
+tl.to('.b1-frag-tl', { scale: 1.05, duration: 0.083, ease: 'power2.out' }, 4.3);
+tl.to('.b1-frag-tl', { scale: 1, duration: 0.083, ease: 'power2.in' }, 4.383);
+
+// 0:04.50 — Loss Tracker bar rows cascade in
+tl.fromTo('.b1-frag-tl .b1-frag-bar-row',
+  { opacity: 0 },
+  { opacity: 1, duration: 0.08, stagger: 0.08, ease: 'none' }, 4.5);
+
+// 0:04.80 — Skinny Shot card slides in from bottom-left
+tl.fromTo('.b1-frag-bl',
+  { opacity: 0, x: -400, rotation: 1.5 },
+  { opacity: 1, x: 0, rotation: 1.5, duration: 0.25, ease: 'expo.out' }, 4.8);
+
+// 0:05.10 — SKU column slides in from right
+tl.fromTo('.b1-frag-tr',
+  { opacity: 0, x: 120, rotation: 1.5 },
+  { opacity: 0.7, x: 0, rotation: 1.5, duration: 0.25, ease: 'expo.out' }, 5.1);
+
+// 0:05.40 — Ask Ario pill slides up from bottom-right
+tl.fromTo('.b1-frag-br',
+  { opacity: 0, y: 120, rotation: -1.5 },
+  { opacity: 1, y: 0, rotation: -1.5, duration: 0.25, ease: 'expo.out' }, 5.4);
+
+// =====================================================================
+// FRAME 4 — "instantly" alone, bigger (0:06.70–0:07.80)
+// Flash cut clears everything. "instantly" pops in larger as the kicker.
+// =====================================================================
+
+// 0:06.70 — flash cut: clear all cards + wireframe.
+tl.set('.b1-frag-tl', { opacity: 0 }, 6.7);
+tl.set('.b1-frag-tr', { opacity: 0 }, 6.7);
+tl.set('.b1-frag-bl', { opacity: 0 }, 6.7);
+tl.set('.b1-frag-br', { opacity: 0 }, 6.7);
+tl.set('.b1-skeleton-donut', { opacity: 0 }, 6.7);
+
+// 0:06.70 — "instantly" snaps in BIGGER (size-kicker class) with scale pop 0 → 1.05 → 1
+tl.call(() => setText('instantly', 'size-kicker'), null, 6.7);
+tl.set('.b1-text', { opacity: 1, scale: 0 }, 6.7);
+tl.to('.b1-text', { scale: 1.05, duration: 0.10, ease: 'power2.out' }, 6.7);
+tl.to('.b1-text', { scale: 1, duration: 0.08, ease: 'power2.in' }, 6.8);
+
+// 0:06.88–0:07.80 — HOLD "instantly" alone (~0.9s)
+
+// 0:07.90 — fade out for Beat 2 cut
+tl.to(scenes.b1, { opacity: 0, duration: 0.1 }, 7.9);
+
+// ============================================================
+// DIVIDER 1 — "User-permissioned account linking" (0:08–0:09.5)
+// Typewriter effect: ghost reserves layout, real text types in
+// ============================================================
+tl.to(scenes.d1, { opacity: 1, duration: 0.1 }, 8);
+tl.call(() => typeText('#d1-typed', 'User-permissioned account linking', 40), null, 8.1);
+tl.to(scenes.d1, { opacity: 0, duration: 0.2 }, 10.4);
+
+// ============================================================
+// BEAT 2 — RETAIL ACCOUNT LINKING (0:10.5–0:18)
+// Phone center → accounts connect → phone slides left → 3 features reveal on right
+// ============================================================
+tl.to(scenes.b2, { opacity: 1, duration: 0.2 }, 10.5);
+tl.fromTo('#phone',
+  { scale: 0.88, opacity: 0, x: 0 },
+  { scale: 1, opacity: 1, duration: 0.6, ease: 'back.out(1.4)' }, 10.6);
+
+// 0:11.3 — retailer rows slide up, staggered
+tl.to('.phone-row', {
+  opacity: 1, y: 0, duration: 0.4, stagger: 0.06, ease: 'power2.out'
+}, 11.3);
+
+// Rows enter already in "Syncing" state (spinner). Amazon resolves first to register
+// the pattern, then the rest snap to Synced in rapid succession.
+const _connect = (r) => {
+  const row = document.querySelector(`[data-retailer="${r}"]`);
+  if (!row) return;
+  row.classList.remove('syncing');
+  row.classList.add('connected');
+  const cta = row.querySelector('.phone-row-cta');
+  if (cta) cta.textContent = 'Synced';
+};
+tl.call(() => _connect('amazon'), null, 12.0);
+['walmart','costco','target','doordash','instacart'].forEach((r, i) => {
+  tl.call(() => _connect(r), null, 13.0 + i * 0.1);
+});
+
+// 0:14.0 — phone slides from center to LEFT
+tl.to('#phone', {
+  x: '-13vw',
+  duration: 0.6,
+  ease: 'expo.out'
+}, 14.0);
+
+// 0:14.5 — three features reveal on the right, staggered 600ms apart
+tl.fromTo('.b2-feat[data-feat="1"]',
+  { opacity: 0, x: 30 },
+  { opacity: 1, x: 0, duration: 0.4, ease: 'expo.out' }, 14.5);
+tl.fromTo('.b2-feat[data-feat="2"]',
+  { opacity: 0, x: 30 },
+  { opacity: 1, x: 0, duration: 0.4, ease: 'expo.out' }, 15.1);
+tl.fromTo('.b2-feat[data-feat="3"]',
+  { opacity: 0, x: 30 },
+  { opacity: 1, x: 0, duration: 0.4, ease: 'expo.out' }, 15.7);
+
+// 0:15.1–0:17.5 — HOLD full split composition
+
+tl.to(scenes.b2, { opacity: 0, duration: 0.3 }, 17.7);
+
+// ============================================================
+// DIVIDER 2 (0:18–0:20)
+// ============================================================
+tl.to(scenes.d2, { opacity: 1, duration: 0.1 }, 18);
+tl.call(() => typeText('#d2-typed', 'Track your brand vitals', 40), null, 18.1);
+tl.to(scenes.d2, { opacity: 0, duration: 0.2 }, 19.85);
+
+// ============================================================
+// BEAT 3A — LOSS TRACKER HERO (0:20–0:26)
+// ============================================================
+tl.to(scenes.b3a, { opacity: 1, duration: 0.2 }, 20);
+tl.fromTo('.b3a-hero',
+  { opacity: 0, scale: 0.94, y: 30 },
+  { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: 'back.out(1.3)' }, 20.2);
+
+const b3aBars = document.querySelectorAll('#b3a-bars .b3a-bar-fill');
+b3aBars.forEach((bar, i) => {
+  const w = bar.getAttribute('data-width');
+  tl.to(bar, { width: w + '%', duration: 0.5, ease: 'power2.out' }, 21.0 + i * 0.10);
+});
+
+tl.to(scenes.b3a, { opacity: 0, duration: 0.3 }, 22.7);
+
+// ============================================================
+// BEAT 3A-2 — BASKET BUDDY (0:23–0:26)
+// ============================================================
+tl.to(scenes.b3a2, { opacity: 1, duration: 0.2 }, 23);
+tl.to('.b3a2-hero', { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.3)' }, 23.2);
+
+// Columns rise from bottom, staggered left-to-right
+const b3a2Cols = document.querySelectorAll('#b3a2-cols .b3a2-col-bar');
+b3a2Cols.forEach((bar, i) => {
+  const h = bar.getAttribute('data-h');
+  tl.to(bar, { height: h + '%', duration: 0.6, ease: 'power3.out' }, 23.7 + i * 0.06);
+});
+// Numbers fade in once their column finishes rising
+const b3a2Nums = document.querySelectorAll('#b3a2-cols .b3a2-col-num');
+b3a2Nums.forEach((num, i) => {
+  tl.to(num, { opacity: 1, duration: 0.25 }, 24.1 + i * 0.06);
+});
+
+tl.to(scenes.b3a2, { opacity: 0, duration: 0.3 }, 25.7);
+
+// ============================================================
+// DIVIDER 3 — "Stay on top of market shifts" (0:26–0:28)
+// ============================================================
+tl.to(scenes.d3, { opacity: 1, duration: 0.1 }, 26);
+tl.call(() => typeText('#d3-typed', 'Stay on top of market shifts', 40), null, 26.1);
+tl.to(scenes.d3, { opacity: 0, duration: 0.2 }, 27.85);
+
+// ============================================================
+// DIVIDER 3 — DROPPED (absorbed Beat 1's +2s expansion)
+// B3a now flows directly into B3b
+// ============================================================
+
+// ============================================================
+// BEAT 3B — SKINNY SHOT (0:26–0:32)
+// ============================================================
+tl.to(scenes.b3b, { opacity: 1, duration: 0.2 }, 28);
+tl.fromTo('.b3b-hero',
+  { opacity: 0, scale: 0.94, y: 30 },
+  { opacity: 1, scale: 1, y: 0, duration: 0.7, ease: 'back.out(1.3)' }, 28.2);
+
+// Growth chart bars rise alongside the card scaling in — no dead pause
+const b3bGrowth = document.querySelectorAll('#b3b-growth .b3b-growth-bar');
+b3bGrowth.forEach((bar, i) => {
+  const h = bar.getAttribute('data-h');
+  tl.to(bar, { height: h + '%', duration: 0.5, ease: 'power3.out' }, 28.4 + i * 0.05);
+});
+
+// 0:30.2 — one continuous fast pan from growth chart toward the Ask Ario bar.
+// Stops short so the "Where they over- and under-shop" chart title stays in view
+// alongside the bar — gives viewers a chance to read the third chart's framing.
+tl.to('#b3b-report', { y: -1000, duration: 2.0, ease: 'power2.inOut' }, 30.2);
+
+// Composition bars animate as we pan through "Who they are"
+const b3bComp = document.querySelectorAll('.b3b-comp-bar-fill');
+b3bComp.forEach((bar, i) => {
+  const w = bar.getAttribute('data-w');
+  tl.to(bar, { width: w + '%', duration: 0.3, ease: 'power2.out' }, 30.4 + i * 0.02);
+});
+
+// Aisle bars animate as we pan past the third chart
+const b3bAisle = document.querySelectorAll('#b3b-aisle .b3b-aisle-fill');
+b3bAisle.forEach((bar, i) => {
+  const w = bar.getAttribute('data-w');
+  tl.to(bar, { width: w + '%', duration: 0.25, ease: 'power2.out' }, 31.4 + i * 0.02);
+});
+
+// 0:32.7 — clear placeholder & type the deep-dive question into the bar
+tl.call(() => {
+  const el = document.getElementById('b3b-ask-typed');
+  if (el) el.classList.add('typed');
+}, null, 32.7);
+tl.call(() => typeText('#b3b-ask-typed', 'How is GLP-1 impacting my brand vs. competitors?', 32), null, 32.7);
+
+// 0:34.4 — send button briefly flashes blue (press)
+tl.call(() => {
+  const btn = document.getElementById('b3b-ask-send');
+  if (btn) btn.classList.add('pressed');
+}, null, 34.4);
+
+// 0:34.65 — release back to dark (~0.25s blue flash total)
+tl.call(() => {
+  const btn = document.getElementById('b3b-ask-send');
+  if (btn) btn.classList.remove('pressed');
+}, null, 34.65);
+
+tl.to(scenes.b3b, { opacity: 0, duration: 0.3 }, 35.1);
+
+// (D4 "Ask anything" divider dropped — the question is now typed directly into
+// the report's Ask Ario bar at the end of B3b.)
+
+// ============================================================
+// BEAT 3C-ASK — Thinking state (0:39.7–0:43.7)
+// Question bubble + spinner + verified-purchase text. Lingers for the
+// "verified purchases" point to land.
+// ============================================================
+tl.to(scenes.b3cAsk, { opacity: 1, duration: 0.2 }, 35.4);
+tl.to('#b3c-ask-bubble', { opacity: 1, duration: 0.25, ease: 'power2.out' }, 35.55);
+tl.fromTo('#b3c-thinking', { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.25, ease: 'power2.out' }, 35.8);
+
+tl.to(scenes.b3cAsk, { opacity: 0, duration: 0.3, ease: 'none' }, 36.9);
+
+// ============================================================
+// BEAT 3C-ANSWER — thought trace + response + chart (0:36.9–0:42.5)
+// ============================================================
+// Pre-set the bubble + thought-done to visible so the question doesn't blink
+// during the linear cross-fade between the two scenes.
+tl.set('#b3c-ans-bubble', { opacity: 1 }, 36.9);
+tl.set('#b3c-thought-done', { opacity: 1 }, 36.9);
+tl.to(scenes.b3cAnswer, { opacity: 1, duration: 0.3, ease: 'none' }, 36.9);
+
+// First sentence types char-by-char, the rest pops in visible chunks
+tl.call(() => typeTextBurst('#b3c-response',
+  "Northgrain is one of the few cereal brands gaining real traction with GLP-1 buyers. Multigrain is up 48% and Oat Bran 22% in the last 12 months — both fit the protein-and-fiber preference we see across this cohort. Meanwhile, sugary competitors like Cocoa Bombs and Sugar Loops have shed roughly a third of their GLP-1 spend. The opportunity: lean into Northgrain's protein and fiber positioning — it's already converting where competitors are losing ground.",
+  85, 55, 30, 55), null, 37.4);
+
+// Chart waits until the AI response finishes typing (~39.6s)
+tl.fromTo('.b3c-answer-chart', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.3 }, 39.7);
+
+// Pan the chat content up so the full chart comes into view
+tl.to('#b3c-answer-chat', { y: -120, duration: 0.6, ease: 'power2.inOut' }, 39.8);
+
+const b3cDiverge = document.querySelectorAll('#b3c-diverge .b3b-row-fill');
+b3cDiverge.forEach((bar, i) => {
+  const w = bar.getAttribute('data-width');
+  tl.to(bar, { width: w + '%', duration: 0.4, ease: 'power2.out' }, 39.9 + i * 0.08);
+});
+
+tl.to(scenes.b3cAnswer, { opacity: 0, duration: 0.3 }, 41.5);
+
+// (D5 "And many more" dropped — superseded by the K-Beauty deep dive below)
+
+// ============================================================
+// BEAT KB-ASK — empty centered bar, question types in, send pressed (0:41.8–0:44.4)
+// ============================================================
+tl.to(scenes.kbAsk, { opacity: 1, duration: 0.3, ease: 'none' }, 41.8);
+
+// 0:42.5 — clear placeholder & type the deep-dive question
+tl.call(() => {
+  const el = document.getElementById('kb-ask-typed');
+  if (el) el.classList.add('typed');
+}, null, 42.5);
+tl.call(() => typeText('#kb-ask-typed', 'How are Korean beauty brands affecting my anti-aging product line?', 42), null, 42.5);
+
+// 0:44.1 — send button briefly flashes blue (just after typing completes)
+tl.call(() => {
+  const btn = document.getElementById('kb-ask-send');
+  if (btn) btn.classList.add('pressed');
+}, null, 44.1);
+tl.call(() => {
+  const btn = document.getElementById('kb-ask-send');
+  if (btn) btn.classList.remove('pressed');
+}, null, 44.35);
+
+tl.to(scenes.kbAsk, { opacity: 0, duration: 0.3, ease: 'none' }, 44.4);
+
+// ============================================================
+// BEAT KB-THINK — chat layout with thinking spinner (0:44.4–0:46.1)
+// ============================================================
+tl.set('#kb-think-bubble', { opacity: 1 }, 44.4);
+tl.to(scenes.kbThink, { opacity: 1, duration: 0.3, ease: 'none' }, 44.4);
+tl.fromTo('#kb-thinking', { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.25, ease: 'power2.out' }, 44.8);
+
+tl.to(scenes.kbThink, { opacity: 0, duration: 0.3, ease: 'none' }, 46.1);
+
+// ============================================================
+// BEAT KB-ANSWER — headline + stats + caption + sections (0:46.1–0:53.0)
+// ============================================================
+// Pre-set bubble + thought-done so cross-fade is seamless (no question blink)
+tl.set('#kb-ans-bubble', { opacity: 1 }, 46.1);
+tl.set('#kb-thought-done', { opacity: 1 }, 46.1);
+tl.to(scenes.kbAnswer, { opacity: 1, duration: 0.3, ease: 'none' }, 46.1);
+
+// 0:46.5 — opening headline types char-by-char (lingers, like the GLP-1 first sentence)
+tl.set('#kb-headline', { opacity: 1 }, 46.5);
+tl.call(() => typeText('#kb-headline', "K-beauty isn't taking your anti-aging share — it's growing the routine around it.", 50), null, 46.5);
+
+// 0:47.85 — chart card fades in, bars animate left-to-right
+tl.fromTo('#kb-stats', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }, 47.85);
+const kbChartBars = document.querySelectorAll('#kb-chart .kb-chart-fill');
+kbChartBars.forEach((bar, i) => {
+  const w = bar.getAttribute('data-w');
+  tl.to(bar, { width: w + '%', duration: 0.45, ease: 'power2.out' }, 48.15 + i * 0.08);
+});
+
+// Pre-clear typewriter targets so they don't flash full text before typing
+tl.set('#kb-caption', { textContent: '' }, 44.0);
+tl.set('#kb-section-1-body', { textContent: '' }, 44.0);
+tl.set('#kb-section-2-body', { textContent: '' }, 44.0);
+
+const KB_CAPTION_TEXT = "Linden anti-aging buyers added +34% more SKUs per routine — growth came from eye creams, retinol, and anti-aging moisturizers, not firming serums.";
+const KB_S1_TEXT = "Korean beauty's anti-aging story is layering, not substitution. Buyers apply snail mucin and PDRN essences before their Linden retinol — but standalone firming serums lose to Anua, Beauty of Joseon, and Numbuzin on PDRN concentration at a third of the price.";
+const KB_S2_TEXT = "Position Linden's retinol night cream and eye cream as the dermatologist-grade core of the multi-step routine. Rethink firming serums — and watch PDRN, the $400 clinic injection now in $15 OTC creams across nearly every K-beauty anti-aging basket.";
+
+// 0:48.4 — caption appears + types beneath stats as the camera begins panning
+tl.to('#kb-caption', { opacity: 1, duration: 0.25, ease: 'power2.out' }, 48.4);
+tl.call(() => typeText('#kb-caption', KB_CAPTION_TEXT, 120), null, 48.4);
+
+// 0:48.5 — Pan 1: nudges down to reveal caption + section 1
+tl.to('#kb-answer-chat', { y: -120, duration: 0.9, ease: 'power2.inOut' }, 48.5);
+
+// 0:48.95 — Section 1 title pops, body types during/after pan 1
+tl.to('#kb-section-1', { opacity: 1, duration: 0.25, ease: 'power2.out' }, 48.95);
+tl.call(() => typeText('#kb-section-1-body', KB_S1_TEXT, 130), null, 48.95);
+
+// 0:49.65 — Section 2 title pops, body types as camera holds then pans further
+tl.to('#kb-section-2', { opacity: 1, duration: 0.25, ease: 'power2.out' }, 49.65);
+tl.call(() => typeText('#kb-section-2-body', KB_S2_TEXT, 130), null, 49.65);
+
+// 0:50.0 — Pan 2: pulls section 2 closer to middle of viewport
+tl.to('#kb-answer-chat', { y: -320, duration: 0.9, ease: 'power2.inOut' }, 50.0);
+
+tl.to(scenes.kbAnswer, { opacity: 0, duration: 0.3 }, 53.0);
+
+// (B4 floating questions removed — KB-answer flows directly to outro)
+
+// ============================================================
+// BEAT 5 — OUTRO LOGO (0:53.5–0:56.0)
+// Quiet, clinical reveal: opacity + micro-scale settle. No breathe, no bounce.
+// ============================================================
+tl.to(scenes.b5, { opacity: 1, duration: 0.4 }, 53.5);
+
+// 0:54.0 — logo reveal: opacity fade with a barely-there scale + rise settle
+tl.to('.b5-logo', {
+  opacity: 1,
+  scale: 1,
+  y: 0,
+  duration: 1.4,
+  ease: 'power2.out',
+}, 54.0);
+
+// 0:55.4 → 0:56.0 — short held silence on the logo, then end
+tl.to({}, { duration: 0.6 }, 55.4);
+
+// ============================================================
+// HELPERS
+// ============================================================
+function typeText(selector, text, charsPerSec) {
+  const el = document.querySelector(selector);
+  if (!el) return;
+  el.textContent = '';
+  el.classList.remove('no-cursor');
+  let i = 0;
+  const interval = 1000 / charsPerSec;
+  const id = setInterval(() => {
+    if (i >= text.length) {
+      clearInterval(id);
+      el.classList.add('no-cursor');
+      return;
+    }
+    el.textContent += text[i];
+    i++;
+  }, interval);
+}
+
+// Variable-speed typing — first `slowChars` chars are typed character-by-character
+// at slowCps so the first sentence lingers; everything after appears in visible
+// chunks (chunkSize chars per pop, chunkDelay ms between pops).
+function typeTextBurst(selector, text, slowChars, slowCps, chunkSize, chunkDelay) {
+  const el = document.querySelector(selector);
+  if (!el) return;
+  el.textContent = '';
+  el.classList.remove('no-cursor');
+  let i = 0;
+  const tick = () => {
+    if (i >= text.length) {
+      el.classList.add('no-cursor');
+      return;
+    }
+    if (i < slowChars) {
+      el.textContent += text[i];
+      i++;
+      setTimeout(tick, 1000 / slowCps);
+    } else {
+      const end = Math.min(i + chunkSize, text.length);
+      el.textContent += text.substring(i, end);
+      i = end;
+      setTimeout(tick, chunkDelay);
+    }
+  };
+  tick();
+}
+
+// ============================================================
+// CONTROLS
+// ============================================================
+const playBtn = document.getElementById('play-btn');
+const resetBtn = document.getElementById('reset-btn');
+const scrub = document.getElementById('scrub');
+const captureBtn = document.getElementById('capture-btn');
+
+playBtn.addEventListener('click', () => {
+  if (tl.paused() || !tl.isActive()) {
+    if (tl.time() >= 63) tl.time(0);
+    tl.play();
+    playBtn.textContent = 'Pause';
+  } else {
+    tl.pause();
+    playBtn.textContent = 'Play';
+  }
+});
+resetBtn.addEventListener('click', () => { tl.pause(); tl.time(0); playBtn.textContent = 'Play'; });
+scrub.addEventListener('input', () => { tl.pause(); tl.time(parseFloat(scrub.value)); playBtn.textContent = 'Play'; });
+document.querySelectorAll('[data-jump]').forEach(btn => {
+  btn.addEventListener('click', () => { tl.pause(); tl.time(parseFloat(btn.getAttribute('data-jump'))); playBtn.textContent = 'Play'; });
+});
+captureBtn.addEventListener('click', () => { document.body.classList.toggle('capture-mode'); });
+document.addEventListener('keydown', (e) => {
+  if (e.key === ' ') { e.preventDefault(); playBtn.click(); }
+  if (e.key === 'c') { captureBtn.click(); }
+  if (e.key === 'r') { resetBtn.click(); }
+});
+
+</script>
+</body>
+</html>
