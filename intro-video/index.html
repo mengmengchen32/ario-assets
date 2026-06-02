@@ -41,20 +41,28 @@ body {
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
 
 /* ============================================================
-   STAGE
+   STAGE — locked 16:9, letterboxed to fit any window
+   All child sizing uses container query units (cqw / cqh) so
+   internal proportions stay identical regardless of window shape.
    ============================================================ */
 .stage {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  width: min(100vw, calc(100vh * 16 / 9));
+  height: min(100vh, calc(100vw * 9 / 16));
   background: var(--cream);
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  container-type: size;
+  container-name: stage;
 }
 .camera {
   position: absolute;
@@ -91,22 +99,22 @@ body {
 .b1-panel-warm {
   top: 4%;
   left: 0;
-  width: 38vw;
-  height: 42vh;
+  width: 38cqw;
+  height: 42cqh;
   background: var(--cream-2);
 }
 .b1-panel-green {
   top: 22%;
   left: 36%;
-  width: 30vw;
-  height: 56vh;
+  width: 30cqw;
+  height: 56cqh;
   background: rgba(0, 187, 127, 0.22);
 }
 .b1-panel-yellow {
   top: 4%;
   right: 0;
-  width: 30vw;
-  height: 44vh;
+  width: 30cqw;
+  height: 44cqh;
   background: rgba(255, 215, 90, 0.50);
 }
 
@@ -123,8 +131,8 @@ body {
 
 /* Top-left: Loss Tracker fragment */
 .b1-frag-tl {
-  top: 7vh;
-  left: 7vw;
+  top: 7cqh;
+  left: 7cqw;
   width: 360px;
   transform: rotate(-1.5deg);
 }
@@ -155,8 +163,8 @@ body {
 
 /* Top-right: SKU column ghosted */
 .b1-frag-tr {
-  top: 8vh;
-  right: 7vw;
+  top: 8cqh;
+  right: 7cqw;
   width: 300px;
   transform: rotate(1.5deg);
   background: transparent;
@@ -173,8 +181,8 @@ body {
 
 /* Bottom-left: Skinny Shot partial chart */
 .b1-frag-bl {
-  bottom: 7vh;
-  left: 7vw;
+  bottom: 7cqh;
+  left: 7cqw;
   width: 360px;
   transform: rotate(1.5deg);
 }
@@ -199,8 +207,8 @@ body {
 
 /* Bottom-right: Ask Ario input pill */
 .b1-frag-br {
-  bottom: 18vh;
-  right: 22vw;
+  bottom: 18cqh;
+  right: 22cqw;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -251,7 +259,7 @@ body {
   font-weight: 900;
   letter-spacing: -0.05em;
   color: var(--ink);
-  font-size: clamp(140px, 18vw, 280px);
+  font-size: clamp(140px, 18cqw, 280px);
   line-height: 0.9;
   opacity: 0;
 }
@@ -269,7 +277,7 @@ body {
   color: var(--ink);
   line-height: 0.9;
   text-align: center;
-  padding: 0 4vw;
+  padding: 0 4cqw;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -278,20 +286,20 @@ body {
   opacity: 0; /* hidden by default; GSAP snaps to visible at each beat */
 }
 .b1-text.size-small {
-  font-size: clamp(60px, 7.5vw, 130px);
+  font-size: clamp(60px, 7.5cqw, 130px);
 }
 .b1-text.size-explosion {
-  font-size: clamp(120px, 18vw, 280px);
+  font-size: clamp(120px, 18cqw, 280px);
   letter-spacing: -0.05em;
 }
 .b1-text.size-final {
-  font-size: clamp(40px, 5vw, 84px);
+  font-size: clamp(40px, 5cqw, 84px);
   letter-spacing: -0.035em;
   line-height: 1.0;
-  max-width: 78vw;
+  max-width: 78cqw;
 }
 .b1-text.size-kicker {
-  font-size: clamp(80px, 11vw, 180px);
+  font-size: clamp(80px, 11cqw, 180px);
   letter-spacing: -0.045em;
   line-height: 1.0;
 }
@@ -332,7 +340,7 @@ body {
 /* Skeleton chart that appears with "With Ario," */
 .b1-skeleton-donut {
   position: absolute;
-  top: 6vh;
+  top: 6cqh;
   left: 50%;
   transform: translateX(-50%);
   width: 200px;
@@ -346,11 +354,11 @@ body {
    ============================================================ */
 .divider {
   flex-direction: column;
-  padding: 0 4vw;
+  padding: 0 4cqw;
 }
 .divider-text {
   font-family: 'Satoshi', sans-serif;
-  font-size: clamp(32px, 4vw, 64px);
+  font-size: clamp(32px, 4cqw, 64px);
   font-weight: 700;
   letter-spacing: -0.035em;
   color: var(--ink);
@@ -361,7 +369,7 @@ body {
 .divider-text .typed-ghost { white-space: nowrap; }
 .divider-eyebrow {
   font-family: 'Satoshi', sans-serif;
-  font-size: clamp(32px, 4vw, 64px);
+  font-size: clamp(32px, 4cqw, 64px);
   font-weight: 700;
   color: var(--ink);
   letter-spacing: -0.035em;
@@ -506,7 +514,7 @@ body {
 /* 3 highlighted features that reveal on the right after phone slides to left */
 .b2-features {
   position: absolute;
-  right: 8vw;
+  right: 8cqw;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
@@ -522,7 +530,7 @@ body {
   display: block;
   font-family: 'Satoshi', sans-serif;
   font-weight: 700;
-  font-size: clamp(48px, 5.2vw, 88px);
+  font-size: clamp(48px, 5.2cqw, 88px);
   color: var(--ink);
   letter-spacing: -0.03em;
   line-height: 1;
@@ -533,7 +541,7 @@ body {
   display: block;
   font-family: 'Satoshi', sans-serif;
   font-weight: 500;
-  font-size: clamp(20px, 1.6vw, 28px);
+  font-size: clamp(20px, 1.6cqw, 28px);
   color: var(--text-2);
   letter-spacing: -0.01em;
   line-height: 1.2;
@@ -548,7 +556,7 @@ body {
   --violet-soft: #eee9ff;
 }
 #beat-3a2 {
-  padding: 0 6vw;
+  padding: 0 6cqw;
 }
 .b3a2-hero {
   background: white;
@@ -556,7 +564,7 @@ body {
   padding: 48px 56px 56px;
   box-shadow: var(--shadow-hero);
   width: 820px;
-  max-width: 64vw;
+  max-width: 64cqw;
   position: relative;
   opacity: 0;
   transform: scale(0.96);
@@ -685,7 +693,7 @@ body {
    BEAT 3A — LOSS TRACKER HERO (0:20–0:26)
    ============================================================ */
 #beat-3a {
-  padding: 0 6vw;
+  padding: 0 6cqw;
 }
 .b3a-hero {
   background: white;
@@ -693,7 +701,7 @@ body {
   padding: 56px 64px;
   box-shadow: var(--shadow-hero);
   width: 720px;
-  max-width: 60vw;
+  max-width: 60cqw;
   position: relative;
   z-index: 2;
   opacity: 0;
@@ -793,7 +801,7 @@ body {
 
 .b3a-edge-peek {
   position: absolute;
-  left: 62vw;
+  left: 62cqw;
   top: 52%;
   transform: translateY(-50%) rotate(3deg);
   width: 380px;
@@ -834,15 +842,15 @@ body {
    BEAT 3B — SKINNY SHOT REPORT (0:28–0:34)
    ============================================================ */
 #beat-3b {
-  padding: 0 6vw;
+  padding: 0 6cqw;
 }
 .b3b-hero {
   background: white;
   border-radius: 24px;
   box-shadow: var(--shadow-hero);
   width: 820px;
-  max-width: 68vw;
-  height: 78vh;
+  max-width: 68cqw;
+  height: 78cqh;
   max-height: 660px;
   position: relative;
   z-index: 2;
@@ -1133,7 +1141,7 @@ body {
   flex-direction: column;
   align-items: stretch;
   justify-content: flex-start;
-  padding: 7vh 0;
+  padding: 7cqh 0;
 }
 
 /* Chat-style deep-dive layout */
@@ -1143,7 +1151,7 @@ body {
   width: 100%;
   max-width: 880px;
   margin: 0 auto;
-  padding: 0 6vw;
+  padding: 0 6cqw;
   gap: 28px;
 }
 .b3c-user-bubble {
@@ -1260,7 +1268,7 @@ body {
   padding: 18px 22px;
   box-shadow: var(--shadow-card);
   width: 720px;
-  max-width: 70vw;
+  max-width: 70cqw;
   opacity: 0;
 }
 .b3c-input-plus {
@@ -1349,7 +1357,7 @@ body {
 }
 .b4-header {
   font-family: 'Satoshi', sans-serif;
-  font-size: clamp(56px, 8vw, 120px);
+  font-size: clamp(56px, 8cqw, 120px);
   font-weight: 700;
   color: var(--ink);
   letter-spacing: -0.04em;
@@ -1363,9 +1371,9 @@ body {
 }
 .b4-questions {
   position: relative;
-  width: 86vw;
+  width: 86cqw;
   max-width: 1400px;
-  height: 50vh;
+  height: 50cqh;
 }
 .b4-q {
   position: absolute;
@@ -1377,19 +1385,19 @@ body {
   white-space: nowrap;
   letter-spacing: -0.015em;
 }
-.b4-q.q1 { top: 6%;  left: 3%;  font-size: clamp(20px, 1.7vw, 28px); font-weight: 700; color: var(--ink); }
-.b4-q.q2 { top: 24%; right: 5%; font-size: clamp(18px, 1.4vw, 24px); }
-.b4-q.q3 { top: 42%; left: 14%; font-size: clamp(22px, 1.9vw, 32px); font-weight: 700; color: var(--ink); }
-.b4-q.q4 { top: 58%; right: 7%; font-size: clamp(16px, 1.3vw, 22px); }
-.b4-q.q5 { top: 74%; left: 6%; font-size: clamp(18px, 1.4vw, 24px); }
-.b4-q.q6 { top: 88%; right: 12%; font-size: clamp(20px, 1.6vw, 26px); font-weight: 700; color: var(--ink); }
+.b4-q.q1 { top: 6%;  left: 3%;  font-size: clamp(20px, 1.7cqw, 28px); font-weight: 700; color: var(--ink); }
+.b4-q.q2 { top: 24%; right: 5%; font-size: clamp(18px, 1.4cqw, 24px); }
+.b4-q.q3 { top: 42%; left: 14%; font-size: clamp(22px, 1.9cqw, 32px); font-weight: 700; color: var(--ink); }
+.b4-q.q4 { top: 58%; right: 7%; font-size: clamp(16px, 1.3cqw, 22px); }
+.b4-q.q5 { top: 74%; left: 6%; font-size: clamp(18px, 1.4cqw, 24px); }
+.b4-q.q6 { top: 88%; right: 12%; font-size: clamp(20px, 1.6cqw, 26px); font-weight: 700; color: var(--ink); }
 
 /* ============================================================
    BEAT 5 — OUTRO LOGO (0:54–1:00)
    ============================================================ */
 #beat-5 { flex-direction: column; }
 .b5-logo {
-  height: clamp(36px, 4.5vw, 72px);
+  height: clamp(36px, 4.5cqw, 72px);
   width: auto;
   opacity: 0;
   transform: scale(1.025) translateY(3px);
@@ -1468,14 +1476,14 @@ body.capture-mode .controls { display: none; }
   width: 100%;
   max-width: 980px;
   margin: 0 auto;
-  padding: 0 3vw;
+  padding: 0 3cqw;
 }
 
 #beat-kb-think, #beat-kb-answer {
   flex-direction: column;
   align-items: stretch;
   justify-content: flex-start;
-  padding: 5vh 0;
+  padding: 5cqh 0;
 }
 #beat-kb-answer .b3c-chat { gap: 32px; }
 
@@ -2319,7 +2327,7 @@ tl.call(() => _connect('amazon'), null, 12.0);
 
 // 0:14.0 — phone slides from center to LEFT
 tl.to('#phone', {
-  x: '-13vw',
+  xPercent: -70,
   duration: 0.6,
   ease: 'expo.out'
 }, 14.0);
