@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ario — Viewing History Link Flow (4 Frames)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #2B5CFF;
+      --blue-deep: #1A4AE6;
+      --blue-pale: #EEF2FF;
+      --ink: #111111;
+      --ink-soft: #2A2A2A;
+      --ink-muted: #6B7280;
+      --ink-faint: #9AA0A6;
+      --paper: #FAFAFA;
+      --green: #22C55E;
+      --green-bg: #ECFDF3;
+      --border: #E5E7EB;
+      --border-soft: #EDEFF2;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #F4F5F7;
+      font-family: 'DM Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 26px;
+      padding: 48px;
+    }
+
+    /* ══════════════════════════════════════════
+       PHONE FRAME
+    ══════════════════════════════════════════ */
+    .phone {
+      position: relative;
+      width: 400px;
+      height: 818px;
+      flex-shrink: 0;
+      background: #0d0d0f;
+      border-radius: 58px;
+      padding: 13px;
+      box-shadow:
+        0 2px 6px rgba(0,0,0,0.12),
+        0 30px 70px rgba(0,0,0,0.22),
+        inset 0 0 2px 2px rgba(255,255,255,0.08);
+    }
+    .phone-screen {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      border-radius: 46px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── STATUS BAR ── */
+    .status-bar {
+      height: 54px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 34px 0;
+    }
+    .status-time { font-size: 16px; font-weight: 600; color: var(--ink); letter-spacing: 0.02em; }
+    .status-icons { display: flex; align-items: center; gap: 7px; color: var(--ink); }
+    .status-icons svg { display: block; }
+
+    /* ── APP HEADER ── */
+    .app-header {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 24px 6px;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 9px 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 22px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    /* ── SCREEN STAGE ── */
+    .stage { position: relative; flex: 1; overflow: hidden; }
+    .screen {
+      position: absolute;
+      inset: 0;
+      padding: 18px 28px 26px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ══════ SCREEN 1: ACCOUNT LIST ══════ */
+    .s-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 29px;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin-bottom: 14px;
+    }
+    .s-desc {
+      font-size: 15.5px;
+      color: var(--ink-muted);
+      line-height: 1.62;
+      margin-bottom: 26px;
+    }
+    .acct-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 14px;
+    }
+    .acct-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 15px 16px;
+      border: 1.5px solid var(--border-soft);
+      border-radius: 16px;
+      margin-bottom: 14px;
+      background: #fff;
+    }
+    .acct-logo {
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      color: #fff;
+    }
+    .acct-logo svg { width: 24px; height: 24px; }
+    .acct-logo .n {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 28px;
+      line-height: 1;
+    }
+    .acct-info { flex: 1; min-width: 0; }
+    .acct-name { font-size: 16px; font-weight: 700; color: var(--ink); }
+    .acct-sub { font-size: 13px; color: var(--ink-muted); margin-top: 2px; }
+    .connect-pill {
+      flex-shrink: 0;
+      padding: 9px 18px;
+      border-radius: 22px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* ══════ SCREEN 2: LOGIN ══════ */
+    .s2-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 27px;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      margin-bottom: 26px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .s2-title .acct-logo { width: 38px; height: 38px; border-radius: 10px; }
+    .s2-title .acct-logo svg { width: 20px; height: 20px; }
+    .s2-title .acct-logo .n { font-size: 23px; }
+    .field { margin-bottom: 18px; }
+    .field-label {
+      display: block;
+      font-size: 14.5px;
+      font-weight: 500;
+      color: var(--ink-soft);
+      margin-bottom: 9px;
+    }
+    .field-input {
+      width: 100%;
+      min-height: 54px;
+      padding: 15px 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 13px;
+      font-size: 16.5px;
+      color: var(--ink);
+      background: #fff;
+      display: flex;
+      align-items: center;
+    }
+    .field-input.password .typed { letter-spacing: 3px; }
+    .link-btn {
+      width: 100%;
+      padding: 18px;
+      border: none;
+      border-radius: 13px;
+      background: var(--blue);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16.5px;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    /* ══════ SCREEN 3: SUCCESS ══════ */
+    .screen.success { justify-content: center; align-items: center; text-align: center; }
+    .check-circle {
+      width: 92px; height: 92px;
+      border-radius: 50%;
+      background: var(--green-bg);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 28px;
+      position: relative;
+    }
+    .check-circle svg { width: 42px; height: 42px; color: var(--green); }
+    .check-ring {
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      border: 3px solid var(--green);
+      opacity: 0.28;
+    }
+    .success-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 12px;
+    }
+    .success-sub {
+      font-size: 16px;
+      color: var(--ink-muted);
+      line-height: 1.6;
+      max-width: 300px;
+    }
+    .success-chips {
+      display: flex;
+      gap: 8px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .succ-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 13px;
+      border-radius: 22px;
+      background: #fff;
+      border: 1.5px solid var(--border-soft);
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .succ-chip svg { width: 13px; height: 13px; color: var(--green); }
+
+    /* ══════ SCREEN 4: DATA VIEW ══════ */
+    .screen.data { padding: 14px 20px 0; }
+    .data-head { flex-shrink: 0; padding: 2px 4px 14px; }
+    .data-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 10px;
+    }
+    .data-eyebrow .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 3px rgba(34,197,94,0.18);
+    }
+    .data-head h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .data-head .sub { font-size: 13.5px; color: var(--ink-muted); margin-top: 3px; }
+    .data-head .sub b { color: var(--ink); font-weight: 700; }
+
+    .data-viewport {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 22px, #000 calc(100% - 40px), transparent 100%);
+              mask-image: linear-gradient(to bottom, transparent 0, #000 22px, #000 calc(100% - 40px), transparent 100%);
+    }
+    .data-scroll { padding: 8px 4px 40px; }
+
+    .order-card {
+      border: 1.5px solid var(--border-soft);
+      border-radius: 14px;
+      padding: 13px 14px;
+      margin-bottom: 12px;
+      background: #fff;
+    }
+    .order-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 11px;
+    }
+    .order-date {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--ink-muted);
+      font-weight: 500;
+    }
+    .order-date svg { width: 13px; height: 13px; color: var(--ink-faint); }
+    .order-status {
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .order-status.youtube { background: #FFEBEB; color: #E11900; }
+    .order-status.netflix { background: #FBE9EA; color: #B0060F; }
+    .order-status.prime   { background: #E6F4FF; color: #0A7CD1; }
+    .order-body { display: flex; align-items: center; gap: 12px; }
+    .order-thumb {
+      width: 42px; height: 42px;
+      border-radius: 9px;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 21px;
+    }
+    .order-info { flex: 1; min-width: 0; }
+    .order-name {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .order-price {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--ink-muted);
+      flex-shrink: 0;
+      align-self: flex-start;
+      white-space: nowrap;
+    }
+
+    /* ── FOOTER ── */
+    .app-footer {
+      flex-shrink: 0;
+      padding: 14px 0 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      font-size: 13px;
+      color: var(--ink-faint);
+    }
+    .app-footer svg { width: 13px; height: 13px; color: var(--green); }
+    .app-footer strong { color: var(--ink); font-weight: 700; }
+    .app-footer .sep { color: #ccc; }
+    .app-footer a { color: var(--ink-muted); text-decoration: none; }
+
+    /* ── CONFETTI (static) ── */
+    .confetti-container { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1; }
+    .screen.success .check-circle,
+    .screen.success .success-title,
+    .screen.success .success-sub,
+    .screen.success .success-chips { position: relative; z-index: 6; }
+    .confetti-static { position: absolute; }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════ PHONE 1 — ACCOUNT LIST ════════════ -->
+  <div class="phone">
+    <div class="phone-screen">
+      <div class="status-bar">
+        <div class="status-time">3:04</div>
+        <div class="status-icons">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0.5" width="3" height="11.5" rx="1"/></svg>
+          <svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 2C5.6 2 2.95 3.05 1 4.78l1.4 1.6C3.98 4.97 6.13 4.1 8.5 4.1s4.52.87 6.1 2.28l1.4-1.6C14.05 3.05 11.4 2 8.5 2zm0 4.2c-1.6 0-3.06.58-4.2 1.55L8.5 12l4.2-4.25c-1.14-.97-2.6-1.55-4.2-1.55z"/></svg>
+          <svg width="26" height="13" viewBox="0 0 26 13" fill="none"><rect x="0.5" y="0.5" width="22" height="12" rx="3.5" stroke="currentColor" opacity="0.4"/><rect x="2" y="2" width="17" height="9" rx="2" fill="currentColor"/><rect x="24" y="4" width="1.5" height="5" rx="0.75" fill="currentColor" opacity="0.5"/></svg>
+        </div>
+      </div>
+      <div class="app-header"><div class="back-btn">Back</div></div>
+      <div class="stage">
+        <div class="screen">
+          <h1 class="s-title">Connect your accounts</h1>
+          <p class="s-desc">Link the services you watch on so brands can understand real viewing habits. Connect any or all — it takes seconds.</p>
+          <div class="acct-eyebrow">Available to connect</div>
+
+          <div class="acct-row">
+            <div class="acct-logo" style="background:#FF0000;">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2a2.8 2.8 0 00-2-2C17.9 4.8 12 4.8 12 4.8s-5.9 0-7.6.4a2.8 2.8 0 00-2 2A29 29 0 002 12a29 29 0 00.4 4.8 2.8 2.8 0 002 2c1.7.4 7.6.4 7.6.4s5.9 0 7.6-.4a2.8 2.8 0 002-2A29 29 0 0022 12a29 29 0 00-.4-4.8zM10 15V9l5.2 3-5.2 3z"/></svg>
+            </div>
+            <div class="acct-info">
+              <div class="acct-name">YouTube</div>
+              <div class="acct-sub">Watch history &amp; subscriptions</div>
+            </div>
+            <div class="connect-pill">Connect</div>
+          </div>
+
+          <div class="acct-row">
+            <div class="acct-logo" style="background:#E50914;"><span class="n">N</span></div>
+            <div class="acct-info">
+              <div class="acct-name">Netflix</div>
+              <div class="acct-sub">Titles &amp; viewing activity</div>
+            </div>
+            <div class="connect-pill">Connect</div>
+          </div>
+
+          <div class="acct-row">
+            <div class="acct-logo" style="background:#1399FF;">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7L8 5z"/></svg>
+            </div>
+            <div class="acct-info">
+              <div class="acct-name">Prime Video</div>
+              <div class="acct-sub">Watch history</div>
+            </div>
+            <div class="connect-pill">Connect</div>
+          </div>
+
+          <div class="app-footer" style="margin-top:auto;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Secured by <strong>Ario</strong><span class="sep">·</span><a href="#">Privacy Policy</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ PHONE 2 — SIGN IN ════════════ -->
+  <div class="phone">
+    <div class="phone-screen">
+      <div class="status-bar">
+        <div class="status-time">3:04</div>
+        <div class="status-icons">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0.5" width="3" height="11.5" rx="1"/></svg>
+          <svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 2C5.6 2 2.95 3.05 1 4.78l1.4 1.6C3.98 4.97 6.13 4.1 8.5 4.1s4.52.87 6.1 2.28l1.4-1.6C14.05 3.05 11.4 2 8.5 2zm0 4.2c-1.6 0-3.06.58-4.2 1.55L8.5 12l4.2-4.25c-1.14-.97-2.6-1.55-4.2-1.55z"/></svg>
+          <svg width="26" height="13" viewBox="0 0 26 13" fill="none"><rect x="0.5" y="0.5" width="22" height="12" rx="3.5" stroke="currentColor" opacity="0.4"/><rect x="2" y="2" width="17" height="9" rx="2" fill="currentColor"/><rect x="24" y="4" width="1.5" height="5" rx="0.75" fill="currentColor" opacity="0.5"/></svg>
+        </div>
+      </div>
+      <div class="app-header"><div class="back-btn">Back</div></div>
+      <div class="stage">
+        <div class="screen">
+          <h2 class="s2-title">
+            <span class="acct-logo" style="background:#E50914;"><span class="n">N</span></span>
+            Sign in to Netflix
+          </h2>
+          <div class="field">
+            <label class="field-label">Email address</label>
+            <div class="field-input"><span class="typed">sarah@gmail.com</span></div>
+          </div>
+          <div class="field">
+            <label class="field-label">Password</label>
+            <div class="field-input password"><span class="typed">••••••••••••</span></div>
+          </div>
+          <button class="link-btn">Connect account</button>
+          <div class="app-footer" style="margin-top:auto;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Secured by <strong>Ario</strong><span class="sep">·</span><a href="#">Privacy Policy</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ PHONE 3 — SUCCESS ════════════ -->
+  <div class="phone">
+    <div class="phone-screen">
+      <div class="status-bar">
+        <div class="status-time">3:04</div>
+        <div class="status-icons">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0.5" width="3" height="11.5" rx="1"/></svg>
+          <svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 2C5.6 2 2.95 3.05 1 4.78l1.4 1.6C3.98 4.97 6.13 4.1 8.5 4.1s4.52.87 6.1 2.28l1.4-1.6C14.05 3.05 11.4 2 8.5 2zm0 4.2c-1.6 0-3.06.58-4.2 1.55L8.5 12l4.2-4.25c-1.14-.97-2.6-1.55-4.2-1.55z"/></svg>
+          <svg width="26" height="13" viewBox="0 0 26 13" fill="none"><rect x="0.5" y="0.5" width="22" height="12" rx="3.5" stroke="currentColor" opacity="0.4"/><rect x="2" y="2" width="17" height="9" rx="2" fill="currentColor"/><rect x="24" y="4" width="1.5" height="5" rx="0.75" fill="currentColor" opacity="0.5"/></svg>
+        </div>
+      </div>
+      <div class="app-header"><div class="back-btn">Back</div></div>
+      <div class="stage">
+        <div class="screen success">
+          <div class="confetti-container" id="confettiContainer"></div>
+          <div class="check-circle">
+            <div class="check-ring"></div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <div class="success-title">You're all set!</div>
+          <div class="success-sub">Your accounts are linked and your viewing history is synced.</div>
+          <div class="success-chips">
+            <div class="succ-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>YouTube</div>
+            <div class="succ-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Netflix</div>
+            <div class="succ-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Prime Video</div>
+          </div>
+          <div class="app-footer" style="position:absolute;bottom:26px;left:0;right:0;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Secured by <strong>Ario</strong><span class="sep">·</span><a href="#">Privacy Policy</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ PHONE 4 — VIEWING HISTORY ════════════ -->
+  <div class="phone">
+    <div class="phone-screen">
+      <div class="status-bar">
+        <div class="status-time">3:04</div>
+        <div class="status-icons">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0.5" width="3" height="11.5" rx="1"/></svg>
+          <svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 2C5.6 2 2.95 3.05 1 4.78l1.4 1.6C3.98 4.97 6.13 4.1 8.5 4.1s4.52.87 6.1 2.28l1.4-1.6C14.05 3.05 11.4 2 8.5 2zm0 4.2c-1.6 0-3.06.58-4.2 1.55L8.5 12l4.2-4.25c-1.14-.97-2.6-1.55-4.2-1.55z"/></svg>
+          <svg width="26" height="13" viewBox="0 0 26 13" fill="none"><rect x="0.5" y="0.5" width="22" height="12" rx="3.5" stroke="currentColor" opacity="0.4"/><rect x="2" y="2" width="17" height="9" rx="2" fill="currentColor"/><rect x="24" y="4" width="1.5" height="5" rx="0.75" fill="currentColor" opacity="0.5"/></svg>
+        </div>
+      </div>
+      <div class="app-header"><div class="back-btn">Back</div></div>
+      <div class="stage">
+        <div class="screen data">
+          <div class="data-head">
+            <div class="data-eyebrow"><span class="dot"></span>Connected</div>
+            <h2>Viewing history</h2>
+            <div class="sub"><b>1,284</b> titles synced from 3 services</div>
+          </div>
+          <div class="data-viewport">
+            <div class="data-scroll">
+              <div class="order-card">
+                <div class="order-meta"><span class="order-date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>3/3/2026</span><span class="order-status netflix">Netflix</span></div>
+                <div class="order-body"><div class="order-thumb" style="background:#FBE9EA;">🕵️</div><div class="order-info"><div class="order-name">The Night Agent — S2:E4 "The Cipher"</div></div><div class="order-price">51 min</div></div>
+              </div>
+              <div class="order-card">
+                <div class="order-meta"><span class="order-date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>3/3/2026</span><span class="order-status youtube">YouTube</span></div>
+                <div class="order-body"><div class="order-thumb" style="background:#FFEBEB;">🏠</div><div class="order-info"><div class="order-name">$1 vs $100,000 Home Office Setup</div></div><div class="order-price">18 min</div></div>
+              </div>
+              <div class="order-card">
+                <div class="order-meta"><span class="order-date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>3/2/2026</span><span class="order-status prime">Prime Video</span></div>
+                <div class="order-body"><div class="order-thumb" style="background:#E6F4FF;">🥊</div><div class="order-info"><div class="order-name">Reacher — S3:E1 "Persuader"</div></div><div class="order-price">58 min</div></div>
+              </div>
+              <div class="order-card">
+                <div class="order-meta"><span class="order-date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>3/1/2026</span><span class="order-status netflix">Netflix</span></div>
+                <div class="order-body"><div class="order-thumb" style="background:#F3E8FF;">🖤</div><div class="order-info"><div class="order-name">Wednesday — S2:E6 "A Murder of Crows"</div></div><div class="order-price">47 min</div></div>
+              </div>
+              <div class="order-card">
+                <div class="order-meta"><span class="order-date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>2/28/2026</span><span class="order-status youtube">YouTube</span></div>
+                <div class="order-body"><div class="order-thumb" style="background:#DBEAFE;">📈</div><div class="order-info"><div class="order-name">How the Economy Actually Works</div></div><div class="order-price">24 min</div></div>
+              </div>
+              <div class="order-card">
+                <div class="order-meta"><span class="order-date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>2/27/2026</span><span class="order-status prime">Prime Video</span></div>
+                <div class="order-body"><div class="order-thumb" style="background:#FEF3C7;">💥</div><div class="order-info"><div class="order-name">The Boys — S4:E8 "Assassination Run"</div></div><div class="order-price">62 min</div></div>
+              </div>
+              <div class="order-card">
+                <div class="order-meta"><span class="order-date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>2/26/2026</span><span class="order-status netflix">Netflix</span></div>
+                <div class="order-body"><div class="order-thumb" style="background:#FCE7F3;">💍</div><div class="order-info"><div class="order-name">Love Is Blind — S8:E5 "The Pods"</div></div><div class="order-price">55 min</div></div>
+              </div>
+              <div class="order-card">
+                <div class="order-meta"><span class="order-date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>2/25/2026</span><span class="order-status youtube">YouTube</span></div>
+                <div class="order-body"><div class="order-thumb" style="background:#DCFCE7;">🏋️</div><div class="order-info"><div class="order-name">30-Minute Full Body Workout (No Equipment)</div></div><div class="order-price">31 min</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Static confetti scatter for the success frame
+    (function () {
+      const container = document.getElementById('confettiContainer');
+      if (!container) return;
+      const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#2B5CFF', '#9B59B6', '#F39C12', '#22C55E', '#E74C3C', '#F472B6'];
+      const w = 374, h = 600;
+      for (let i = 0; i < 46; i++) {
+        const p = document.createElement('div');
+        p.className = 'confetti-static';
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const shape = Math.random();
+        p.style.left = (Math.random() * w) + 'px';
+        p.style.top = (40 + Math.random() * h) + 'px';
+        p.style.background = color;
+        p.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+        if (shape < 0.4) { p.style.width = '8px'; p.style.height = '8px'; }
+        else if (shape < 0.75) { p.style.width = '5px'; p.style.height = '14px'; }
+        else { p.style.width = '8px'; p.style.height = '8px'; p.style.borderRadius = '50%'; }
+        container.appendChild(p);
+      }
+    })();
+  </script>
+</body>
+</html>

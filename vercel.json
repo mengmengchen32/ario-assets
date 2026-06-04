@@ -5,6 +5,7 @@
     { "source": "/ario-corelens", "destination": "/ario-corelens-one-pager-v2.html" },
     { "source": "/iiex-booth", "destination": "/iiex-booth.html" },
     { "source": "/link-flow", "destination": "/3steps-phone-animated/index.html" },
+    { "source": "/viewing-flow", "destination": "/viewing-flow-4frames.html" },
     { "source": "/grill-stories", "destination": "/grill-stories.html" },
     { "source": "/brand", "destination": "/ario-brand-guide.html" },
     { "source": "/canonical-design", "destination": "/ario-canonical-design.html" }
