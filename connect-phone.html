@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ario — Link Flow (Animated Phone)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #2B5CFF;
+      --blue-deep: #1A4AE6;
+      --blue-pale: #EEF2FF;
+      --ink: #111111;
+      --ink-soft: #2A2A2A;
+      --ink-muted: #6B7280;
+      --ink-faint: #9AA0A6;
+      --paper: #FAFAFA;
+      --green: #22C55E;
+      --green-bg: #ECFDF3;
+      --border: #E5E7EB;
+      --border-soft: #EDEFF2;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #fff;
+      font-family: 'Hanken Grotesk', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      flex-direction: column;
+      gap: 28px;
+      padding: 40px 0;
+    }
+
+    /* ══════════════════════════════════════════
+       PHONE FRAME
+    ══════════════════════════════════════════ */
+    .phone {
+      position: relative;
+      width: 400px;
+      height: 818px;
+      background: #0d0d0f;
+      border-radius: 58px;
+      padding: 13px;
+      box-shadow:
+        0 2px 6px rgba(0,0,0,0.12),
+        0 30px 70px rgba(0,0,0,0.22),
+        inset 0 0 2px 2px rgba(255,255,255,0.08);
+    }
+    .phone-screen {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      border-radius: 46px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── STATUS BAR ── */
+    .status-bar {
+      height: 54px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 34px 0;
+      font-family: 'Hanken Grotesk', sans-serif;
+    }
+    .status-time {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: 0.02em;
+    }
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--ink);
+    }
+    .status-icons svg { display: block; }
+
+    /* ── APP HEADER (Back + refresh) ── */
+    .app-header {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 24px 6px;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 9px 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 22px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink);
+      background: #fff;
+    }
+    .refresh-btn {
+      width: 40px;
+      height: 40px;
+      border: 1.5px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-soft);
+    }
+    .refresh-btn svg { width: 18px; height: 18px; }
+
+    /* ── SCREEN STAGE ── */
+    .stage {
+      position: relative;
+      flex: 1;
+      overflow: hidden;
+    }
+    .screen {
+      position: absolute;
+      inset: 0;
+      padding: 18px 28px 26px;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+      pointer-events: none;
+    }
+    .screen.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
+    .screen.exit-left { opacity: 0; transform: translateX(-40px); }
+
+    /* ══════ SCREEN 1: INVITE ══════ */
+    .s-title {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 29px;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin-bottom: 14px;
+    }
+    .s-desc {
+      font-size: 15.5px;
+      color: var(--ink-muted);
+      line-height: 1.62;
+      margin-bottom: 24px;
+    }
+    .cta-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      width: 100%;
+      padding: 17px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 13px;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 16.5px;
+      font-weight: 600;
+      transition: transform 0.15s, background 0.15s;
+    }
+    .cta-btn svg { width: 16px; height: 16px; }
+    .cta-btn.pressed { transform: scale(0.97); background: var(--blue-deep); }
+
+    .keep-card {
+      margin-top: 24px;
+      border: 1.5px solid var(--border-soft);
+      border-radius: 16px;
+      padding: 22px 22px 6px;
+      background: #fff;
+    }
+    .keep-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 18px;
+    }
+    .trust-item {
+      display: flex;
+      gap: 14px;
+      padding-bottom: 18px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .trust-item:last-child { border-bottom: none; }
+    .trust-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: var(--blue-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--blue);
+      flex-shrink: 0;
+    }
+    .trust-icon svg { width: 16px; height: 16px; }
+    .trust-label {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .trust-text {
+      font-size: 13.5px;
+      color: var(--ink-muted);
+      line-height: 1.5;
+    }
+
+    /* beat composition: phone scooches left, callouts reveal on the right */
+    .beat { position: relative; width: min(95vw, 1380px); height: 720px; }
+    .phone-wrap { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(0.78); transform-origin: center; transition: transform 0.75s cubic-bezier(0.65,0,0.25,1); }
+    .phone-wrap.left { transform: translate(calc(-50% - 330px), -50%) scale(0.78); }
+    .callouts { position: absolute; right: 24px; top: 50%; transform: translateY(-50%); width: 42%; max-width: 540px; display: flex; flex-direction: column; gap: 30px; }
+    .callout { opacity: 0; transform: translateY(18px); transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.2,1,0.3,1); }
+    .callout.show { opacity: 1; transform: translateY(0); }
+    .callout-text { font-family: 'Hanken Grotesk', sans-serif; font-size: 33px; font-weight: 700; color: var(--ink); letter-spacing: -0.022em; line-height: 1.12; }
+    .callout.accent .callout-text { color: var(--blue); }
+
+    /* step-through controls (review only) */
+    .ctrls { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: center; max-width: 460px; }
+    .ctrls button { font-family: 'Hanken Grotesk', sans-serif; font-size: 13px; font-weight: 600; color: #fff; background: #1a1814; border: none; border-radius: 999px; padding: 8px 13px; cursor: pointer; }
+    .ctrls button:hover { background: #333; }
+    .ctrls #cPlay { background: var(--blue); }
+    .ctrls-sep { width: 1px; height: 18px; background: #ddd; margin: 0 4px; }
+
+    /* ══════ SCREEN 0: ACCOUNT LIST (original Ario design) ══════ */
+    .phone-brand { display: flex; align-items: center; gap: 6px; padding-bottom: 12px; }
+    .phone-brand img { height: 17px; width: auto; display: block; }
+    .phone-brand-label { font-family: 'Hanken Grotesk', sans-serif; font-size: 13px; font-weight: 500; color: var(--ink-faint); }
+    .phone-header { font-family: 'Hanken Grotesk', sans-serif; font-size: 27px; font-weight: 700; color: var(--ink); letter-spacing: -0.025em; line-height: 1.05; margin-bottom: 20px; }
+    .phone-list { display: flex; flex-direction: column; gap: 11px; }
+    .phone-row { display: flex; align-items: center; justify-content: space-between; padding: 15px 17px; background: #fff; border: 1px solid var(--border); border-radius: 16px; font-size: 17px; font-weight: 600; color: var(--ink); }
+    .phone-row-name { display: flex; align-items: center; gap: 13px; }
+    .phone-row-logo { width: 38px; height: 38px; border-radius: 10px; background: #fff; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+    .phone-row-logo img { width: 23px; height: 23px; object-fit: contain; display: block; }
+    /* default = small "Connect" button (not yet connected) */
+    .phone-row-cta { font-size: 13px; font-weight: 600; color: var(--blue); background: var(--blue-pale); padding: 7px 15px; border-radius: 999px; }
+    /* syncing = spinner */
+    .phone-row.syncing .phone-row-cta { color: var(--ink-muted); background: transparent; padding: 0; display: flex; align-items: center; gap: 7px; font-size: 14.5px; font-weight: 500; }
+    .phone-row.syncing .phone-row-cta::after { content: ''; width: 13px; height: 13px; border-radius: 50%; border: 1.5px solid var(--ink-faint); border-right-color: transparent; animation: phone-spin 0.7s linear infinite; }
+    @keyframes phone-spin { to { transform: rotate(360deg); } }
+    /* connected = green checkmark */
+    .phone-row.connected { border-color: rgba(34,197,94,0.35); background: rgba(34,197,94,0.05); }
+    .phone-row.connected .phone-row-cta { color: var(--green); background: transparent; padding: 0; display: flex; align-items: center; gap: 8px; font-size: 14.5px; font-weight: 600; }
+    .phone-row.connected .phone-row-cta::after { content: ''; width: 6px; height: 11px; border: solid var(--green); border-width: 0 2px 2px 0; transform: rotate(45deg); margin-bottom: 3px; }
+
+    /* ══════ SCREEN 2: LOGIN ══════ */
+    .s2-title {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 27px;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      margin-bottom: 26px;
+    }
+    .field { margin-bottom: 18px; }
+    .field-label {
+      display: block;
+      font-size: 14.5px;
+      font-weight: 500;
+      color: var(--ink-soft);
+      margin-bottom: 9px;
+    }
+    .field-input {
+      width: 100%;
+      min-height: 54px;
+      padding: 15px 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 13px;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 16.5px;
+      color: var(--ink);
+      background: #fff;
+      display: flex;
+      align-items: center;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .field-input.focused {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(43, 92, 255, 0.10);
+    }
+    .field-input.password .typed { letter-spacing: 3px; }
+    .caret {
+      display: inline-block;
+      width: 2px;
+      height: 20px;
+      background: var(--blue);
+      margin-left: 1px;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .link-btn {
+      width: 100%;
+      padding: 18px;
+      border: none;
+      border-radius: 13px;
+      background: var(--blue);
+      color: #fff;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 16.5px;
+      font-weight: 600;
+      margin-top: 8px;
+      transition: transform 0.15s, background 0.15s;
+    }
+    .link-btn.pressed { transform: scale(0.97); background: var(--blue-deep); }
+
+    .chip-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .chip {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 13px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+    }
+    .chip svg { width: 16px; height: 16px; color: var(--ink-soft); flex-shrink: 0; }
+    .chip-text { font-size: 13.5px; line-height: 1.25; }
+    .chip-text b { font-weight: 700; color: var(--ink); }
+    .chip-text span { color: var(--ink-muted); font-weight: 400; }
+
+    /* ══════ SCREEN 3: SUCCESS ══════ */
+    .screen.success { justify-content: center; align-items: center; text-align: center; }
+    .check-circle {
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      background: var(--green-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 28px;
+      position: relative;
+    }
+    .check-circle svg {
+      width: 42px;
+      height: 42px;
+      color: var(--green);
+      opacity: 0;
+      transform: scale(0.5);
+      transition: opacity 0.4s, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .check-circle.animate svg { opacity: 1; transform: scale(1); }
+    .check-ring {
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      border: 3px solid var(--green);
+      opacity: 0;
+      transform: scale(0.85);
+      transition: opacity 0.3s 0.15s, transform 0.45s 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .check-circle.animate .check-ring { opacity: 0.28; transform: scale(1); }
+    .success-title {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 12px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s 0.3s, transform 0.4s 0.3s;
+    }
+    .success.animate .success-title { opacity: 1; transform: translateY(0); }
+    .success-sub {
+      font-size: 16px;
+      color: var(--ink-muted);
+      line-height: 1.6;
+      max-width: 300px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s 0.45s, transform 0.4s 0.45s;
+    }
+    .success.animate .success-sub { opacity: 1; transform: translateY(0); }
+
+    /* ══════ SCREEN 4: DATA VIEW ══════ */
+    .screen.data { padding: 14px 20px 0; }
+    .data-head {
+      flex-shrink: 0;
+      padding: 2px 4px 14px;
+    }
+    .data-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 10px;
+    }
+    .data-eyebrow .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 3px rgba(34,197,94,0.18);
+    }
+    .data-head h2 {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .data-head .sub {
+      font-size: 13.5px;
+      color: var(--ink-muted);
+      margin-top: 3px;
+    }
+    .data-head .sub b { color: var(--ink); font-weight: 700; }
+
+    .data-viewport {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 22px, #000 calc(100% - 40px), transparent 100%);
+              mask-image: linear-gradient(to bottom, transparent 0, #000 22px, #000 calc(100% - 40px), transparent 100%);
+    }
+    .data-scroll { padding: 8px 4px 40px; }
+
+    .order-card {
+      border: 1.5px solid var(--border-soft);
+      border-radius: 14px;
+      padding: 13px 14px;
+      margin-bottom: 12px;
+      background: #fff;
+    }
+    .order-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 11px;
+    }
+    .order-date {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--ink-muted);
+      font-weight: 500;
+    }
+    .order-date svg { width: 13px; height: 13px; color: var(--ink-faint); }
+    .order-status {
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .order-status.delivered { background: #ECFDF3; color: #15803D; }
+    .order-status.returned { background: #FEF3E2; color: #B45309; }
+    .order-body { display: flex; align-items: center; gap: 12px; }
+    .order-thumb {
+      width: 42px; height: 42px;
+      border-radius: 9px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 21px;
+    }
+    .order-info { flex: 1; min-width: 0; }
+    .order-name {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .order-price {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink);
+      flex-shrink: 0;
+      align-self: flex-start;
+    }
+
+    /* ── FOOTER ── */
+    .app-footer {
+      flex-shrink: 0;
+      padding: 14px 0 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      font-size: 13px;
+      color: var(--ink-faint);
+    }
+    .app-footer svg { width: 13px; height: 13px; color: var(--green); }
+    .app-footer strong { color: var(--ink); font-weight: 700; }
+    .app-footer .sep { color: #ccc; }
+    .app-footer a { color: var(--ink-muted); text-decoration: none; }
+
+    /* ── TAP INDICATOR ── */
+    .tap-dot {
+      position: absolute;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(43, 92, 255, 0.18);
+      border: 2px solid rgba(43, 92, 255, 0.55);
+      z-index: 60;
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(0.7);
+      opacity: 0;
+      transition: left 0.55s cubic-bezier(0.4,0,0.2,1), top 0.55s cubic-bezier(0.4,0,0.2,1), opacity 0.25s;
+    }
+    .tap-dot.visible { opacity: 1; }
+    .tap-ring {
+      position: absolute;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 2px solid var(--blue);
+      z-index: 59;
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(0.5);
+      opacity: 0;
+    }
+    .tap-ring.animate { animation: tap-pulse 0.5s ease-out forwards; }
+    @keyframes tap-pulse {
+      0% { transform: translate(-50%,-50%) scale(0.5); opacity: 0.9; }
+      100% { transform: translate(-50%,-50%) scale(2.4); opacity: 0; }
+    }
+
+    /* ── CONFETTI ── */
+    .confetti-container {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 5;
+    }
+    .confetti {
+      position: absolute;
+      top: -20px;
+      opacity: 0;
+      animation: confetti-fall var(--duration) ease-in forwards;
+      animation-delay: var(--delay);
+      will-change: transform, opacity;
+    }
+    @keyframes confetti-fall {
+      0% { transform: translate(0,0) rotate(0deg); opacity: 0; }
+      8% { opacity: 1; }
+      82% { opacity: 1; }
+      100% { transform: translate(var(--drift), 820px) rotate(var(--rotate)); opacity: 0; }
+    }
+
+    /* ── REPLAY ── */
+    .replay-btn {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink-muted);
+      background: #fff;
+      border: 1px solid var(--border);
+      padding: 10px 24px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s, box-shadow 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .replay-btn:hover { color: var(--ink); border-color: var(--ink-muted); box-shadow: 0 4px 16px rgba(0,0,0,0.10); }
+    .replay-btn svg { width: 14px; height: 14px; }
+  </style>
+</head>
+<body>
+
+<div class="phone" id="phone">
+  <div class="phone-screen">
+
+    <!-- Tap indicators -->
+    <div class="tap-dot" id="tapDot"></div>
+    <div class="tap-ring" id="tapRing"></div>
+
+    <!-- Status bar -->
+    <div class="status-bar">
+      <div class="status-time">3:04</div>
+      <div class="status-icons">
+        <!-- signal -->
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0.5" width="3" height="11.5" rx="1"/></svg>
+        <!-- wifi -->
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 2C5.6 2 2.95 3.05 1 4.78l1.4 1.6C3.98 4.97 6.13 4.1 8.5 4.1s4.52.87 6.1 2.28l1.4-1.6C14.05 3.05 11.4 2 8.5 2zm0 4.2c-1.6 0-3.06.58-4.2 1.55L8.5 12l4.2-4.25c-1.14-.97-2.6-1.55-4.2-1.55z"/></svg>
+        <!-- battery -->
+        <svg width="26" height="13" viewBox="0 0 26 13" fill="none"><rect x="0.5" y="0.5" width="22" height="12" rx="3.5" stroke="currentColor" opacity="0.4"/><rect x="2" y="2" width="17" height="9" rx="2" fill="currentColor"/><rect x="24" y="4" width="1.5" height="5" rx="0.75" fill="currentColor" opacity="0.5"/></svg>
+      </div>
+    </div>
+
+
+    <!-- STAGE -->
+    <div class="stage">
+
+      <!-- SCREEN 0: ACCOUNT LIST (original Ario design) -->
+      <div class="screen active" id="screen0">
+        <div class="phone-brand"><span class="phone-brand-label">powered by</span><img src="ario-logo-black.png" alt="Ario" /></div>
+        <div class="phone-header">Connect your accounts</div>
+        <div class="phone-list">
+          <div class="phone-row" id="acctAmazon"><div class="phone-row-name"><div class="phone-row-logo"><img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" alt=""/></div>Amazon</div><div class="phone-row-cta">Connect</div></div>
+          <div class="phone-row"><div class="phone-row-name"><div class="phone-row-logo"><img src="https://www.google.com/s2/favicons?domain=walmart.com&sz=64" alt=""/></div>Walmart</div><div class="phone-row-cta">Connect</div></div>
+          <div class="phone-row"><div class="phone-row-name"><div class="phone-row-logo"><img src="costco-logo.png" alt=""/></div>Costco</div><div class="phone-row-cta">Connect</div></div>
+          <div class="phone-row"><div class="phone-row-name"><div class="phone-row-logo"><img src="https://www.google.com/s2/favicons?domain=target.com&sz=64" alt=""/></div>Target</div><div class="phone-row-cta">Connect</div></div>
+          <div class="phone-row"><div class="phone-row-name"><div class="phone-row-logo"><img src="https://www.google.com/s2/favicons?domain=doordash.com&sz=64" alt=""/></div>DoorDash</div><div class="phone-row-cta">Connect</div></div>
+        </div>
+      </div>
+
+      <!-- SCREEN 1: INVITE -->
+      <div class="screen" id="screen1">
+        <h1 class="s-title">Link your Amazon account</h1>
+        <p class="s-desc">We're inviting a group of participants to share their Amazon purchase history — it unlocks future survey opportunities and helps brands understand real shopping habits.</p>
+        <button class="cta-btn" id="getStartedBtn">
+          Get started
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+        <div class="keep-card">
+          <div class="keep-title">Keep in mind</div>
+          <div class="trust-item">
+            <div class="trust-icon"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+            <div>
+              <div class="trust-label">Less than 15 seconds</div>
+              <div class="trust-text">The connection process is very quick — it will take less than 15 seconds.</div>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+            <div>
+              <div class="trust-label">One-time, secure connection</div>
+              <div class="trust-text">We will not track your purchases after this.</div>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></div>
+            <div>
+              <div class="trust-label">Anonymous &amp; research-only</div>
+              <div class="trust-text">Your information will be kept anonymous, and only used for research.</div>
+            </div>
+          </div>
+        </div>
+        <div class="app-footer" style="margin-top:auto;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Secured by <strong>Ario</strong><span class="sep">·</span><a href="#">Privacy Policy</a>
+        </div>
+      </div>
+
+      <!-- SCREEN 2: LOGIN -->
+      <div class="screen" id="screen2">
+        <h2 class="s2-title">Sign in to Amazon</h2>
+        <div class="field">
+          <label class="field-label">Email address</label>
+          <div class="field-input" id="emailBox"><span class="typed" id="emailText"></span><span class="caret" id="emailCaret" style="display:none;"></span></div>
+        </div>
+        <div class="field">
+          <label class="field-label">Password</label>
+          <div class="field-input password" id="passwordBox"><span class="typed" id="passwordText"></span><span class="caret" id="passwordCaret" style="display:none;"></span></div>
+        </div>
+        <button class="link-btn" id="linkBtn">Link account</button>
+        <div class="app-footer" style="margin-top:auto;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Secured by <strong>Ario</strong><span class="sep">·</span><a href="#">Privacy Policy</a>
+        </div>
+      </div>
+
+      <!-- SCREEN 3: SUCCESS -->
+      <div class="screen success" id="screen3">
+        <div class="confetti-container" id="confettiContainer"></div>
+        <div class="check-circle" id="checkCircle">
+          <div class="check-ring"></div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <div class="success-title">You're all set!</div>
+        <div class="success-sub">Your Amazon account is linked and your e-receipts are connected.</div>
+        <div class="app-footer" style="position:absolute;bottom:26px;left:0;right:0;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Secured by <strong>Ario</strong><span class="sep">·</span><a href="#">Privacy Policy</a>
+        </div>
+      </div>
+
+      <!-- SCREEN 4: DATA VIEW -->
+      <div class="screen data" id="screen4">
+        <div class="data-head">
+          <h2>Purchase history</h2>
+          <div class="sub"><b>3,534</b> orders synced from Amazon</div>
+        </div>
+        <div class="data-viewport">
+          <div class="data-scroll" id="dataScroll">
+            <div class="order-card">
+              <div class="order-meta"><span class="order-date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>3/3/2026</span><span class="order-status delivered">Delivered</span></div>
+              <div class="order-body"><div class="order-thumb" style="background:#FEF3C7;">🫒</div><div class="order-info"><div class="order-name">IVKIOMA Olive Oil Sprayer for Cooking, 220ml Glass Oil Dispenser, Food Grade Premium Spray Bottle</div></div><div class="order-price">$7.63</div></div>
+            </div>
+            <div class="order-card">
+              <div class="order-meta"><span class="order-date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>3/3/2026</span><span class="order-status delivered">Delivered</span></div>
+              <div class="order-body"><div class="order-thumb" style="background:#FEF9C3;">🍋</div><div class="order-info"><div class="order-name">Manual Lemon Squeezer, Hand Lemon Squeezer, Easy-to-Use, Very Sturdy, Lemon Juicer, Yellow</div></div><div class="order-price">$6.54</div></div>
+            </div>
+            <div class="order-card">
+              <div class="order-meta"><span class="order-date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>2/21/2026</span><span class="order-status returned">Return complete</span></div>
+              <div class="order-body"><div class="order-thumb" style="background:#DBEAFE;">📒</div><div class="order-info"><div class="order-name">Beautiful Oops!</div></div><div class="order-price">$7.82</div></div>
+            </div>
+            <div class="order-card">
+              <div class="order-meta"><span class="order-date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>2/20/2026</span><span class="order-status delivered">Delivered</span></div>
+              <div class="order-body"><div class="order-thumb" style="background:#FEE2E2;">🍼</div><div class="order-info"><div class="order-name">Grosmimi Replacements (Straw only 4-counts, Stage 2)</div></div><div class="order-price">$24.01</div></div>
+            </div>
+            <div class="order-card">
+              <div class="order-meta"><span class="order-date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>2/18/2026</span><span class="order-status delivered">Delivered</span></div>
+              <div class="order-body"><div class="order-thumb" style="background:#E0E7FF;">🎧</div><div class="order-info"><div class="order-name">Anker Soundcore Wireless Earbuds, Bluetooth 5.3, 40H Playtime, Deep Bass</div></div><div class="order-price">$15.70</div></div>
+            </div>
+            <div class="order-card">
+              <div class="order-meta"><span class="order-date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>2/15/2026</span><span class="order-status delivered">Delivered</span></div>
+              <div class="order-body"><div class="order-thumb" style="background:#DCFCE7;">🧴</div><div class="order-info"><div class="order-name">CeraVe Daily Moisturizing Lotion for Dry Skin, Fragrance Free, 19 Oz</div></div><div class="order-price">$13.48</div></div>
+            </div>
+            <div class="order-card">
+              <div class="order-meta"><span class="order-date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>2/11/2026</span><span class="order-status delivered">Delivered</span></div>
+              <div class="order-body"><div class="order-thumb" style="background:#FCE7F3;">☕️</div><div class="order-info"><div class="order-name">Stanley Quencher H2.0 FlowState Tumbler 40 oz, Stainless Steel</div></div><div class="order-price">$35.00</div></div>
+            </div>
+            <div class="order-card">
+              <div class="order-meta"><span class="order-date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>2/8/2026</span><span class="order-status delivered">Delivered</span></div>
+              <div class="order-body"><div class="order-thumb" style="background:#F3E8FF;">📚</div><div class="order-info"><div class="order-name">The Let Them Theory: A Life-Changing Tool, Mel Robbins (Hardcover)</div></div><div class="order-price">$18.59</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<button class="replay-btn" id="replayBtn" onclick="startDemo()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 105.64-8.36L1 10"/></svg>
+  Replay
+</button>
+
+<div class="ctrls" id="ctrls">
+  <button data-screen="0">List</button>
+  <button data-screen="2">Sign&nbsp;in</button>
+  <button data-screen="4">Purchase&nbsp;history</button>
+  <span class="ctrls-sep"></span>
+  <button id="cPrev">◀ Prev</button>
+  <button id="cNext">Next ▶</button>
+  <button id="cPlay">Play all</button>
+</div>
+
+<script>
+  const emailStr = 'sarah@gmail.com';
+  const passwordStr = '••••••••••••';
+  let timers = [];
+
+  function clearTimers() { timers.forEach(t => clearTimeout(t)); timers = []; }
+  function wait(ms) { return new Promise(r => { const t = setTimeout(r, ms); timers.push(t); }); }
+
+  const phone = document.getElementById('phone');
+  const tapDot = document.getElementById('tapDot');
+  const tapRing = document.getElementById('tapRing');
+
+  let currentScreen = 0;
+  function setScreen(num) {
+    currentScreen = num;
+    for (let i = 0; i <= 4; i++) {
+      const el = document.getElementById('screen' + i);
+      el.classList.remove('active', 'exit-left');
+      if (i < num) el.classList.add('exit-left');
+      if (i === num) el.classList.add('active');
+    }
+  }
+
+  async function typeText(elId, text, speed) {
+    const el = document.getElementById(elId);
+    el.textContent = '';
+    for (let i = 0; i < text.length; i++) {
+      el.textContent += text[i];
+      await wait(speed);
+    }
+  }
+
+  function moveTapTo(targetEl) {
+    return new Promise(resolve => {
+      const pr = phone.getBoundingClientRect();
+      const tr = targetEl.getBoundingClientRect();
+      const x = tr.left - pr.left + tr.width / 2;
+      const y = tr.top - pr.top + tr.height / 2;
+      tapDot.classList.add('visible');
+      tapDot.style.left = x + 'px';
+      tapDot.style.top = y + 'px';
+      setTimeout(resolve, 580);
+    });
+  }
+
+  function tap() {
+    return new Promise(resolve => {
+      const x = parseFloat(tapDot.style.left);
+      const y = parseFloat(tapDot.style.top);
+      tapDot.style.transform = 'translate(-50%, -50%) scale(0.55)';
+      tapRing.style.left = x + 'px';
+      tapRing.style.top = y + 'px';
+      tapRing.classList.remove('animate');
+      void tapRing.offsetWidth;
+      tapRing.classList.add('animate');
+      setTimeout(() => {
+        tapDot.style.transform = 'translate(-50%, -50%) scale(0.7)';
+        resolve();
+      }, 240);
+    });
+  }
+  function hideTap() { tapDot.classList.remove('visible'); }
+
+  // account-row lifecycle: connect (button) → syncing (spinner) → connected (check)
+  const acctRows = () => [...document.querySelectorAll('#screen0 .phone-row')];
+  function setRowState(row, state) {
+    row.classList.remove('syncing', 'connected');
+    const cta = row.querySelector('.phone-row-cta');
+    if (state === 'connect') cta.textContent = 'Connect';
+    else if (state === 'syncing') { row.classList.add('syncing'); cta.textContent = 'Connecting'; }
+    else if (state === 'connected') { row.classList.add('connected'); cta.textContent = 'Connected'; }
+  }
+
+  async function startDemo() {
+    clearTimers();
+    // reset
+    setScreen(0);
+    document.getElementById('emailText').textContent = '';
+    document.getElementById('passwordText').textContent = '';
+    document.getElementById('emailCaret').style.display = 'none';
+    document.getElementById('passwordCaret').style.display = 'none';
+    document.getElementById('emailBox').classList.remove('focused');
+    document.getElementById('passwordBox').classList.remove('focused');
+    document.getElementById('getStartedBtn').classList.remove('pressed');
+    document.getElementById('linkBtn').classList.remove('pressed');
+    document.getElementById('checkCircle').classList.remove('animate');
+    document.getElementById('screen3').classList.remove('animate');
+    document.getElementById('confettiContainer').innerHTML = '';
+    acctRows().forEach(r => setRowState(r, 'connect'));
+    const ds = document.getElementById('dataScroll');
+    ds.style.transition = 'none';
+    ds.style.transform = 'translateY(0)';
+    hideTap();
+    tapDot.style.transition = 'none';
+    tapDot.style.left = '200px';
+    tapDot.style.top = '700px';
+    void tapDot.offsetWidth;
+    tapDot.style.transition = '';
+
+    // ── SCREEN 0: account list (all "Connect") → tap Amazon's Connect button ──
+    await wait(1800);
+    await moveTapTo(document.querySelector('#acctAmazon .phone-row-cta'));
+    await wait(250);
+    await tap();
+    await wait(450);
+    hideTap();
+
+    // ── SCREEN 2: sign in to Amazon (invite page dropped → straight to sign-in) ──
+    setScreen(2);
+    await wait(450);
+    await moveTapTo(document.getElementById('emailBox'));
+    await tap();
+    document.getElementById('emailBox').classList.add('focused');
+    document.getElementById('emailCaret').style.display = 'inline-block';
+    hideTap();
+    await typeText('emailText', emailStr, 35);
+    document.getElementById('emailCaret').style.display = 'none';
+    document.getElementById('emailBox').classList.remove('focused');
+
+    await wait(120);
+    await moveTapTo(document.getElementById('passwordBox'));
+    await tap();
+    document.getElementById('passwordBox').classList.add('focused');
+    document.getElementById('passwordCaret').style.display = 'inline-block';
+    hideTap();
+    await typeText('passwordText', passwordStr, 35);
+    document.getElementById('passwordCaret').style.display = 'none';
+    document.getElementById('passwordBox').classList.remove('focused');
+
+    await wait(200);
+    await moveTapTo(document.getElementById('linkBtn'));
+    await tap();
+    document.getElementById('linkBtn').classList.add('pressed');
+    await wait(450);
+    hideTap();
+
+    // ── PURCHASE HISTORY: Amazon's data floods in ──
+    setScreen(4);
+    await wait(800);
+    const viewport = document.querySelector('.data-viewport');
+    const scrollDist = Math.max(0, ds.scrollHeight - viewport.clientHeight);
+    ds.style.transition = 'transform 3.4s cubic-bezier(0.45, 0, 0.55, 1)';
+    ds.style.transform = 'translateY(-' + scrollDist + 'px)';
+    await wait(3000);
+
+    // ── BACK TO THE LIST: Amazon connects (spinner → check), then the rest cascade ──
+    setScreen(0);
+    await wait(500);
+    const amazon = document.getElementById('acctAmazon');
+    const others = acctRows().filter(r => r !== amazon);
+    setRowState(amazon, 'syncing');
+    await wait(850);
+    setRowState(amazon, 'connected');
+    // the rest start syncing, then flip to connected very soon after
+    await wait(250);
+    others.forEach(r => setRowState(r, 'syncing'));
+    await wait(550);
+    for (const r of others) { setRowState(r, 'connected'); await wait(170); }
+
+    await wait(1700);
+    startDemo();
+  }
+
+  function spawnConfetti(container) {
+    if (!container) return;
+    container.innerHTML = '';
+    const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#2B5CFF', '#9B59B6', '#F39C12', '#22C55E', '#E74C3C', '#F472B6'];
+    const w = container.offsetWidth || 374;
+    for (let i = 0; i < 55; i++) {
+      const p = document.createElement('div');
+      p.className = 'confetti';
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const shape = Math.random();
+      p.style.left = (Math.random() * w) + 'px';
+      p.style.background = color;
+      p.style.setProperty('--delay', (Math.random() * 0.8) + 's');
+      p.style.setProperty('--duration', (2.2 + Math.random() * 2.2) + 's');
+      p.style.setProperty('--rotate', (Math.random() * 1080 - 540) + 'deg');
+      p.style.setProperty('--drift', ((Math.random() - 0.5) * 200) + 'px');
+      if (shape < 0.4) { p.style.width = '8px'; p.style.height = '8px'; }
+      else if (shape < 0.75) { p.style.width = '5px'; p.style.height = '14px'; }
+      else { p.style.width = '8px'; p.style.height = '8px'; p.style.borderRadius = '50%'; }
+      container.appendChild(p);
+    }
+  }
+
+  // ── step-through controls: park on any screen to inspect ──
+  function showScreen(n) {
+    n = Math.max(0, Math.min(4, n));
+    clearTimers();
+    hideTap();
+    acctRows().forEach(r => setRowState(r, 'connect'));
+    const emailEl = document.getElementById('emailText');
+    const pwEl = document.getElementById('passwordText');
+    document.getElementById('emailCaret').style.display = 'none';
+    document.getElementById('passwordCaret').style.display = 'none';
+    document.getElementById('getStartedBtn').classList.remove('pressed');
+    document.getElementById('linkBtn').classList.remove('pressed');
+    if (n === 2) { emailEl.textContent = emailStr; pwEl.textContent = passwordStr; }
+    else { emailEl.textContent = ''; pwEl.textContent = ''; }
+    const cc = document.getElementById('checkCircle'), s3 = document.getElementById('screen3'), conf = document.getElementById('confettiContainer');
+    if (n === 3) { cc.classList.add('animate'); s3.classList.add('animate'); spawnConfetti(conf); }
+    else { cc.classList.remove('animate'); s3.classList.remove('animate'); conf.innerHTML = ''; }
+    const ds = document.getElementById('dataScroll');
+    ds.style.transition = 'none'; ds.style.transform = 'translateY(0)';
+    setScreen(n);
+  }
+  const SCREENS = [0, 2, 4];   // list → sign-in → purchase history (invite/confetti-success dropped)
+  function stepScreen(dir) {
+    let idx = SCREENS.indexOf(currentScreen);
+    if (idx === -1) idx = 0;
+    idx = Math.max(0, Math.min(SCREENS.length - 1, idx + dir));
+    showScreen(SCREENS[idx]);
+  }
+  document.querySelectorAll('.ctrls [data-screen]').forEach(b => b.addEventListener('click', () => showScreen(+b.dataset.screen)));
+  document.getElementById('cPrev').addEventListener('click', () => stepScreen(-1));
+  document.getElementById('cNext').addEventListener('click', () => stepScreen(1));
+  document.getElementById('cPlay').addEventListener('click', () => startDemo());
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') { e.preventDefault(); stepScreen(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); stepScreen(-1); }
+  });
+
+  window.addEventListener('load', () => { setTimeout(startDemo, 500); });
+</script>
+
+</body>
+</html>
