@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ario CoreLens — Insight Reports</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Sans:wght@0,300;0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#2B5CFF; --indigo:#6A5CFF; --ink:#111; --ink-soft:#2A2A2A; --ink-muted:#666;
+    --paper:#FAFAFA; --rule:#E0E0E0; --blue-pale:#EEF2FF;
+    --grad:linear-gradient(120deg,#2B5CFF,#6A5CFF);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{background:#888}
+  @page{size:letter;margin:0}
+  .page{
+    width:8.5in;height:11in;background:#fff;margin:0 auto;
+    padding:0.4in 0.5in 0.3in;display:flex;flex-direction:column;
+    overflow:hidden;-webkit-print-color-adjust:exact;print-color-adjust:exact;
+    font-family:'DM Sans',sans-serif;color:var(--ink);
+  }
+  @media print{html,body{background:#fff}.page{margin:0}}
+
+  /* Top / bottom bars */
+  .top-bar,.bottom-bar{display:flex;align-items:center;justify-content:space-between}
+  .top-bar{border-bottom:1.5px solid var(--ink);padding-bottom:9px}
+  .top-bar span{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.04em;color:var(--ink-muted)}
+  .bottom-bar{border-top:1.5px solid var(--ink);padding-top:8px;margin-top:auto}
+  .bottom-bar .left{display:flex;align-items:center;gap:10px}
+  .bottom-bar .left span{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--ink-muted)}
+  .bottom-bar .right{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--blue);letter-spacing:.04em}
+
+  /* Hero */
+  .hero{margin-top:22px}
+  .hero h1{
+    font-family:'Outfit',sans-serif;font-weight:900;font-size:34px;line-height:1.06;
+    letter-spacing:-.03em;color:var(--ink);
+  }
+  .hero h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+
+  /* Anchor box — what CoreLens is */
+  .anchor{
+    background:linear-gradient(135deg,#EBF1FF 0%,#ECE6FB 100%);border-radius:16px;
+    padding:18px 22px;margin-top:18px;
+  }
+  .anchor p{font-size:13px;line-height:1.65;color:var(--ink-soft);max-width:97%}
+  .anchor p strong{font-weight:700;color:var(--ink)}
+  .note{margin:18px 0;font-size:11px;line-height:1.45;color:var(--ink-muted)}
+
+  /* Section header */
+  /* Sections fill the page; slack is shared evenly above / between / below the two groups */
+  .sections{flex:1;display:flex;flex-direction:column;justify-content:space-evenly}
+  .sec-head{margin:0 0 14px}
+  .sec-head .row{display:flex;align-items:baseline;gap:10px}
+  .label{
+    font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:500;
+    text-transform:uppercase;letter-spacing:.12em;color:var(--blue);
+  }
+  .sec-head .tag{font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;color:var(--ink)}
+  .sec-head .desc{font-size:11px;color:var(--ink-muted);line-height:1.4;margin-top:5px;max-width:100%}
+
+  /* Report grid */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 30px}
+  .item{display:flex;gap:10px;align-items:flex-start}
+  .num{
+    flex:0 0 auto;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;
+    color:var(--blue);width:18px;padding-top:2px;
+  }
+  .item .body{flex:1}
+  .item .q{font-family:'Outfit',sans-serif;font-weight:700;font-size:12.5px;color:var(--ink);line-height:1.22}
+  .item .d{font-size:11px;color:var(--ink-muted);line-height:1.45;margin-top:5px}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="top-bar">
+    <img src="ario-logo-black.png" alt="Ario" style="height:22px">
+    <span>ariodata.com</span>
+  </div>
+
+  <div class="hero">
+    <h1>Verified behavioral intelligence<br><em>that tells you what's really going on.</em></h1>
+  </div>
+
+  <div class="anchor">
+    <p><strong>Ario CoreLens</strong> is built on permissioned, SKU-level purchase data from Amazon and other top retailers — going back years, continuously, from the same people over time. Whether a report tracks a market shift or your own buyers, it shows you exactly how the change lands on you: your products, your brand, your buyers, your share, and the competitors around you — not just the category.</p>
+  </div>
+
+  <div class="sections">
+
+  <div class="block">
+  <div class="sec-head">
+    <div class="row"><span class="tag">Industry Pulse</span></div>
+    <div class="desc">Deep dives on the forces reshaping CPG — GLP-1, private label, Gen Z, Prime Day — surfaced before they're obvious.</div>
+  </div>
+  <div class="grid">
+    <div class="item"><div class="num">01</div><div class="body"><div class="q">How are GLP-1 buyers shopping differently for food?</div><div class="d">Each basket the year before vs. after onset — what softens, what rises, and which brands gain or slip.</div></div></div>
+    <div class="item"><div class="num">02</div><div class="body"><div class="q">Where are buyers trading down — and who's catching them?</div><div class="d">Category-by-category switching to private label, and who leaves versus who stays loyal.</div></div></div>
+    <div class="item"><div class="num">03</div><div class="body"><div class="q">How did inflation change what people actually buy?</div><div class="d">Price pass-through and real elasticity by category — smaller packs, fewer units, switching, trading down.</div></div></div>
+    <div class="item"><div class="num">04</div><div class="body"><div class="q">How does Gen Z really shop?</div><div class="d">How loyal they are, how readily they buy dupes, what they over-index on, and how fast they move on.</div></div></div>
+    <div class="item"><div class="num">05</div><div class="body"><div class="q">Is premium pet food still on the rise — and who's trading up?</div><div class="d">Fresh, freeze-dried, and premium brands gaining ground, and where the trade-up dollars come from.</div></div></div>
+    <div class="item"><div class="num">06</div><div class="body"><div class="q">Who's winning the energy-drink wars?</div><div class="d">Share movement among Celsius, Alani, Red Bull and Monster — who switches to whom, and the demographics behind each.</div></div></div>
+    <div class="item"><div class="num">07</div><div class="body"><div class="q">Which Prime Day spikes actually stick?</div><div class="d">Separates habit-forming, incremental demand from one-time deal-seeking, by category and brand.</div></div></div>
+    <div class="item"><div class="num">08</div><div class="body"><div class="q">What does the new-parent buying journey look like?</div><div class="d">The category sequence as a baby arrives and grows, and who wins the first purchase at each stage.</div></div></div>
+  </div>
+  </div><!-- /.block -->
+
+  <div class="block">
+  <div class="sec-head">
+    <div class="row"><span class="tag">Brand Vitals</span></div>
+    <div class="desc">Always-on reads on your own buyers — who's buying, where they switch, how the wallet splits, and how loyal they stay.</div>
+  </div>
+  <div class="grid">
+    <div class="item"><div class="num">09</div><div class="body"><div class="q">How is the category wallet split among your buyers?</div><div class="d">True share of wallet — how much category spend goes to you versus each competitor.</div></div></div>
+    <div class="item"><div class="num">10</div><div class="body"><div class="q">When buyers leave, where do they actually go?</div><div class="d">Follows lapsing buyers to their next purchase to quantify leakage and target win-back.</div></div></div>
+    <div class="item"><div class="num">11</div><div class="body"><div class="q">What products land in the same basket as mine?</div><div class="d">The strongest adjacencies in your buyers' baskets — for bundling, partnerships, and media.</div></div></div>
+    <div class="item"><div class="num">12</div><div class="body"><div class="q">Who are my buyers on Amazon, really?</div><div class="d">Age, income, household, and region drawn from real purchases — not surveys.</div></div></div>
+    <div class="item"><div class="num">13</div><div class="body"><div class="q">How often do my buyers come back?</div><div class="d">Repeat cadence, light versus heavy buyers, and subscription or replenishment behavior.</div></div></div>
+    <div class="item"><div class="num">14</div><div class="body"><div class="q">How sticky is my buyer base?</div><div class="d">Repeat rate, cohort retention curves, and the share of one-time versus loyal buyers.</div></div></div>
+  </div>
+  </div><!-- /.block -->
+
+  </div><!-- /.sections -->
+
+  <p class="note">Recent and ongoing studies — with new topics added continuously.</p>
+
+  <div class="bottom-bar">
+    <div class="left">
+      <img src="ario-logo-black.png" alt="Ario" style="height:16px">
+      <span>enterprise@ariodata.com</span>
+    </div>
+    <div class="right">ariodata.com</div>
+  </div>
+
+</div>
+</body>
+</html>
