@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Account Linking — Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16191d;
+    --body:#3a3f47;
+    --muted:#727983;
+    --bg:#f4f3ef;
+    --accent:#1c3a5e;
+    --line:#e4e2dc;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    background:var(--bg);
+    color:var(--body);
+    font-family:"DM Sans",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+    overflow:hidden;
+  }
+  .heading{font-family:"Outfit",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;color:var(--ink);}
+
+  /* Slide system */
+  .slide{
+    position:fixed;inset:0;
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+    padding:6vh 7vw;
+    opacity:0;
+    transition:opacity .35s ease;
+  }
+  .slide.active{display:flex;opacity:1;}
+
+  /* Title slide */
+  .kicker{
+    font-family:"Outfit";font-size:15px;font-weight:600;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:26px;
+  }
+  .title-h{font-family:"Outfit";font-weight:700;font-size:clamp(34px,5.4vw,68px);line-height:1.06;color:var(--ink);letter-spacing:-.02em;max-width:none;width:100%;}
+  .title-sub{font-size:clamp(17px,1.7vw,22px);color:var(--muted);margin-top:28px;max-width:58ch;line-height:1.5;}
+  .title-foot{position:absolute;bottom:6vh;left:7vw;font-family:"Outfit";font-size:13px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;}
+
+  /* Statement slide */
+  .statement{font-family:"Outfit";font-weight:600;font-size:clamp(26px,3.4vw,44px);line-height:1.28;color:var(--ink);letter-spacing:-.015em;max-width:20ch;}
+  .statement b{color:var(--accent);font-weight:600;}
+  .statement-note{font-size:clamp(16px,1.5vw,20px);color:var(--muted);margin-top:30px;max-width:50ch;line-height:1.5;}
+
+  /* App slide */
+  .app-head{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-bottom:4px;}
+  .app-name{font-family:"Outfit";font-weight:700;font-size:clamp(28px,3.4vw,44px);color:var(--ink);letter-spacing:-.02em;}
+  .app-tag{font-family:"Outfit";font-size:clamp(14px,1.4vw,18px);font-weight:500;color:var(--accent);}
+  .app-desc{font-size:clamp(15px,1.5vw,19px);color:var(--muted);max-width:75ch;line-height:1.5;margin-bottom:auto;}
+  .flow{
+    display:flex;gap:1.4vw;align-items:flex-end;justify-content:center;
+    flex:1;min-height:0;margin-top:2.4vh;
+  }
+  .frame{display:flex;flex-direction:column;align-items:center;min-width:0;}
+  .frame img{height:58vh;width:auto;max-width:100%;object-fit:contain;display:block;}
+  .frame .lbl{
+    font-family:"Outfit";font-size:clamp(11px,1vw,14px);font-weight:500;
+    color:var(--body);margin-top:8px;text-align:center;
+  }
+  .frame .num{
+    font-family:"Outfit";font-size:12px;font-weight:600;color:var(--accent);
+    display:inline-block;margin-bottom:2px;
+  }
+  .arrow{align-self:center;color:#c4c0b6;font-size:24px;flex:0 0 auto;padding-bottom:9vh;}
+
+  /* AI example media */
+  .media-single{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0;margin-top:2vh;}
+  .media-single img{max-height:60vh;max-width:90vw;width:auto;height:auto;object-fit:contain;border:1px solid var(--line);border-radius:12px;box-shadow:0 18px 50px -28px rgba(20,25,35,.45);}
+  .media-pair{flex:1;display:flex;gap:2.6vw;align-items:center;justify-content:center;min-height:0;margin-top:2vh;}
+  .media-pair .frame img{height:auto;max-height:54vh;max-width:44vw;width:auto;border:1px solid var(--line);border-radius:12px;box-shadow:0 18px 50px -28px rgba(20,25,35,.45);}
+  .cap{font-family:"Outfit";font-size:clamp(13px,1.1vw,15px);font-weight:500;color:var(--body);margin-top:12px;text-align:center;}
+
+  /* Grid slide */
+  .grid-h{font-family:"Outfit";font-weight:700;font-size:clamp(26px,3.2vw,42px);color:var(--ink);letter-spacing:-.02em;margin-bottom:6px;}
+  .grid-sub{font-size:clamp(15px,1.5vw,19px);color:var(--muted);margin-bottom:34px;}
+  .co-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px 30px;}
+  .co{border-top:2px solid var(--accent);padding-top:10px;}
+  .co .n{font-family:"Outfit";font-weight:600;font-size:clamp(15px,1.4vw,19px);color:var(--ink);}
+  .co .d{font-size:clamp(12.5px,1.1vw,14.5px);color:var(--muted);margin-top:2px;line-height:1.35;}
+
+  /* Closing */
+  .close-h{font-family:"Outfit";font-weight:700;font-size:clamp(30px,4.4vw,58px);line-height:1.12;color:var(--ink);letter-spacing:-.02em;max-width:17ch;}
+
+  /* Chrome */
+  .counter{position:fixed;bottom:3.4vh;right:3vw;font-family:"Outfit";font-size:13px;color:var(--muted);letter-spacing:.05em;}
+  .progress{position:fixed;top:0;left:0;height:3px;background:var(--accent);width:0;transition:width .35s ease;z-index:10;}
+  .hint{position:fixed;bottom:3.4vh;left:3vw;font-family:"Outfit";font-size:12px;color:#b7b3a9;letter-spacing:.04em;}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<!-- 1 TITLE / NEW OIL -->
+<section class="slide">
+  <h1 class="title-h">In the AI era, data is the new oil</h1>
+  <p class="title-sub">And the biggest apps in the world &mdash; including the AI apps &mdash; are racing to let you connect your accounts to get it. Shown here from their own screens.</p>
+</section>
+
+<!-- 2 CHATGPT × PLAID (FINANCES) -->
+<section class="slide">
+  <div class="app-head"><span class="app-name">ChatGPT</span><span class="app-tag">Connects your bank &mdash; via Plaid</span></div>
+  <p class="app-desc">The world&rsquo;s most-used AI app asks you to link your financial accounts, through Plaid, so it can deliver personalized financial insights.</p>
+  <div class="media-single">
+    <img src="/account-linking-deck/screenshots/ai-chatgpt-finances.png" alt="ChatGPT prompting to connect finances via Plaid">
+    <span class="cap">Get insights &rarr; connect finances &rarr; Plaid sign-in &rarr; accounts synced &mdash; all inside ChatGPT</span>
+  </div>
+</section>
+
+<!-- 4 CHATGPT × APPLE HEALTH -->
+<section class="slide">
+  <div class="app-head"><span class="app-name">ChatGPT</span><span class="app-tag">Connects Apple Health</span></div>
+  <p class="app-desc">The same pattern, for the most sensitive data there is: ChatGPT asks to connect Apple Health &ldquo;for a better picture of your overall health.&rdquo;</p>
+  <div class="media-single">
+    <img src="/account-linking-deck/screenshots/ai-chatgpt-health.png" alt="ChatGPT prompting to connect Apple Health">
+    <span class="cap">Connect Apple Health &mdash; in-app, with one tap</span>
+  </div>
+</section>
+
+<!-- 5 CLAUDE — PORT YOUR MEMORY -->
+<section class="slide">
+  <div class="app-head"><span class="app-name">Claude</span><span class="app-tag">Connects your history from other AI apps</span></div>
+  <p class="app-desc">AI companies now compete on the connection itself &mdash; Anthropic invites you to port your memory and context over from other AI providers.</p>
+  <div class="media-pair">
+    <div class="frame"><span class="num">1</span><img src="/account-linking-deck/screenshots/ai-claude-switch.png" alt="Claude — switch without starting over"><span class="cap">&ldquo;Switch without starting over&rdquo;</span></div>
+    <div class="frame"><span class="num">2</span><img src="/account-linking-deck/screenshots/ai-claude-import.png" alt="Claude — import memory modal"><span class="cap">Import your memory into Claude</span></div>
+  </div>
+</section>
+
+<!-- 5 BRIDGE + WHAT IT IS -->
+<section class="slide">
+  <p class="statement">None of this is new. <b>The shopping-data industry has run on account linking for years</b> &mdash; people connecting their email, retailer, loyalty, or bank accounts to share what they buy.</p>
+  <p class="statement-note">It isn&rsquo;t fringe or unusual. It runs at real scale today, marketed in the open &mdash; across research incumbents, rewards apps, and household-name brands.</p>
+</section>
+
+<!-- 3 FETCH -->
+<section class="slide">
+  <div class="app-head"><span class="app-name">Fetch</span><span class="app-tag">Independent rewards app · founded 2013</span></div>
+  <p class="app-desc">Shoppers connect their email inbox and retailer accounts; Fetch automatically imports their e-receipts.</p>
+  <div class="flow">
+    <div class="frame"><span class="num">1</span><img src="/account-linking-deck/screenshots/fetch-discover.png" alt=""><span class="lbl">The rewards home screen</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="frame"><span class="num">2</span><img src="/account-linking-deck/screenshots/fetch-connect-list.png" alt=""><span class="lbl">Connect your retailer accounts</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="frame"><span class="num">3</span><img src="/account-linking-deck/screenshots/fetch-amazon-link.png" alt=""><span class="lbl">Sign in to your Amazon account</span></div>
+  </div>
+</section>
+
+<!-- 4 RECEIPT HOG -->
+<section class="slide">
+  <div class="app-head"><span class="app-name">Receipt Hog</span><span class="app-tag">Owned by Numerator, a major market-research firm</span></div>
+  <p class="app-desc">Users connect their email and retailer accounts; the purchase data feeds Numerator&rsquo;s commercial shopper panel.</p>
+  <div class="flow">
+    <div class="frame"><span class="num">1</span><img src="/account-linking-deck/screenshots/receipthog-home.png" alt=""><span class="lbl">Home — link accounts to earn</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="frame"><span class="num">2</span><img src="/account-linking-deck/screenshots/receipthog-accounts-list.png" alt=""><span class="lbl">Pick a retailer to connect</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="frame"><span class="num">3</span><img src="/account-linking-deck/screenshots/receipthog-amazon-connect.png" alt=""><span class="lbl">Connect your Amazon account</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="frame"><span class="num">4</span><img src="/account-linking-deck/screenshots/receipthog-amazon-signin.png" alt=""><span class="lbl">Sign in to Amazon</span></div>
+  </div>
+</section>
+
+<!-- 5 POGO -->
+<section class="slide">
+  <div class="app-head"><span class="app-name">Pogo</span><span class="app-tag">Venture-funded · 3 million+ users</span></div>
+  <p class="app-desc">Users link their bank (via Plaid), retailer, and email accounts; Pogo gathers their purchases and sells anonymized, aggregated data to brands.</p>
+  <div class="flow">
+    <div class="frame"><span class="num">1</span><img src="/account-linking-deck/screenshots/pogo-home.png" alt=""><span class="lbl">Home — receipts and points</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="frame"><span class="num">2</span><img src="/account-linking-deck/screenshots/pogo-connections-list.png" alt=""><span class="lbl">Connect retailer &amp; email accounts</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="frame"><span class="num">3</span><img src="/account-linking-deck/screenshots/pogo-amazon-modal.png" alt=""><span class="lbl">Get paid for Amazon receipts</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="frame"><span class="num">4</span><img src="/account-linking-deck/screenshots/pogo-amazon-signin.png" alt=""><span class="lbl">Sign in to your Amazon account</span></div>
+  </div>
+</section>
+
+<!-- 6 BOX TOPS -->
+<section class="slide">
+  <div class="app-head"><span class="app-name">Box Tops for Education</span><span class="app-tag">General Mills · since 1996</span></div>
+  <p class="app-desc">A household-name school-rewards program. Shoppers connect their Walmart account so Box Tops can read their qualifying purchases &mdash; no receipt scanning required.</p>
+  <div class="flow">
+    <div class="frame"><span class="num">1</span><img src="/account-linking-deck/screenshots/boxtops-connected-accounts.png" alt=""><span class="lbl">Connect your retailer accounts</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="frame"><span class="num">2</span><img src="/account-linking-deck/screenshots/boxtops-walmart-connect.png" alt=""><span class="lbl">Link your Walmart account</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="frame"><span class="num">3</span><img src="/account-linking-deck/screenshots/boxtops-walmart-signin.png" alt=""><span class="lbl">Sign in and share receipts</span></div>
+  </div>
+</section>
+
+<!-- 7 MANY MORE -->
+<section class="slide">
+  <h2 class="grid-h">&hellip;and many more</h2>
+  <p class="grid-sub">The same mechanism, across research incumbents, rewards apps, and data startups.</p>
+  <div class="co-grid">
+    <div class="co"><div class="n">CoinOut</div><div class="d">Now Circana / IRI · email + retailer logins</div></div>
+    <div class="co"><div class="n">Numerator OmniPanel</div><div class="d">Email + Amazon + loyalty · 1M+ households</div></div>
+    <div class="co"><div class="n">ReceiptPal</div><div class="d">NPD / Circana · email + Amazon</div></div>
+    <div class="co"><div class="n">National Consumer Panel</div><div class="d">NielsenIQ + Circana panel</div></div>
+    <div class="co"><div class="n">Ibotta</div><div class="d">Public (NYSE: IBTA) · loyalty linking</div></div>
+    <div class="co"><div class="n">Amazon Shopper Panel</div><div class="d">Amazon itself · forward email receipts</div></div>
+    <div class="co"><div class="n">Capital One Shopping</div><div class="d">Paribus · email inbox access</div></div>
+    <div class="co"><div class="n">Slice / Rakuten Intel.</div><div class="d">Inbox e-receipt extraction</div></div>
+    <div class="co"><div class="n">Caden</div><div class="d">Data-dividend · connect Amazon, Gmail</div></div>
+    <div class="co"><div class="n">Prodege / Swagbucks</div><div class="d">Verified online purchases</div></div>
+    <div class="co"><div class="n">DISQO</div><div class="d">Opt-in behavioral panel</div></div>
+    <div class="co"><div class="n">Shopkick</div><div class="d">Email inbox for online receipts</div></div>
+  </div>
+</section>
+
+<!-- 8 CLOSE -->
+<section class="slide">
+  <h2 class="close-h">Startups, research incumbents, and a household-name brand &mdash; all doing the same thing.</h2>
+</section>
+
+<div class="progress" id="progress2" style="display:none"></div>
+<div class="counter" id="counter">1 / 11</div>
+<div class="hint">← → to flip</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progress');
+  let i = 0;
+  function show(n){
+    i = Math.max(0, Math.min(slides.length-1, n));
+    slides.forEach((s,k)=>s.classList.toggle('active', k===i));
+    counter.textContent = (i+1)+' / '+slides.length;
+    progress.style.width = ((i+1)/slides.length*100)+'%';
+  }
+  function next(){ show(i+1); }
+  function prev(){ show(i-1); }
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ') { e.preventDefault(); next(); }
+    else if(e.key==='ArrowLeft'||e.key==='PageUp') { e.preventDefault(); prev(); }
+    else if(e.key==='Home'){ show(0); } else if(e.key==='End'){ show(slides.length-1); }
+  });
+  document.addEventListener('click', e=>{
+    if(e.clientX < window.innerWidth*0.28) prev(); else next();
+  });
+  show(0);
+</script>
+</body>
+</html>

@@ -5,9 +5,11 @@
     { "source": "/ario-corelens", "destination": "/ario-corelens-one-pager-v2.html" },
     { "source": "/iiex-booth", "destination": "/iiex-booth.html" },
     { "source": "/link-flow", "destination": "/3steps-phone-animated/index.html" },
+    { "source": "/link-flow-desktop", "destination": "/link-flow-desktop/index.html" },
     { "source": "/connect-flow", "destination": "/connect-phone.html" },
     { "source": "/viewing-flow", "destination": "/viewing-flow-4frames.html" },
     { "source": "/grill-stories", "destination": "/grill-stories.html" },
+    { "source": "/account-linking", "destination": "/account-linking-deck/index.html" },
     { "source": "/brand", "destination": "/ario-brand-guide.html" },
     { "source": "/canonical-design", "destination": "/ario-canonical-design.html" }
   ]
